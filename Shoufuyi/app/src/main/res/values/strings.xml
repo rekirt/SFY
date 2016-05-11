@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">收付易</string>
+    <string name="error_http_fail_connet_server">Unable to connect to the server, please check the network</string>
+    <string name="error_http_request">The server is not responding. Please try again later.</string>
+    <string name="error_http_server_error">The server is not responding. Please try again later.</string>
+    <string name="error_http_server_busy">Server is busy, please try again later</string>
+    <string name="message_loading">Loading...</string>
+
+
+</resources>
