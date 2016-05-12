@@ -1,45 +1,43 @@
 package com.example.shoufuyi.uitls.dialog;
 
-import android.app.Activity;
-
-import com.example.shoufuyi.R;
+import android.content.Context;
 
 
 public class DialogHelper {
-	
-	public static WaitDialog getWaitDialog(Activity activity, int message) {
-		WaitDialog dialog = null;
-		try {
-			dialog = new WaitDialog(activity, R.style.dialog_waiting);
-			dialog.setMessage(message);
-		} catch (Exception e) {
-			e.printStackTrace();
+
+	public static CustomProgressDialog progressDialog;
+
+	public static void showProgressDialog(Context context,
+										  String paramMsg,
+										  boolean cancelable,
+										  boolean canceledOnTouchOutside) {
+
+		if (progressDialog == null) {
+			progressDialog = CustomProgressDialog.createDialog(context, paramMsg, cancelable,canceledOnTouchOutside);
+		}else {
+			progressDialog.dismiss();
+			progressDialog = null;
+			progressDialog = CustomProgressDialog.createDialog(context, paramMsg, cancelable,canceledOnTouchOutside);
 		}
-		return dialog;
+		progressDialog.show();
 	}
 
-	public static WaitDialog getWaitDialog(Activity activity, String message) {
-		WaitDialog dialog = null;
-		try {
-			dialog = new WaitDialog(activity, R.style.dialog_waiting);
-			dialog.setMessage(message);
-		} catch (Exception ex) {
-			ex.printStackTrace();
+	public static void dismissProgressDialog() {
+		if (progressDialog != null && progressDialog.isShowing()) {
+			progressDialog.dismiss();
+			progressDialog = null;
 		}
-		return dialog;
 	}
 
-	public static WaitDialog getCancelableWaitDialog(Activity activity,
-			String message) {
-		WaitDialog dialog = null;
-		try {
-			dialog = new WaitDialog(activity, R.style.dialog_waiting);
-			dialog.setMessage(message);
-			dialog.setCancelable(true);
-		} catch (Exception ex) {
-			ex.printStackTrace();
+	public static void upDateProgressDialog(Context context,
+											String newMsg,
+											boolean cancelable,
+											boolean canceledOnTouchOutside) {
+		if (progressDialog == null) {
+			progressDialog = CustomProgressDialog.createDialog(context, newMsg, cancelable,canceledOnTouchOutside);
+		}else {
+			progressDialog.setMessage(newMsg);
 		}
-		return dialog;
+		progressDialog.show();
 	}
-
 }

@@ -1,0 +1,66 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:input="http://schemas.android.com/apk/res/com.example.shoufuyi"
+    android:id="@+id/myscroll"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:id="@+id/screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:id="@+id/loginPanel"
+            android:layout_width="400dp"
+            android:layout_height="450dp"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/login_bg" >
+
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/loginmidlogo" />
+            </RelativeLayout>
+            <com.example.shoufuyi.uitls.view.InputView
+                android:id="@+id/phone"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                input:hint="手机号"
+                input:label_background="@drawable/loginname" />
+
+            <com.example.shoufuyi.uitls.view.InputView
+                android:id="@+id/login"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                input:hint="输入登录密码"
+                input:label_background="@drawable/loginsercet"
+                input:password="true" />
+
+            <Button
+                android:id="@+id/loginbut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/activation"
+                android:text="登录"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</ScrollView>

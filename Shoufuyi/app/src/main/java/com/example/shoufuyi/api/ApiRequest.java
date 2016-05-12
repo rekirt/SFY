@@ -1,10 +1,19 @@
 package com.example.shoufuyi.api;
 
-import android.content.Context;
+import com.alibaba.fastjson.JSON;
+import com.example.shoufuyi.BaseApplication;
+import com.example.shoufuyi.uitls.Constant;
+import com.example.shoufuyi.uitls.SharedPreferencesHelper;
+import com.itech.message.APPMsgPack;
+import com.itech.message.APP_Basic;
+import com.itech.utils.SequenceUtil;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 
 public class ApiRequest {
+
+    public static APP_Basic returnapp;
+
     /**
      * 基本参数变量
      *
@@ -28,21 +37,98 @@ public class ApiRequest {
     /**
      * 登录
      *
-     * @param username      用户名
-     * @param password      密码
-     * @param handler       回调
      */
-    public static RequestHandle login(Context context,
-                                      String username,
-                                      String password,
+    public static RequestHandle login(APP_Basic app,String MOBILE,
                                       JsonHttpHandler handler) {
-        RequestParams params = getBaseParams();
-        params.put("mobile", username);
-        params.put("password", password);
-        String url = ApiUrl.getAbsoluteUrl(ApiUrl.LOGIN);
-        return AsyncHttp.post(context,url, params, handler);
+
+        String uuid = SharedPreferencesHelper.getString("uuid", "");
+        if (uuid.equals("")) {
+            uuid = "2" + SequenceUtil.globalSequenceFor32();
+        }
+        app.setTerminalInfo(uuid);
+        returnapp = app;
+        String json = JSON.toJSONString(app, true);
+        // 要发送的字节数组
+        byte[] data = pack(json, MOBILE);
+        return AsyncHttp.get(BaseApplication.getInstance(), data, "application/octet-stream",handler);
+    }
+
+    /**
+     * 获取验证码
+     *
+     */
+    public static RequestHandle getMsgCode(APP_Basic app,String MOBILE,
+                                      JsonHttpHandler handler) {
+
+        String uuid = SharedPreferencesHelper.getString("uuid", "");
+        if (uuid.equals("")) {
+            uuid = "2" + SequenceUtil.globalSequenceFor32();
+        }
+        app.setTerminalInfo(uuid);
+        returnapp = app;
+        String json = JSON.toJSONString(app, true);
+        // 要发送的字节数组
+        byte[] data = pack(json, MOBILE);
+        return AsyncHttp.get(BaseApplication.getInstance(), data, "application/octet-stream",handler);
     }
 
 
+    /**
+     * 提交请求
+     *
+     */
+    public static RequestHandle requestData(APP_Basic app,String MOBILE,
+                                           JsonHttpHandler handler) {
+
+        String uuid = SharedPreferencesHelper.getString("uuid", "");
+        if (uuid.equals("")) {
+            uuid = "2" + SequenceUtil.globalSequenceFor32();
+        }
+        app.setTerminalInfo(uuid);
+        returnapp = app;
+        String json = JSON.toJSONString(app, true);
+        // 要发送的字节数组
+        byte[] data = pack(json, MOBILE);
+        return AsyncHttp.get(BaseApplication.getInstance(), data, "application/octet-stream",handler);
+    }
+
+
+    // 压缩
+    private static byte[] pack(String json, String MOBILE) {
+        String token = SharedPreferencesHelper.getString("token", "");
+
+        String deskey = SharedPreferencesHelper.getString("deskey", "");
+
+        String jihuo = SharedPreferencesHelper.getString("jihuo", "");
+
+        String uuid = SharedPreferencesHelper.getString("uuid", "");
+
+        String strToken;
+        if (!token.equals("")) {
+            strToken = token;
+        } else {
+            strToken = SequenceUtil.TOKEN;
+        }
+        if (jihuo.equals("")) {
+            returnapp.getTrxCode().equals("120031");
+            returnapp.setTrxCode("120032");
+        }
+
+        APPMsgPack pack;
+        if (deskey.equals("")) {
+            pack = new APPMsgPack(json.getBytes(), MOBILE, Constant.secretType,
+                    returnapp.getTrxCode(), strToken);
+        } else {
+            pack = new APPMsgPack(json.getBytes(), MOBILE, Constant.secretType,
+                    returnapp.getTrxCode(), strToken, deskey);
+        }
+        try {
+            pack.setTerminalInfo(uuid);
+            return pack.pack();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }
