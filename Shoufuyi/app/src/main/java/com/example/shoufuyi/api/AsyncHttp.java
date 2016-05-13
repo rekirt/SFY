@@ -48,14 +48,17 @@ public class AsyncHttp {
                              byte[] zipSendDateService,
                              String contentType,
                              ResponseHandlerInterface responseHandler){
-            //字节转成字节输入流
-            ByteArrayInputStream bis = new ByteArrayInputStream(zipSendDateService);
-            //将流写到Entity中
-            InputStreamEntity entity = new InputStreamEntity(bis,
-                    zipSendDateService.length);
-            //请求服务器
-            return getClient().get(context, ApiUrl.ONLINE_URL, entity, contentType,
-                    responseHandler);
+            if (zipSendDateService !=null){
+                //字节转成字节输入流
+                ByteArrayInputStream bis = new ByteArrayInputStream(zipSendDateService);
+                //将流写到Entity中
+                InputStreamEntity entity = new InputStreamEntity(bis,
+                        zipSendDateService.length);
+                //请求服务器
+                return getClient().get(context, ApiUrl.ONLINE_URL, entity, contentType,
+                        responseHandler);
+            }
+          return null;
     }
 
     //获得上面方法的参数
@@ -63,13 +66,16 @@ public class AsyncHttp {
                               byte[] zipSendDateService,
                               String contentType,
                               ResponseHandlerInterface responseHandler) {
-    //字节转成字节输入流
-        ByteArrayInputStream bis = new ByteArrayInputStream(zipSendDateService);
-    //将流写到Entity中
-        InputStreamEntity entity = new InputStreamEntity(bis,
-                zipSendDateService.length);
-    //请求服务器
-        return getClient().post(context, ApiUrl.ONLINE_URL, entity, contentType,
-                responseHandler);
+        if (zipSendDateService !=null){
+            //字节转成字节输入流
+            ByteArrayInputStream bis = new ByteArrayInputStream(zipSendDateService);
+            //将流写到Entity中
+            InputStreamEntity entity = new InputStreamEntity(bis,
+                    zipSendDateService.length);
+            //请求服务器
+            return getClient().post(context, ApiUrl.ONLINE_URL, entity, contentType,
+                    responseHandler);
+        }
+        return null;
     }
 }

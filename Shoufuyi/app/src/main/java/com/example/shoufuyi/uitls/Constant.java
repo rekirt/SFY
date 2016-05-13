@@ -24,7 +24,7 @@ public class Constant {
 	public static String SIGNHASHCODE = "SIGNHASHCODE";
 	public static int time = 91;
 
-	public static String UUID = "";
+	public static String UUID = "uuid";
 	public static String three="THREE_ELEMENT";
 	public static String four="FOUR_ELEMENT";
 	public static String five="FIVE_ELEMENT";
@@ -34,79 +34,16 @@ public class Constant {
 	public static String banknumber="";
 
 	public static String SHARED_PREFERENCE_NAME = "SFY_SHARED_PREFERENCE_NAME";
+    public static String ACTIVATION = "jihuo";
+    public static String PHONE = "phone";
+    public static String DESKEY = "deskey";
+    public static String DESK3KEY = "des3key";
+    public static String TOKEN = "token";
 
-
-	public static String getUrl() {
-		return url;
-	}
-
-	public static void setUrl(String url) {
-		Constant.url = url;
-	}
-
-	public static String getSecretType() {
-		return secretType;
-	}
-
-	public static void setSecretType(String secretType) {
-		Constant.secretType = secretType;
-	}
-
-	public static String getReqCode() {
-		return reqCode;
-	}
-
-	public static void setReqCode(String reqCode) {
-		Constant.reqCode = reqCode;
-	}
-
-	public static String getToken() {
-		return token;
-	}
-
-	public static void setToken(String token) {
-		Constant.token = token;
-	}
-
-	public static String getUNSIGN() {
-		return UNSIGN;
-	}
-
-	public static void setUNSIGN(String uNSIGN) {
-		UNSIGN = uNSIGN;
-	}
-
-	public static String getEFFECT() {
-		return EFFECT;
-	}
-
-	public static void setEFFECT(String eFFECT) {
-		EFFECT = eFFECT;
-	}
-
-	public static String getUNEFFECT() {
-		return UNEFFECT;
-	}
-
-	public static void setUNEFFECT(String uNEFFECT) {
-		UNEFFECT = uNEFFECT;
-	}
-
-	public static String getDeskey() {
-		return Deskey;
-	}
-
-	public static void setDeskey(String deskey) {
-		Deskey = deskey;
-	}
-
-	public static String getUUID() {
-		return UUID;
-	}
-
-	public static void setUUID(String uUID) {
-		UUID = uUID;
-	}
+    public static String NUMBER = "number";
+    public static String ISEXIT = "Is_exit";
+    public static String GAIMIMA = "gaimima";
+    public static String MIMA = "mima";
 
 
 }

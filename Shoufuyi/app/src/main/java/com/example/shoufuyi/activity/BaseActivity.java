@@ -98,12 +98,12 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
      */
     private long lastClick = 0;
 
-    public boolean IsDuplication() {
+    public boolean IsNotDuplication() {
         if (System.currentTimeMillis() - lastClick <= 2000) {
-            return true;
+            return false;
         }
         lastClick = System.currentTimeMillis();
-        return false;
+        return true;
     }
 
     /**
@@ -137,7 +137,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        if (IsDuplication()) {
+        if (IsNotDuplication()) {
             return;
         }
     }

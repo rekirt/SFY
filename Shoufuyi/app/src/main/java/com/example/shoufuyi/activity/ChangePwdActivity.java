@@ -57,7 +57,7 @@ public class ChangePwdActivity extends BaseActivity {
 		strold = editold.getText().toString().trim();
 		strnew = editnew.getText().toString().trim();
 		strsure = editsure.getText().toString().trim();
-
+		setCanBack(true);
 	}
 
 	private OnClickListener submitlis = new OnClickListener() {

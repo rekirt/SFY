@@ -3,7 +3,6 @@ package com.example.shoufuyi.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputFilter;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -14,9 +13,10 @@ import com.alibaba.fastjson.JSON;
 import com.example.shoufuyi.R;
 import com.example.shoufuyi.api.ApiRequest;
 import com.example.shoufuyi.api.JsonHttpHandler;
-import com.example.shoufuyi.uitls.CommonUtils;
 import com.example.shoufuyi.uitls.Constant;
+import com.example.shoufuyi.uitls.PhoneUtils;
 import com.example.shoufuyi.uitls.SharedPreferencesHelper;
+import com.example.shoufuyi.uitls.SimpleTextWatcher;
 import com.example.shoufuyi.uitls.ToastHelper;
 import com.example.shoufuyi.uitls.dialog.DialogHelper;
 import com.itech.message.APP_120031;
@@ -25,13 +25,12 @@ import com.itech.message.APP_120032;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class StartToUseActivity extends Activity implements OnClickListener{
-	private Button butregister, butsent;
+	private Button butregister, btn_getcode;
 	private EditText editcode, editphone;
-	private String strcode, strphone;
 
 	// 通过设备读取的手机号码
 	private APP_120032 returnapp;
@@ -49,20 +48,59 @@ public class StartToUseActivity extends Activity implements OnClickListener{
 
 	private void initView() {
 		butregister = (Button) findViewById(R.id.zhucejihuo);
+        btn_getcode = (Button) findViewById(R.id.btn_get_code);
+
         editcode = (EditText) findViewById(R.id.edt_code);
         editphone = (EditText) findViewById(R.id.edt_phone);
-        butsent = (Button) findViewById(R.id.btn_get_code);
-		editphone.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
-		char[] mychar = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
-		editphone.setKeyListener(CommonUtils.getKeylistener(mychar));
-		strcode = editcode.getText().toString().trim();
-		strphone = editphone.getText().toString().trim();
-		strphone=strphone.replace(" ", "");
 	}
 
 	private void initData(){
-        butsent.setOnClickListener(this);
+        btn_getcode.setOnClickListener(this);
         butregister.setOnClickListener(this);
+        editphone.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                if (count == 1) {
+                    int length = s.toString().length();
+                    if (length == 3 || length == 8) {
+                        editphone.setText(s + " ");
+                        editphone.setSelection(editphone.getText().toString().length());
+                    }
+                }
+                if (PhoneUtils.isPhoneNumberValid(s.toString().replaceAll(" ", ""))) {
+                    btn_getcode.setClickable(true);
+                    btn_getcode.setEnabled(true);
+                } else {
+                    btn_getcode.setClickable(false);
+                    btn_getcode.setEnabled(false);
+                }
+            }
+        });
+        editcode.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                int length = s.toString().length();
+                if (length >= 6) {
+                    butregister.setClickable(true);
+                    butregister.setEnabled(true);
+                } else {
+                    butregister.setClickable(false);
+                    butregister.setEnabled(false);
+                }
+            }
+        });
+        //为了方便测试，暂时将号码写入输入框
+        editphone.setText("13430990001");
+        editphone.setSelection(editphone.getText().toString().length());
+        if (PhoneUtils.isPhoneNumberValid(editphone.getText().toString())) {
+            btn_getcode.setClickable(true);
+            btn_getcode.setEnabled(true);
+        } else {
+            btn_getcode.setClickable(false);
+            btn_getcode.setEnabled(false);
+        }
     }
 
     @Override
@@ -70,12 +108,12 @@ public class StartToUseActivity extends Activity implements OnClickListener{
 
         switch (view.getId()){
             case R.id.btn_get_code:
-                if (IsDuplication()){
+                if (IsNotDuplication()){
                     getCode();
                 }
                 break;
             case R.id.zhucejihuo:
-                if (IsDuplication()){
+                if (IsNotDuplication()){
                     StartToUse();
                 }
                 break;
@@ -83,39 +121,84 @@ public class StartToUseActivity extends Activity implements OnClickListener{
                 break;
         }
     }
+
+    /**
+     * 进行倒计时
+     *
+     */
+    Timer timer ;
+    private int recLen = 30;
+    private MyTask task;
+    public void Countdown(){
+        recLen= 30;
+        if (timer == null){
+            timer = new Timer();
+        }else {
+            timer.cancel();
+            timer = new Timer();
+        }
+        if (task != null){
+            task.cancel();
+            task = new MyTask();
+        }else {
+            task = new MyTask();
+        }
+        timer.schedule(task, 100,1000);
+    }
+
+    /**
+     * 执行倒计时任务
+     *
+     */
+    class MyTask extends TimerTask {
+        @Override
+        public void run(){
+            runOnUiThread(new Runnable() {      // UI thread
+                @Override
+                public void run() {
+                    btn_getcode.setEnabled(false);
+                    recLen--;
+                    btn_getcode.setText(recLen+"S重新获取");
+                    if(recLen < 0){
+                        timer.cancel();
+                        btn_getcode.setText("获取验证码");
+                        btn_getcode.setClickable(true);
+                        btn_getcode.setEnabled(true);
+                    }
+                }
+            });
+        }
+    };
+
     /**
      * 判断是否短时间内重复点击
      */
     private long lastClick = 0;
 
-    public boolean IsDuplication() {
+    public boolean IsNotDuplication() {
         if (System.currentTimeMillis() - lastClick <= 2000) {
-            return true;
+            return false;
         }
         lastClick = System.currentTimeMillis();
-        return false;
+        return true;
     }
 
 
     // 获得验证码
     private void getCode(){
-        Pattern p = Pattern.compile("[1][3-8]\\d{9}");
-        Matcher m = p.matcher(strphone);
-            if (m.matches()) {
-                DialogHelper.showProgressDialog(StartToUseActivity.this, "正在请求...", false, false);
+                ToastHelper.ShowToast("发送成功！");
+                Countdown();
                 // 发送报文获取验证码
                 APP_120031 app = new APP_120031();
-                app.setMobile(strphone);
-                app.setUserName(strphone);
+                app.setMobile(editphone.getText().toString());
+                app.setUserName(editphone.getText().toString());
                 app.setType("2");
-                ApiRequest.getMsgCode(app, strphone, new JsonHttpHandler() {
+                ApiRequest.getMsgCode(app, editphone.getText().toString(), new JsonHttpHandler() {
                     @Override
                     public void onDo(JSONObject responseJsonObject) {
-                        APP_120031 returnapp = JSON.parseObject(
-                                responseJsonObject.toString(),
+                        APP_120031 returnapp = JSON.parseObject(responseJsonObject.toString(),
                                 APP_120031.class);
-                        if (returnapp.getDetailCode().equals(
-                                "0000")) {
+                        if (returnapp.getDetailCode().equals("0000")) {
                             ToastHelper.ShowToast("短信发送成功");
                         } else {
                             ToastHelper.ShowToast(returnapp.getDetailInfo());
@@ -135,19 +218,14 @@ public class StartToUseActivity extends Activity implements OnClickListener{
                     @Override
                     public void onFinish() {
                         super.onFinish();
-                        DialogHelper.dismissProgressDialog();
                     }
-                });
-            } else {
-                ToastHelper.ShowToast("请输入正确格式的手机号码");
-                editphone.setText("");
-            }
+                }.setIsNeedToReturnResponseBody(true));
     }
 
     // 启用
     private void StartToUse(){
         final APP_120032 app = new APP_120032();
-        app.setUserName(strphone);
+        app.setUserName(editphone.getText().toString());
         String strserect = editcode.getText().toString().trim();
         if (strserect.equals("")) {
             ToastHelper.ShowToast("验证码不能为空");
@@ -159,20 +237,24 @@ public class StartToUseActivity extends Activity implements OnClickListener{
             e.printStackTrace();
         }
         DialogHelper.showProgressDialog(StartToUseActivity.this, "正在请求...", true, true);
-        ApiRequest.requestData(app, strphone, new JsonHttpHandler() {
+        ApiRequest.requestData(app, editphone.getText().toString(), new JsonHttpHandler() {
                     @Override
                     public void onDo(JSONObject responseJsonObject) {
                         returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120032.class);
-                        sharedPreferencesHelper.setString("jihuo", "0000");// 记录登录成功状态
-                        sharedPreferencesHelper.setString("phone", strphone);// 保存字符串
-                        sharedPreferencesHelper.setString("deskey", returnapp.getDesKey());
-                        sharedPreferencesHelper.setString("des3key", returnapp.getDes3Key());
-                        sharedPreferencesHelper.setString("token", returnapp.getToken());
-                        sharedPreferencesHelper.setString("uuid", Constant.getUUID());
-                        Intent intent = new Intent();
-                        intent.setClass(StartToUseActivity.this, ChangePwdActivity.class);
-                        startActivity(intent);
-                        finish();
+                        if ("0000".equals(returnapp.getDetailCode())){
+                            sharedPreferencesHelper.setString(Constant.ACTIVATION, "0000");// 记录登录成功状态
+                            sharedPreferencesHelper.setString(Constant.PHONE, editphone.getText().toString());// 保存字符串
+                            sharedPreferencesHelper.setString(Constant.DESKEY, returnapp.getDesKey());
+                            sharedPreferencesHelper.setString(Constant.DESK3KEY, returnapp.getDes3Key());
+                            sharedPreferencesHelper.setString(Constant.TOKEN, returnapp.getToken());
+                            Intent intent = new Intent();
+                            intent.setClass(StartToUseActivity.this, ChangePwdActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }else {
+                            ToastHelper.ShowToast(returnapp.getDetailInfo());
+                        }
+
                     }
 
                     @Override
@@ -190,7 +272,7 @@ public class StartToUseActivity extends Activity implements OnClickListener{
                         super.onFinish();
                         DialogHelper.dismissProgressDialog();
                     }
-                }
+                }.setIsNeedToReturnResponseBody(true)
         );
     }
 }

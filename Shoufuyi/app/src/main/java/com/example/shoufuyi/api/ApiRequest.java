@@ -50,7 +50,7 @@ public class ApiRequest {
         String json = JSON.toJSONString(app, true);
         // 要发送的字节数组
         byte[] data = pack(json, MOBILE);
-        return AsyncHttp.get(BaseApplication.getInstance(), data, "application/octet-stream",handler);
+        return AsyncHttp.post(BaseApplication.getInstance(), data, "application/octet-stream",handler);
     }
 
     /**
@@ -67,9 +67,10 @@ public class ApiRequest {
         app.setTerminalInfo(uuid);
         returnapp = app;
         String json = JSON.toJSONString(app, true);
+
         // 要发送的字节数组
         byte[] data = pack(json, MOBILE);
-        return AsyncHttp.get(BaseApplication.getInstance(), data, "application/octet-stream",handler);
+        return AsyncHttp.post(BaseApplication.getInstance(), data, "application/octet-stream", handler);
     }
 
 
@@ -89,7 +90,7 @@ public class ApiRequest {
         String json = JSON.toJSONString(app, true);
         // 要发送的字节数组
         byte[] data = pack(json, MOBILE);
-        return AsyncHttp.get(BaseApplication.getInstance(), data, "application/octet-stream",handler);
+        return AsyncHttp.post(BaseApplication.getInstance(), data, "application/octet-stream",handler);
     }
 
 
@@ -108,6 +109,7 @@ public class ApiRequest {
             strToken = token;
         } else {
             strToken = SequenceUtil.TOKEN;
+            SharedPreferencesHelper.getInstance().setString("token", strToken);
         }
         if (jihuo.equals("")) {
             returnapp.getTrxCode().equals("120031");

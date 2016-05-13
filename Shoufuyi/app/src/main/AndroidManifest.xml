@@ -59,7 +59,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.StartToUseActivity"/>
+        <activity
+            android:name=".activity.StartToUseActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait"
+            android:label="@string/start_to_use_activity"/>
     </application>
 
 </manifest>

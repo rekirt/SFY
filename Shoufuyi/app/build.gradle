@@ -22,6 +22,22 @@ android {
         }
     }
     useLibrary 'org.apache.http.legacy'
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+    dexOptions {
+        preDexLibraries = false
+        jumboMode true
+    }
 }
 
 dependencies {
@@ -36,4 +52,6 @@ dependencies {
     //其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.2.9
     compile files('libs/sfy_inf_util.jar')
     compile files('libs/fastjson-1.1.38.jar')
+    compile files('libs/slf4j-api-1.6.3.jar')
+    compile files('libs/commons-lang-2.6.jar')
 }

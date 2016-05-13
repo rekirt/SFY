@@ -51,35 +51,27 @@ public class SplashActivity extends Activity {
 
             @Override
             public void onAnimationStart(Animation animation) {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-                // TODO Auto-generated method stub
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                // TODO Auto-generated method stub
                 redirectTo();
             }
         });
-
-
 	}
 
     private void redirectTo(){
-        String is_regserect = sharedPreferencesHelper.getString("mima","");
-
-        String number = sharedPreferencesHelper.getString("number", "");
+        String number = sharedPreferencesHelper.getString(Constant.NUMBER, "");
         // 如果退出字段是1就跳转到登录界面
-        String is_exit = sharedPreferencesHelper.getString("Is_exit", "");
+        String is_exit = sharedPreferencesHelper.getString(Constant.ISEXIT, "");
         // 激活状态
-        String is_login = sharedPreferencesHelper.getString("jihuo", "");
+        String is_login = sharedPreferencesHelper.getString(Constant.ACTIVATION, "");
         // 是否修改密码状态
-        String is_gaimima = sharedPreferencesHelper.getString("gaimima", "");
+        String is_gaimima = sharedPreferencesHelper.getString(Constant.GAIMIMA, "");
         //如果帐号存在，表示已登录
         if (is_exit.equals("1") || number.equals("0")) {
             Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
@@ -94,14 +86,13 @@ public class SplashActivity extends Activity {
                 Intent intent = new Intent(SplashActivity.this,ChangePwdActivity.class);
                 startActivity(intent);
                 finish();
-            } else if (is_login.equals("0000")
-                    && is_gaimima.equals("0000")) {
+            } else if (is_login.equals("0000") && is_gaimima.equals("0000")) {
                 // 是否修改密码状态
                 Intent intent = new Intent(SplashActivity.this, Gesture.class);
                 startActivity(intent);
                 finish();
             } else if (is_login.equals("0000") && is_gaimima.equals("1111")) {
-                sharedPreferencesHelper.setString("gaimima", "0000");
+                sharedPreferencesHelper.setString(Constant.GAIMIMA, "0000");
                 Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();

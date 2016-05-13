@@ -6,6 +6,6 @@
     <string name="error_http_server_busy">Server is busy, please try again later</string>
     <string name="message_loading">Loading...</string>
     <string name="start_to_use">启用操作员</string>
-
+    <string name="start_to_use_activity">启动页面</string>
 
 </resources>

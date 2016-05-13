@@ -5,7 +5,9 @@ import android.text.TextUtils;
 
 import com.example.shoufuyi.BaseApplication;
 import com.example.shoufuyi.R;
+import com.example.shoufuyi.uitls.SharedPreferencesHelper;
 import com.example.shoufuyi.uitls.ToastHelper;
+import com.itech.message.APPMsgPack;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -22,8 +24,8 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
     private boolean isProgressDialogCanceledOnTouchOutside = true;
     private boolean isNeedToReturnResponseBody = false;
     private String mDialogMessage;
-    private String mStatusTag = "status";
-    private String mMessageTag = "message";
+    private String mStatusTag = "retCode";
+    private String mMessageTag = "errMsg";
     private String mDataTag = "data";
 
     public JsonHttpHandler() {
@@ -53,29 +55,46 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
 
     @Override
     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+        APPMsgPack response = new APPMsgPack();
+        response.setToken(SharedPreferencesHelper.getString("token", ""));
+
+        if (!SharedPreferencesHelper.getString("deskey", "").equals("")) {
+            response.setDesKey(SharedPreferencesHelper.getString("deskey", ""));
+        }
+
         try {
-            JSONObject response = new JSONObject(new String(responseBody, "UTF-8"));
-            int status = response.getInt(this.mStatusTag);
-            if (0 == status) {
-                try {
-                    if (isNeedToReturnResponseBody){
-                        onDo(response);
-                    }else {
-                        onDo(response.getJSONObject(this.mDataTag));
-                    }
-                } catch (JSONException e) {
-                    try {
-                        onDo(response.getJSONArray(this.mDataTag));
-                    } catch (JSONException e1) {
-                        try{
-                            onDo(response.getString(this.mDataTag));
-                        }catch (JSONException e2){
-                            e2.printStackTrace();
+            if (response.unpack(responseBody) == 0) { // 解析成功
+                byte[] data = response.getMainData(); // 数据包字节数组
+                JSONObject responsedata = new JSONObject(new String(data, "UTF-8"));
+                String status = responsedata.getString(this.mStatusTag);
+
+                    if ("0000".equals(status)) {
+                        try {
+                            if (isNeedToReturnResponseBody) {
+                                onDo(responsedata);
+                            } else {
+                                onDo(responsedata.getJSONObject(this.mDataTag));
+                            }
+                        } catch (JSONException e) {
+                            try {
+                                onDo(responsedata.getJSONArray(this.mDataTag));
+                            } catch (JSONException e1) {
+                                try {
+                                    onDo(responsedata.getString(this.mDataTag));
+                                } catch (JSONException e2) {
+                                    e2.printStackTrace();
+                                }
+                            }
                         }
+                    } else {
+                        onFail(responsedata.getString(mMessageTag));
                     }
-                }
-            } else {
-                onFail(response.getString(mMessageTag));
+            }else if (response.unpack(responseBody) == 1) {
+                // 报文不完整
+                onFail("报文不完整");
+            } else if (response.unpack(responseBody) == 2) {
+                // 报文指纹不正确
+                onFail("报文指纹不正确");
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -15,7 +15,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/loginmidlogo" />
+                android:padding="@dimen/space_59"
+                android:src="@drawable/loginmidlogo" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -31,7 +32,7 @@
         <LinearLayout
             android:layout_marginTop="@dimen/space_10"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/space_48"
+            android:layout_height="@dimen/edt_height"
             android:background="@color/white">
             <ImageView
                 android:layout_width="wrap_content"
@@ -45,6 +46,9 @@
                 android:layout_height="match_parent"
                 android:hint="手机号"
                 android:background="@null"
+                android:maxLength="13"
+                android:text="13430990001"
+                android:inputType="number"
                 />
         </LinearLayout>
         <ImageView
@@ -54,7 +58,7 @@
             />
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/space_48"
+            android:layout_height="@dimen/edt_height"
             android:background="@color/white">
             <ImageView
                 android:layout_width="wrap_content"
@@ -69,6 +73,7 @@
                 android:hint="验证码"
                 android:layout_weight="1"
                 android:background="@null"
+                android:maxLength="6"
                 />
             <Button
                 android:id="@+id/btn_get_code"
@@ -77,6 +82,8 @@
                 android:background="@drawable/btn_green_selector"
                 android:text="获取验证码"
                 android:layout_marginRight="@dimen/space_30"
+                android:enabled="false"
+                android:clickable="false"
                 android:textColor="#ffffff" />
         </LinearLayout>
         <LinearLayout
@@ -104,7 +111,7 @@
         <Button
             android:id="@+id/zhucejihuo"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/btn_height"
             android:layout_margin="@dimen/space_15"
             android:text="启用"
             android:gravity="center"

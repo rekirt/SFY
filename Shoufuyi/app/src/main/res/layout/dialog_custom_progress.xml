@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/dialog_custom_progress_bg"
+    android:background="@null"
     android:gravity="center"
     android:minWidth="150.0dip"
     android:orientation="vertical"
@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/iv_loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/space_59"
+        android:layout_height="@dimen/space_59"
         android:background="@anim/progress_round" />
 
     <TextView
@@ -22,5 +22,4 @@
         android:text="请稍候…"
         android:textColor="@color/gray"
         android:textSize="18.0dip" />
-
 </LinearLayout>

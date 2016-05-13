@@ -33,6 +33,8 @@
 
 
     <dimen name="qrcode_width">@dimen/space_200</dimen>
+    <dimen name="btn_height">@dimen/space_48</dimen>
+    <dimen name="edt_height">55dip</dimen>
     <dimen name="space_200">200.0dip</dimen>
     <dimen name="space_80">80.0dip</dimen>
     <dimen name="space_59">59.0dip</dimen>
