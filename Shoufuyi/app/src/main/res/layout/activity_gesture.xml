@@ -5,19 +5,21 @@
     android:layout_height="match_parent"
     android:background="@drawable/sky"
     >
+    <include layout="@layout/toolbar"/>
 
     <ImageView
         android:id="@+id/imageview"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_below="@+id/toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
         android:src="@drawable/touxiang" />
 
     <FrameLayout
+        android:id="@+id/body_layout"
         android:layout_marginTop="40dp"
         android:layout_below="@id/imageview"
-        android:id="@+id/body_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" >
@@ -29,17 +31,14 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:layout_marginBottom="28dp" >
-
         <TextView
-            android:id="@+id/textshow"
+            android:id="@+id/tv_show_msg"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:textSize="24sp"
             android:text="请设定手势"
-
             android:textColor="#ffffff"/>
     </LinearLayout>
-
 </RelativeLayout>

@@ -1,10 +1,8 @@
 package com.example.shoufuyi.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,7 +26,7 @@ import org.json.JSONObject;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class StartToUseActivity extends Activity implements OnClickListener{
+public class StartToUseActivity extends BaseActivity{
 	private Button butregister, btn_getcode;
 	private EditText editcode, editphone;
 
@@ -105,17 +103,12 @@ public class StartToUseActivity extends Activity implements OnClickListener{
 
     @Override
     public void onClick(View view) {
-
         switch (view.getId()){
             case R.id.btn_get_code:
-                if (IsNotDuplication()){
                     getCode();
-                }
                 break;
             case R.id.zhucejihuo:
-                if (IsNotDuplication()){
                     StartToUse();
-                }
                 break;
             default:
                 break;

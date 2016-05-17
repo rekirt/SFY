@@ -44,16 +44,17 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(layoutResID);
-        mToolbar = findViewById(R.id.toolbar);
-        if (mToolbar != null) {
-            Toolbar toolbar = (Toolbar) mToolbar;
-            setSupportActionBar(toolbar);
-            toolbarTitle = (TextView) mToolbar.findViewById(R.id.tv_toolbar_title);
-            if (toolbarTitle != null) {
-                getSupportActionBar().setDisplayShowTitleEnabled(false);
+            mToolbar = findViewById(R.id.toolbar);
+            if (mToolbar != null) {
+                Toolbar toolbar = (Toolbar) mToolbar;
+                setSupportActionBar(toolbar);
+                toolbarTitle = (TextView) mToolbar.findViewById(R.id.tv_toolbar_title);
+                if (toolbarTitle != null) {
+                    getSupportActionBar().setDisplayShowTitleEnabled(false);
+                }
             }
-        }
     }
+
 
     @Override
     public void setTitle(CharSequence title) {
@@ -99,7 +100,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     private long lastClick = 0;
 
     public boolean IsNotDuplication() {
-        if (System.currentTimeMillis() - lastClick <= 2000) {
+        if (System.currentTimeMillis() - lastClick <= 2500) {
             return false;
         }
         lastClick = System.currentTimeMillis();
@@ -112,11 +113,13 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
      * @param view 绑定的组件
      */
     public void goBack(View view) {
-        finish();
+        if (IsNotDuplication()){
+            finish();
+        }
     }
 
     /**
-     * 点击返回按钮调用该方法
+     * 点击右上角完成按钮调用该方法
      *
      * @param view 绑定的组件
      */
@@ -124,7 +127,14 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    /**
+     * 点击右上角图标调用该方法
+     *
+     * @param view 绑定的组件
+     */
+    public void gotoSetting(View view) {
 
+    }
     public boolean canBack = false;
 
     public boolean canGoBack() {
@@ -135,9 +145,10 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         canBack = goBack;
     }
 
+
     @Override
     public void onClick(View view) {
-        if (IsNotDuplication()) {
+        if (!IsNotDuplication()) {
             return;
         }
     }
@@ -149,7 +160,13 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             mTvRight.setText(rightText);
         }
     }
-
+    public void setRightView() {
+        if (mToolbar != null) {
+            ImageView mIvRight = (ImageView) mToolbar.findViewById(R.id.img_right);
+            mIvRight.setVisibility(View.VISIBLE);
+            mIvRight.setOnClickListener(this);
+        }
+    }
     public void setLeftText(String leftText) {
         if (mToolbar != null) {
             TextView tv_toolbar_left_title = (TextView) mToolbar.findViewById(R.id.tv_left);

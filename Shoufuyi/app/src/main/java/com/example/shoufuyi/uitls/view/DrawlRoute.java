@@ -1,8 +1,6 @@
 package com.example.shoufuyi.uitls.view;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -14,10 +12,13 @@ import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.shoufuyi.uitls.Constant;
+import com.example.shoufuyi.uitls.SharedPreferencesHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Drawl extends View {
+public class DrawlRoute extends View {
 	private int mov_x;// 声明起点坐标
 	private int mov_y;
 	private Paint paint;// 声明画笔
@@ -45,11 +46,9 @@ public class Drawl extends View {
 	 * 用户传入的passWord
 	 */
 	private String passWord;
-	private SharedPreferences.Editor edit;
-	private SharedPreferences share;
 
-	public Drawl(Context context, List<Point> list, String passWord,
-			GestureCallBack callBack) {
+	public DrawlRoute(Context context, List<Point> list, String passWord,
+					  GestureCallBack callBack) {
 		super(context);
 		paint = new Paint(Paint.DITHER_FLAG);// 创建一个画笔
 		// 解决内存溢出的
@@ -82,23 +81,18 @@ public class Drawl extends View {
 		this.passWordSb = new StringBuilder();
 		this.passWord = passWord;
 		if (passWord == "") {
-			share = context.getSharedPreferences("FILENAME",
-					Activity.MODE_PRIVATE);// 指定操作的文件名称
-			edit = share.edit();// 编辑文件
-			// TODO Auto-generated catch block
 
 		}
 
 	}
 
-	public Drawl(Context context) {
+	public DrawlRoute(Context context) {
 		super(context);
 	}
 
 	// 画位图
 	@Override
 	protected void onDraw(Canvas canvas) {
-		// super.onDraw(canvas);
 		canvas.drawBitmap(bitmap, 0, 0, null);
 	}
 
@@ -106,7 +100,6 @@ public class Drawl extends View {
 
 		@Override
 		public boolean onTouch(View arg0, MotionEvent arg1) {
-			// TODO Auto-generated method stub
 			return false;
 		}
 	};
@@ -183,8 +176,7 @@ public class Drawl extends View {
 			// 用户手势绘制的密码为空不检验
 			setFocusableInTouchMode(true);
 			if (passWord == "") {
-				edit.putString("mima", passWordSb.toString());// 保存字符串
-				edit.commit();// 提交更新
+				SharedPreferencesHelper.setString(Constant.MIMA, passWordSb.toString());// 保存字符串
 				// clearScreenAndDrawList(false);
 				// invalidate();
 				new Handler().postDelayed(new Runnable() {

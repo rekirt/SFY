@@ -4,6 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="tab_indicator_text_size">@dimen/text_size_15</dimen>
     <dimen name="title_size">@dimen/text_size_23</dimen>
+    <dimen name="second_title_size">@dimen/text_size_20</dimen>
     <dimen name="text_size_32">32.0sp</dimen>
     <dimen name="text_size_31">31.0sp</dimen>
     <dimen name="text_size_30">30.0sp</dimen>
@@ -34,7 +35,9 @@
 
     <dimen name="qrcode_width">@dimen/space_200</dimen>
     <dimen name="btn_height">@dimen/space_48</dimen>
+    <dimen name="space_120">120.0dip</dimen>
     <dimen name="edt_height">55dip</dimen>
+    <dimen name="space_100">100.0dip</dimen>
     <dimen name="space_200">200.0dip</dimen>
     <dimen name="space_80">80.0dip</dimen>
     <dimen name="space_59">59.0dip</dimen>

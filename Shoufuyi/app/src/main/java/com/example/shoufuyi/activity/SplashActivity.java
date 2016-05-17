@@ -1,6 +1,5 @@
 package com.example.shoufuyi.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.gesture.Gesture;
@@ -8,7 +7,6 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -23,7 +21,7 @@ import java.util.UUID;
 /**
  * 启动页面
  */
-public class SplashActivity extends Activity {
+public class SplashActivity extends BaseActivity {
 
     private static final int sleepTime = 1500;
     final SharedPreferencesHelper sharedPreferencesHelper =SharedPreferencesHelper.getInstance();
@@ -31,9 +29,8 @@ public class SplashActivity extends Activity {
     View view;
     protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);//这只没有标题
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);//设置启动页面全屏
+//		requestWindowFeature(Window.FEATURE_NO_TITLE);//这只没有标题
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//设置启动页面全屏
         view = View.inflate(this, R.layout.activity_splash, null);
         setContentView(view);
         //保存UUID

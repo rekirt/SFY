@@ -71,7 +71,8 @@ public class SharedPreferencesHelper {
      * @param paramString  配置名称
      * @param paramBoolean 配置值
      */
-    public void setBoolean(String paramString, boolean paramBoolean) {
+    public static void setBoolean(String paramString, boolean paramBoolean) {
+        getInstance();
         editor.putBoolean(paramString, paramBoolean);
         apply(editor);
     }
@@ -82,7 +83,8 @@ public class SharedPreferencesHelper {
      * @param defaultValue 返回的默认值
      * @return
      */
-    public boolean getBoolean(String paramString, boolean defaultValue) {
+    public static boolean getBoolean(String paramString, boolean defaultValue) {
+        getInstance();
         return settings.getBoolean(paramString, defaultValue);
     }
 
@@ -91,7 +93,8 @@ public class SharedPreferencesHelper {
      * @param paramString 配置名称
      * @param paramValue  配置值
      */
-    public  void setString(String paramString, String paramValue) {
+    public static void setString(String paramString, String paramValue) {
+        getInstance();
         editor.putString(paramString, paramValue);
         apply(editor);
     }
@@ -103,6 +106,7 @@ public class SharedPreferencesHelper {
      * @return
      */
     public static String getString(String paramString, String defaultValue) {
+        getInstance();
         return settings.getString(paramString, defaultValue);
     }
 
@@ -111,7 +115,8 @@ public class SharedPreferencesHelper {
      * @param paramString 配置名称
      * @param paramValue  配置值
      */
-    public void setInt(String paramString, int paramValue) {
+    public static void setInt(String paramString, int paramValue) {
+        getInstance();
         editor.putInt(paramString, paramValue);
         apply(editor);
     }
@@ -122,7 +127,8 @@ public class SharedPreferencesHelper {
      * @param defaultValue  返回的默认值
      * @return
      */
-    public int getInt(String paramString, int defaultValue) {
+    public static int getInt(String paramString, int defaultValue) {
+        getInstance();
         return settings.getInt(paramString, defaultValue);
     }
 
@@ -132,6 +138,7 @@ public class SharedPreferencesHelper {
      * @param paramValue  配置值
      */
     public void setLong(String paramString, long paramValue) {
+        getInstance();
         editor.putLong(paramString, paramValue);
         apply(editor);
     }
@@ -143,18 +150,22 @@ public class SharedPreferencesHelper {
      * @return
      */
     public long getLong(String paramString, long defaultValue) {
+        getInstance();
         return settings.getLong(paramString, defaultValue);
     }
 
     public void setFloat(String paramString, float paramValue) {
+        getInstance();
         editor.putFloat(paramString, paramValue);
         apply(editor);
     }
     public float getFloat(String paramString, float defaultValue) {
+        getInstance();
         return settings.getFloat(paramString, defaultValue);
     }
 
     public void clear() {
+        getInstance();
         settings.edit().clear().commit();
     }
 }

@@ -13,10 +13,9 @@ import com.alibaba.fastjson.JSON;
 import com.example.shoufuyi.R;
 import com.example.shoufuyi.api.ApiRequest;
 import com.example.shoufuyi.api.JsonHttpHandler;
+import com.example.shoufuyi.uitls.Constant;
 import com.example.shoufuyi.uitls.SharedPreferencesHelper;
 import com.example.shoufuyi.uitls.dialog.DialogHelper;
-import com.example.shoufuyi.uitls.view.Gesture;
-import com.example.shoufuyi.uitls.view.InputView;
 import com.itech.message.APP_120033;
 
 import org.json.JSONArray;
@@ -24,9 +23,9 @@ import org.json.JSONObject;
 
 public class LoginActivity extends BaseActivity implements OnClickListener{
 	private Button butlogin;
-	private EditText editphone, editlogin;
+	private EditText mEditPhone;
+    private EditText mEditPwd;
 	private String strcode, strphone, strserect;
-	private SharedPreferencesHelper sharedPreferencesHelper;
 	private SharedPreferences.Editor edit;
 
 	private String message;
@@ -34,44 +33,40 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 	private String des3key;
 
 	protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
-		sharedPreferencesHelper = SharedPreferencesHelper.getInstance();
 		initView();
 		initData();
 	}
 
-	private InputView iplogin;
-	private InputView ipphone;
 
 	private void initView() {
-		iplogin = (InputView) findViewById(R.id.login);
-		ipphone = (InputView) findViewById(R.id.phone);
-		butlogin = (Button) findViewById(R.id.loginbut);
+        mEditPhone = (EditText) findViewById(R.id.edt_phone);
+        mEditPwd = (EditText) findViewById(R.id.edt_pwd);
+		butlogin = (Button) findViewById(R.id.btn_login);
 	}
 
 	private void initData(){
-		deskey = sharedPreferencesHelper.getString("deskey", "");
-		des3key = sharedPreferencesHelper.getString("des3key", "");
-		editphone = ipphone.getInputEt();
-		editlogin = iplogin.getInputEt();
-		strphone = sharedPreferencesHelper.getString("phone", "");
-		strserect = sharedPreferencesHelper.getString("LoginSerect", "");
-		editphone.setText(strphone);
+		deskey = SharedPreferencesHelper.getString(Constant.DESKEY, "");
+		des3key = SharedPreferencesHelper.getString(Constant.DESK3KEY, "");
+		strphone = SharedPreferencesHelper.getString(Constant.PHONE, "");
+		strserect = SharedPreferencesHelper.getString(Constant.LOGINSERECT, "");
+        mEditPhone.setText(strphone);
 		butlogin.setOnClickListener(this);
 	}
 
 	// 登录
 	private void login() {
 		APP_120033 app = new APP_120033();
-		app.setUserName(strphone);
+		app.setUserName(mEditPhone.getText().toString());
 		app.setLoginState("0000");
 		try {
-			app.setUserPass(des3key, editlogin.getText().toString().trim());
+			app.setUserPass(des3key, mEditPwd.getText().toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		DialogHelper.showProgressDialog(LoginActivity.this, "正在登录...", true, false);
 
 		ApiRequest.login(app, strphone, new JsonHttpHandler() {
@@ -82,33 +77,31 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 				message = returnapp.getDetailInfo();
 				String detailCode = returnapp.getDetailCode();
 				if (detailCode.equals("0000")) {
-					String merchantid = returnapp.getMerchantId();
-					sharedPreferencesHelper.setString("merchant", merchantid);
-					sharedPreferencesHelper.setString("token", returnapp.getToken());
-					sharedPreferencesHelper.setString("deskey", returnapp.getDesKey());
-					sharedPreferencesHelper.setString("des3key", returnapp.getDes3Key());
-					boolean log = sharedPreferencesHelper.getBoolean("login", false);
+                    SharedPreferencesHelper.setString(Constant.MERCHANT, returnapp.getMerchantId());
+                    SharedPreferencesHelper.setString(Constant.TOKEN, returnapp.getToken());
+                    SharedPreferencesHelper.setString(Constant.DESKEY, returnapp.getDesKey());
+                    SharedPreferencesHelper.setString(Constant.DESK3KEY, returnapp.getDes3Key());
+					boolean log = SharedPreferencesHelper.getBoolean(Constant.LOGIN, false);
 					if (log) {
-						sharedPreferencesHelper.setBoolean("login", false);
+                        SharedPreferencesHelper.setBoolean(Constant.LOGIN, false);
 						finish();
 						return;
 					}
-					String is_exit = sharedPreferencesHelper.getString("Is_exit", "");
+					String is_exit = SharedPreferencesHelper.getString(Constant.ISEXIT, "");
 					// 如果是退出就不要修改字段的值
 					if (is_exit.equals("1")) {
 						Intent intent = new Intent();
-						intent.setClass(LoginActivity.this,Gesture.class);
+						intent.setClass(LoginActivity.this,SetGestureActivity.class);
 						startActivity(intent);
 						finish();
 					} else {
-						sharedPreferencesHelper.setString("Is_Login", "");// 保存字符串
-						sharedPreferencesHelper.setString("mima", "");// 保存字符串
+                        SharedPreferencesHelper.setString(Constant.ISLOGIN, "");// 保存字符串
+                        SharedPreferencesHelper.setString(Constant.MIMA, "");// 保存字符串
 						Intent intent = new Intent();
-						intent.setClass(LoginActivity.this,Gesture.class);
+						intent.setClass(LoginActivity.this,SetGestureActivity.class);
 						startActivity(intent);
 						finish();
 						}
-
 					}
 			}
 
@@ -132,7 +125,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 
 	@Override
 	public void onClick(View view) {
-		if(view.getId() == R.id.loginbut){
+		if(view.getId() == R.id.btn_login){
 			login();
 		}
 	}

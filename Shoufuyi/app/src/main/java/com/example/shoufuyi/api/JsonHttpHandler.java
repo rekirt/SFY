@@ -22,7 +22,7 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
     private boolean isShowErrorMessage = true;
     private boolean isProgressDialogCancleable = true;
     private boolean isProgressDialogCanceledOnTouchOutside = true;
-    private boolean isNeedToReturnResponseBody = false;
+    private boolean isNeedToReturnResponseBody = true;
     private String mDialogMessage;
     private String mStatusTag = "retCode";
     private String mMessageTag = "errMsg";

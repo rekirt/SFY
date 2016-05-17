@@ -43,7 +43,12 @@ public class Constant {
     public static String NUMBER = "number";
     public static String ISEXIT = "Is_exit";
     public static String GAIMIMA = "gaimima";
-    public static String MIMA = "mima";
+	public static String MIMA = "mima";
+	public static String MERCHANT = "merchant";
+	public static String LOGIN = "login";
+	public static String ISLOGIN = "Is_Login";
+	public static String LOGINSERECT = "LoginSerect";
+	public static String GESNUMBER = "gesnumber";
 
 
 }

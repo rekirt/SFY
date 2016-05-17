@@ -1,66 +1,129 @@
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:input="http://schemas.android.com/apk/res/com.example.shoufuyi"
-    android:id="@+id/myscroll"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
-
-    <RelativeLayout
-        android:id="@+id/screen"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/login_bg">
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:padding="@dimen/space_59"
+                android:src="@drawable/loginmidlogo" />
+        </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/loginPanel"
-            android:layout_width="400dp"
-            android:layout_height="450dp"
-            android:layout_centerHorizontal="true"
-            android:orientation="vertical" >
-
-            <RelativeLayout
-                android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/space_10"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edt_height"
+            android:background="@color/white">
+            <ImageView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/login_bg" >
-
-                <ImageView
-                    android:id="@+id/imageView1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/loginmidlogo" />
-            </RelativeLayout>
-            <com.example.shoufuyi.uitls.view.InputView
-                android:id="@+id/phone"
+                android:src="@drawable/loginname"
+                android:padding="@dimen/space_10"
+                />
+            <EditText
+                android:id="@+id/edt_phone"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                input:hint="手机号"
-                input:label_background="@drawable/loginname" />
-
-            <com.example.shoufuyi.uitls.view.InputView
-                android:id="@+id/login"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                input:hint="输入登录密码"
-                input:label_background="@drawable/loginsercet"
-                input:password="true" />
-
-            <Button
-                android:id="@+id/loginbut"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/activation"
-                android:text="登录"
-                android:textColor="#ffffff" />
+                android:layout_height="match_parent"
+                android:hint="手机号"
+                android:background="@null"
+                android:maxLength="13"
+                android:inputType="number"
+                />
         </LinearLayout>
-    </RelativeLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/gray"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edt_height"
+            android:background="@color/white">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/loginsercet"
+                android:padding="@dimen/space_10"
+                />
+            <EditText
+                android:id="@+id/edt_pwd"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:hint="输入登录密码"
+                android:layout_weight="1"
+                android:background="@null"
+                android:maxLength="6"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/space_18"
+            >
+            <CheckBox
+                android:id="@+id/cb_privacy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                />
+            <TextView
+                android:id="@+id/tv_agree"
+                android:text="记住手机号"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/normal_text_color"
+                />
+        </LinearLayout>
 
+        <!--同意注册-->
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/btn_height"
+            android:layout_margin="@dimen/space_15"
+            android:text="登录"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:background="@drawable/btn_red_selector"
+            android:textSize="@dimen/title_size"
+            android:enabled="false"
+            android:clickable="false"
+            >
+        </Button>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/space_18"
+            >
+            <TextView
+                android:id="@+id/tv_register"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="快速注册"
+                android:layout_weight="1"
+                />
+            <TextView
+                android:id="@+id/tv_forget_pwd"
+                android:text="忘记密码？"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/space_18"
+                android:textColor="@color/normal_text_color"
+                android:gravity="right"
+                />
+        </LinearLayout>
+    </LinearLayout>
 </ScrollView>

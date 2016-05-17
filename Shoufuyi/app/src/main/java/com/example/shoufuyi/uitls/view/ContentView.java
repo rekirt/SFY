@@ -10,11 +10,6 @@ import com.example.shoufuyi.R;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 
- * @author yinqiaoyin
- *
- */
 public class ContentView extends ViewGroup {
 
 	private int baseNum = 6;
@@ -25,17 +20,17 @@ public class ContentView extends ViewGroup {
 
 	private List<Point> list;
 	private Context context;
-	private Drawl drawl;
+	private DrawlRoute drawlRoute;
 	
 
-	public ContentView(Context context,String passWord,Drawl.GestureCallBack callBack) {
+	public ContentView(Context context,String passWord, DrawlRoute.GestureCallBack callBack) {
 		super(context);
 		screenDispaly = ScreenUtils.getScreenDispaly(context);
 		d = screenDispaly[0]/3;
 		this.list = new ArrayList<Point>();
 		this.context = context;
 		addChild();
-		drawl = new Drawl(context, list,passWord,callBack);
+		drawlRoute = new DrawlRoute(context, list,passWord,callBack);
 	}
 	
 	private void addChild(){
@@ -64,9 +59,9 @@ public class ContentView extends ViewGroup {
 		LayoutParams layoutParams = new LayoutParams(width, width);
 		
 		this.setLayoutParams(layoutParams);
-		drawl.setLayoutParams(layoutParams);
+		drawlRoute.setLayoutParams(layoutParams);
 
-		parent.addView(drawl);
+		parent.addView(drawlRoute);
 		parent.addView(this);
 		
 	}
