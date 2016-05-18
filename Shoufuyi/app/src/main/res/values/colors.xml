@@ -59,4 +59,6 @@
 
     <color name="normal_text_color">#666666</color>
 
+    <color name="list_item_background_normal">#ffffff</color>
+    <color name="list_item_background_pressed">#F1F1F1</color>
 </resources>

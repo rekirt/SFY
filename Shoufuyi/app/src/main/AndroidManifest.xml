@@ -97,6 +97,11 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait"
             android:label="@string/set_gesture_activity"/>
+        <activity android:name=".activity.NewSignActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait"
+            android:label="@string/new_sign_activity"/>
+
     </application>
 
 </manifest>

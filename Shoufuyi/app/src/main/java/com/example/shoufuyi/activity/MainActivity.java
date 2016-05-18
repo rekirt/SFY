@@ -93,10 +93,10 @@ public class MainActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 switch (arg2){
                     case 0:
-//                        Intent intent = new Intent();
-//                        intent.putExtra("where", "1");
-//                        intent.setClass(TestUIActivity.this, InfomationInput.class);
-//                        startActivity(intent);
+                        Intent intent = new Intent();
+                        intent.putExtra("where", "1");
+                        intent.setClass(MainActivity.this, NewSignActivity.class);
+                        startActivity(intent);
                         break;
                     case 1:
 //                        Intent intent = new Intent();
