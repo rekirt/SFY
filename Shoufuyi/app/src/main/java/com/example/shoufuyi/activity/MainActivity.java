@@ -8,14 +8,18 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.example.shoufuyi.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends BaseActivity {
@@ -46,6 +50,8 @@ public class MainActivity extends BaseActivity {
 
     /** 小圆点的父控件 */
     private LinearLayout llDotGroup;
+
+    private GridView gridview;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +67,54 @@ public class MainActivity extends BaseActivity {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         llDotGroup = (LinearLayout) findViewById(R.id.ll_dot_group);
         tvBannerTextDesc = (TextView) findViewById(R.id.tv_banner_text_desc);
+        gridview = (GridView) findViewById(R.id.GridView);
+    }
+
+    private void initData(){
+        ArrayList<HashMap<String, Object>> mMenuList = new ArrayList<HashMap<String, Object>>();
+        int[] res = { R.drawable.new_sign, R.drawable.unfinish_sign, R.drawable.search_sign };
+        String[] mMenuName = { "新建签约", "未完成签约", "签约查询", "设置" };
+        for (int i = 0; i < 3; i++) {
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put("ItemImage", res[i]);
+            map.put("ItemText", "" + mMenuName[i]);
+            mMenuList.add(map);
+        }
+
+        SimpleAdapter saItem = new SimpleAdapter(this, mMenuList, // 数据源
+                R.layout.item_gridview, // xml实现
+                new String[] { "ItemImage", "ItemText" }, // 对应map的Key
+                new int[] { R.id.ItemImage, R.id.ItemText }); // 对应R的Id
+
+        // 添加Item到网格中
+        gridview.setAdapter(saItem);
+        // 添加点击事件
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                switch (arg2){
+                    case 0:
+//                        Intent intent = new Intent();
+//                        intent.putExtra("where", "1");
+//                        intent.setClass(TestUIActivity.this, InfomationInput.class);
+//                        startActivity(intent);
+                        break;
+                    case 1:
+//                        Intent intent = new Intent();
+//                        intent.setClass(TestUIActivity.this,
+//                                com.example.shoufuyi.Unfinished.class);
+//                        startActivity(intent);
+                        break;
+                    case 2:
+//                        Intent intent = new Intent();
+//                        intent.setClass(TestUIActivity.this, Query.class);
+//                        startActivity(intent);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
 
         imageViewContainer = new ArrayList<ImageView>();
         int[] imageIDs = new int[] {
@@ -82,8 +136,8 @@ public class MainActivity extends BaseActivity {
             // 每循环一次添加一个点到线行布局中
             dot = new View(this);
             dot.setBackgroundResource(R.drawable.dot_bg_selector);
-            params = new LayoutParams(5, 5);
-            params.leftMargin = 10;
+            params = new LayoutParams(20, 20);
+            params.leftMargin = 15;
             dot.setEnabled(false);
             dot.setLayoutParams(params);
             llDotGroup.addView(dot); // 向线性布局中添加"点"
@@ -96,10 +150,6 @@ public class MainActivity extends BaseActivity {
         tvBannerTextDesc.setText(bannerTextDescArray[0]);
         llDotGroup.getChildAt(0).setEnabled(true);
         viewPager.setCurrentItem(0);
-    }
-
-    private void initData(){
-
     }
     @Override
     protected void onDestroy() {
