@@ -103,6 +103,7 @@ public class StartToUseActivity extends BaseActivity{
 
     @Override
     public void onClick(View view) {
+        super.onClick(view);
         switch (view.getId()){
             case R.id.btn_get_code:
                     getCode();

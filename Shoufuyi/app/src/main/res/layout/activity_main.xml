@@ -1,16 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.MainActivity">
+    android:layout_height="match_parent">
 
     <include layout="@layout/toolbar"/>
 
-    <TextView
-        android:id="@+id/tv_test"
+    <!-- ViewPager -->
+    <android.support.v4.view.ViewPager
         android:layout_below="@+id/toolbar"
-        android:layout_width="wrap_content"
+        android:id="@+id/viewpager"
+        android:layout_width="fill_parent"
+        android:layout_height="180dip" />
+
+    <LinearLayout
+        android:id="@+id/ll_banner"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_alignBottom="@id/viewpager"
+        android:background="#44000000"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="5dip" >
+
+        <!-- Banner的文字描述 -->
+        <TextView
+            android:id="@+id/tv_banner_text_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white" />
+
+        <!-- 小圆点的父控件 -->
+        <LinearLayout
+            android:id="@+id/ll_dot_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dip"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
+        </LinearLayout>
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/GridView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_banner"
+        android:layout_marginTop="@dimen/space_10"
+        android:columnWidth="120dp"
+        android:gravity="center"
+        android:fadeScrollbars="true"
+        android:numColumns="auto_fit"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:stretchMode="columnWidth" >
+    </GridView>
+
 </RelativeLayout>

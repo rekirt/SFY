@@ -125,6 +125,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 
 	@Override
 	public void onClick(View view) {
+		super.onClick(view);
 		if(view.getId() == R.id.btn_login){
 			login();
 		}

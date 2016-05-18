@@ -127,14 +127,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    /**
-     * 点击右上角图标调用该方法
-     *
-     * @param view 绑定的组件
-     */
-    public void gotoSetting(View view) {
-
-    }
     public boolean canBack = false;
 
     public boolean canGoBack() {

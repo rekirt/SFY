@@ -119,6 +119,7 @@ public class ChangePwdActivity extends BaseActivity {
 
 	@Override
 	public void onClick(View view) {
+        super.onClick(view);
         if (isPrepare()){
             modifyPwd();
         }

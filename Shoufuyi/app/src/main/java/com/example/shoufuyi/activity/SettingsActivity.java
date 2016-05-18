@@ -109,6 +109,7 @@ public class SettingsActivity extends BaseActivity {
 
     @Override
     public void onClick(View view) {
+        super.onClick(view);
         switch (view.getId()){
             case R.id.btn_logout:
                 DiologToJump("确定退出登录");

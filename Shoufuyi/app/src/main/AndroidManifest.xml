@@ -50,10 +50,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.SettingsActivity"
+            android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
-            android:label="@string/setting_activity">
+            android:label="@string/main_activity"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -75,23 +76,23 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:label="@string/login_activity"/>
 
-        <activity android:name=".activity.SplashActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <!--<activity android:name=".activity.SplashActivity"-->
+            <!--android:windowSoftInputMode="adjustUnspecified|stateHidden"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:theme="@style/Theme.AppCompat.Light.NoActionBar" />-->
 
-        <activity android:name=".activity.MainActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
-            android:screenOrientation="portrait"
-            android:label="@string/main_activity"/>
+        <!--<activity android:name=".activity.MainActivity"-->
+            <!--android:windowSoftInputMode="adjustUnspecified|stateHidden"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:label="@string/main_activity"/>-->
         <activity android:name=".activity.ChangePwdActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait"
             android:label="@string/change_pwd_activity"/>
-        <!--<activity android:name=".activity.SettingsActivity"-->
-            <!--android:windowSoftInputMode="adjustUnspecified|stateHidden"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:label="@string/setting_activity"/>-->
+        <activity android:name=".activity.SettingsActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait"
+            android:label="@string/setting_activity"/>
         <activity android:name=".activity.SetGestureActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait"
