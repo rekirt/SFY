@@ -13,5 +13,6 @@
     <string name="main_activity">收付易签约</string>
     <string name="setting_activity">管理中心</string>
     <string name="new_sign_activity">持卡人信息录入</string>
+    <string name="element_verification_activity">要素验证</string>
 
 </resources>

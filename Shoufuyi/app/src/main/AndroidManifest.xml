@@ -10,8 +10,10 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -35,73 +37,80 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-feature android:name="android.hardware.camera.flash" />
 
+    <uses-feature android:name="android.hardware.camera.flash" />
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
+
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <application
-        android:allowBackup="true"
         android:name=".BaseApplication"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.SplashActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
-            android:label="@string/main_activity"
-            >
+            android:windowSoftInputMode="adjustUnspecified|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.StartToUseActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:label="@string/start_to_use_activity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:label="@string/start_to_use_activity"/>
-
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".activity.LoginActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:label="@string/login_activity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:label="@string/login_activity"/>
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
-        <!--<activity android:name=".activity.SplashActivity"-->
-            <!--android:windowSoftInputMode="adjustUnspecified|stateHidden"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/Theme.AppCompat.Light.NoActionBar" />-->
+        <!-- <activity android:name=".activity.SplashActivity" -->
+        <!-- android:windowSoftInputMode="adjustUnspecified|stateHidden" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:theme="@style/Theme.AppCompat.Light.NoActionBar" /> -->
 
-        <!--<activity android:name=".activity.MainActivity"-->
-            <!--android:windowSoftInputMode="adjustUnspecified|stateHidden"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:label="@string/main_activity"/>-->
-        <activity android:name=".activity.ChangePwdActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
-            android:screenOrientation="portrait"
-            android:label="@string/change_pwd_activity"/>
-        <activity android:name=".activity.SettingsActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
-            android:screenOrientation="portrait"
-            android:label="@string/setting_activity"/>
-        <activity android:name=".activity.SetGestureActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
-            android:screenOrientation="portrait"
-            android:label="@string/set_gesture_activity"/>
-        <activity android:name=".activity.NewSignActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
-            android:screenOrientation="portrait"
-            android:label="@string/new_sign_activity"/>
 
+         <activity
+             android:name=".activity.MainActivity"
+             android:windowSoftInputMode="adjustUnspecified|stateHidden"
+             android:screenOrientation="portrait"
+             android:label="@string/main_activity"/>
+        <activity
+            android:name=".activity.ChangePwdActivity"
+            android:label="@string/change_pwd_activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/setting_activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity
+            android:name=".activity.SetGestureActivity"
+            android:label="@string/set_gesture_activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity
+            android:name=".activity.NewSignActivity"
+            android:label="@string/new_sign_activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity android:name=".activity.ElementVerificationActivity"
+            android:label="@string/element_verification_activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            />
     </application>
 
 </manifest>

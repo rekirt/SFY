@@ -28,6 +28,7 @@
             android:id="@+id/iv_id_camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="-20dp"
             android:src="@drawable/ic_camera"/>
     </LinearLayout>
 
@@ -101,6 +102,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="-20dp"
             android:src="@drawable/ic_camera"/>
     </LinearLayout>
     <LinearLayout
@@ -110,7 +112,7 @@
         android:layout_marginLeft="@dimen/space_18"
         >
         <CheckBox
-            android:id="@+id/cb_privacy"
+            android:id="@+id/cb_auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
@@ -126,7 +128,7 @@
 
     <!--同意注册-->
     <Button
-        android:id="@+id/btn_login"
+        android:id="@+id/btn_ok"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/btn_height"
         android:layout_margin="@dimen/space_15"
@@ -135,8 +137,6 @@
         android:textColor="@color/white"
         android:background="@drawable/btn_red_selector"
         android:textSize="@dimen/title_size"
-        android:enabled="false"
-        android:clickable="false"
         >
     </Button>
 </LinearLayout>

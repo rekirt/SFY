@@ -32,14 +32,12 @@ public class StartToUseActivity extends BaseActivity{
 
 	// 通过设备读取的手机号码
 	private APP_120032 returnapp;
-    private SharedPreferencesHelper sharedPreferencesHelper;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
         View view = View.inflate(this, R.layout.activity_start_to_use, null);
         setContentView(view);
-        sharedPreferencesHelper =  SharedPreferencesHelper.getInstance();
 		initView();
         initData();
 	}
@@ -90,7 +88,7 @@ public class StartToUseActivity extends BaseActivity{
             }
         });
         //为了方便测试，暂时将号码写入输入框
-        editphone.setText("13430990001");
+        editphone.setText("134 3099 0001");
         editphone.setSelection(editphone.getText().toString().length());
         if (PhoneUtils.isPhoneNumberValid(editphone.getText().toString())) {
             btn_getcode.setClickable(true);
@@ -180,7 +178,7 @@ public class StartToUseActivity extends BaseActivity{
 
     // 获得验证码
     private void getCode(){
-                ToastHelper.ShowToast("发送成功！");
+                //ToastHelper.ShowToast("发送成功！");
                 Countdown();
                 // 发送报文获取验证码
                 APP_120031 app = new APP_120031();
@@ -236,11 +234,11 @@ public class StartToUseActivity extends BaseActivity{
                     public void onDo(JSONObject responseJsonObject) {
                         returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120032.class);
                         if ("0000".equals(returnapp.getDetailCode())){
-                            sharedPreferencesHelper.setString(Constant.ACTIVATION, "0000");// 记录登录成功状态
-                            sharedPreferencesHelper.setString(Constant.PHONE, editphone.getText().toString());// 保存字符串
-                            sharedPreferencesHelper.setString(Constant.DESKEY, returnapp.getDesKey());
-                            sharedPreferencesHelper.setString(Constant.DESK3KEY, returnapp.getDes3Key());
-                            sharedPreferencesHelper.setString(Constant.TOKEN, returnapp.getToken());
+                            SharedPreferencesHelper.setString(Constant.ACTIVATION, "0000");// 记录登录成功状态
+                            SharedPreferencesHelper.setString(Constant.PHONE, editphone.getText().toString());// 保存字符串
+                            SharedPreferencesHelper.setString(Constant.DESKEY, returnapp.getDesKey());
+                            SharedPreferencesHelper.setString(Constant.DESK3KEY, returnapp.getDes3Key());
+                            SharedPreferencesHelper.setString(Constant.TOKEN, returnapp.getToken());
                             Intent intent = new Intent();
                             intent.setClass(StartToUseActivity.this, ChangePwdActivity.class);
                             startActivity(intent);
