@@ -11,5 +11,6 @@
     <string name="set_gesture_activity">设置手势密码</string>
     <string name="change_pwd_activity">修改密码</string>
     <string name="main_activity">收付易签约</string>
+    <string name="setting_activity">管理中心</string>
 
 </resources>

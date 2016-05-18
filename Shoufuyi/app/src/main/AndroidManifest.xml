@@ -50,10 +50,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.SetGestureActivity"
+            android:name=".activity.SettingsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
-            android:label="@string/set_gesture_activity">
+            android:label="@string/setting_activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -88,6 +88,14 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait"
             android:label="@string/change_pwd_activity"/>
+        <!--<activity android:name=".activity.SettingsActivity"-->
+            <!--android:windowSoftInputMode="adjustUnspecified|stateHidden"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:label="@string/setting_activity"/>-->
+        <activity android:name=".activity.SetGestureActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait"
+            android:label="@string/set_gesture_activity"/>
     </application>
 
 </manifest>

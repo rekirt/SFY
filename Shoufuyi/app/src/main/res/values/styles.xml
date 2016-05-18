@@ -32,16 +32,28 @@
 
     <style name="setting_style">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/space_59</item>
+        <item name="android:layout_height">@dimen/space_48</item>
         <item name="android:background">@color/white</item>
-        <item name="android:paddingLeft">@dimen/space_10</item>
-        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_gravity">left</item>
+        <item name="android:gravity">left</item>
+        <item name="android:paddingLeft">@dimen/space_20</item>
     </style>
     <style name="setting_text_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:drawablePadding">@dimen/space_10</item>
+        <item name="android:layout_marginLeft">@dimen/space_10</item>
         <item name="android:gravity">center</item>
-        <item name="android:textSize">@dimen/title_size</item>
+        <item name="android:textSize">@dimen/second_title_size</item>
+    </style>
+    <style name="setting_image_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:padding">@dimen/space_15</item>
+    </style>
+    <style name="setting_left_image_style">
+        <item name="android:layout_width">@dimen/space_30</item>
+        <item name="android:layout_height">@dimen/space_30</item>
+        <item name="android:layout_centerVertical">true</item>
     </style>
 </resources>
