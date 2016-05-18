@@ -56,4 +56,9 @@
         <item name="android:layout_height">@dimen/space_30</item>
         <item name="android:layout_centerVertical">true</item>
     </style>
+    <!--<style name="setting_right_text_style">-->
+        <!--<item name="android:layout_width">@dimen/space_30</item>-->
+        <!--<item name="android:layout_height">@dimen/space_30</item>-->
+        <!--<item name="android:layout_alignParentRight">true</item>-->
+    <!--</style>-->
 </resources>

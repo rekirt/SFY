@@ -3,6 +3,8 @@ package com.example.shoufuyi.activity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.shoufuyi.R;
+
 /**
  * Shoufuyi
  * Description:
@@ -16,7 +18,7 @@ public class RunningSettingActivity extends BaseActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_running_settings);
     }
 
     @Override

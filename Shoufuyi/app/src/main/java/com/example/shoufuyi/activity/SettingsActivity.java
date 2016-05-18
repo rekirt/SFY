@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.gesture.Gesture;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -350,7 +349,7 @@ public class SettingsActivity extends BaseActivity {
                         SharedPreferencesHelper.setString(Constant.ISLOGIN, "");// 保存字符串
                         SharedPreferencesHelper.setString(Constant.MIMA, "");// 保存字符串
                         Intent intent = new Intent();
-                        intent.setClass(SettingsActivity.this, Gesture.class);
+                        intent.setClass(SettingsActivity.this, SetGestureActivity.class);
                         startActivity(intent);
     //                    finish();
                         break;

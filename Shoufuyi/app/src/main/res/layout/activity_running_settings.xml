@@ -13,58 +13,25 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:background="@drawable/settings_bg"
-                android:gravity="center_vertical">
-                <ImageView
-                    android:id="@+id/iv_avatar"
-                    android:layout_width="@dimen/space_100"
-                    android:layout_height="@dimen/space_100"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/default_avatar" />
-                <TextView
-                    android:id="@+id/tv_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/iv_avatar"
-                    android:layout_centerInParent="true"
-                    android:text="张大三"
-                    android:textSize="@dimen/title_size"
-                    android:textColor="@color/white"
-                    android:gravity="center"
-                    />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_name"
-                    android:layout_centerInParent="true"
-                    android:text="中国太平洋保险有限公司广东分公司"
-                    android:textSize="@dimen/second_title_size"
-                    android:textColor="@color/white"
-                    android:gravity="center"
-                    />
-            </RelativeLayout>
-            <ImageView
-                android:layout_width="match_parent"
-                android:background="@color/gray"
                 android:layout_marginTop="@dimen/space_10"
-                android:layout_height="0.1dp" />
-            <RelativeLayout
-                android:id="@+id/rl_setting"
+                android:id="@+id/rl_page_number"
                 style="@style/setting_style"
                 >
-                <ImageView
-                    style="@style/setting_left_image_style"
-                    android:src="@drawable/setting"
-                    android:id="@+id/iv_setting"
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_setting"
+                    android:gravity="center_vertical"
+                    android:text="4条"
+                    android:layout_toLeftOf="@+id/iv_setting_right"
                     />
                 <TextView
                     style="@style/setting_text_style"
-                    android:layout_toRightOf="@+id/iv_setting"
-                    android:text="运行参数设置"/>
+                    android:text="每页数据量"/>
                 <ImageView
+                    android:id="@+id/iv_setting_right"
                     style="@style/setting_image_style"
                     android:src="@drawable/ic_right"
                     />
@@ -74,19 +41,22 @@
         android:background="@color/gray"
         android:layout_height="0.1dp" />
             <RelativeLayout
-        android:id="@+id/rl_business_authority"
+        android:id="@+id/rl_out_of_time"
         style="@style/setting_style"
         >
-        <ImageView
-            style="@style/setting_left_image_style"
-            android:src="@drawable/running_settings"
-            android:id="@+id/iv_running_settings"
-            />
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_time"
+                    android:gravity="center_vertical"
+                    android:text="30秒"
+                    android:layout_toLeftOf="@+id/iv_time"
+                    />
         <TextView
             style="@style/setting_text_style"
-            android:layout_toRightOf="@+id/iv_running_settings"
-            android:text="业务权限"/>
+            android:text="超时时长"/>
         <ImageView
+            android:id="@+id/iv_time"
             style="@style/setting_image_style"
             android:src="@drawable/ic_right"/>
     </RelativeLayout>
@@ -95,80 +65,73 @@
         android:background="@color/gray"
         android:layout_height="0.1dp" />
             <RelativeLayout
-        android:id="@+id/rl_modify_gesture_pwd"
-        style="@style/setting_style"
-        >
-        <ImageView
-            style="@style/setting_left_image_style"
-            android:src="@drawable/change_pwd_finger"
-            android:id="@+id/iv_change_pwd_finger"
-            />
-        <TextView
-            style="@style/setting_text_style"
-            android:layout_toRightOf="@+id/iv_change_pwd_finger"
-            android:text="修改手势密码"/>
-        <ImageView
-            style="@style/setting_image_style"
-            android:src="@drawable/ic_right"/>
-    </RelativeLayout>
+                android:id="@+id/rl_finger_times"
+                style="@style/setting_style"
+                >
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_finger_times"
+                    android:gravity="center_vertical"
+                    android:text="4次"
+                    android:layout_toLeftOf="@+id/iv_finger_times"
+                    />
+                <TextView
+                    style="@style/setting_text_style"
+                    android:text="手势密码次数"/>
+                <ImageView
+                    android:id="@+id/iv_finger_times"
+                    style="@style/setting_image_style"
+                    android:src="@drawable/ic_right"/>
+            </RelativeLayout>
             <ImageView
         android:layout_width="match_parent"
         android:background="@color/gray"
         android:layout_height="0.1dp" />
             <RelativeLayout
-        android:id="@+id/rl_change_pwd"
-        style="@style/setting_style"
-        >
-        <ImageView
-            style="@style/setting_left_image_style"
-            android:src="@drawable/loginsercet"
-            android:id="@+id/iv_loginsercet"
-            />
-        <TextView
-            style="@style/setting_text_style"
-            android:layout_toRightOf="@+id/iv_loginsercet"
-            android:text="修改登录密码"/>
-        <ImageView
-            style="@style/setting_image_style"
-            android:src="@drawable/ic_right"/>
-    </RelativeLayout>
+                android:id="@+id/rl_video_time"
+                style="@style/setting_style"
+                >
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_video_time"
+                    android:gravity="center_vertical"
+                    android:text="10秒"
+                    android:layout_toLeftOf="@+id/iv_video_time"
+                    />
+                <TextView
+                    style="@style/setting_text_style"
+                    android:text="视频时长"/>
+                <ImageView
+                    android:id="@+id/iv_video_time"
+                    style="@style/setting_image_style"
+                    android:src="@drawable/ic_right"/>
+            </RelativeLayout>
             <ImageView
         android:layout_width="match_parent"
         android:background="@color/gray"
         android:layout_height="0.1dp" />
             <RelativeLayout
-        android:id="@+id/rl_app_update"
-        style="@style/setting_style"
-        >
-        <ImageView
-            style="@style/setting_left_image_style"
-            android:src="@drawable/update_app"
-            android:id="@+id/iv_update_app"
-            />
-        <TextView
-            style="@style/setting_text_style"
-            android:layout_toRightOf="@+id/iv_update_app"
-            android:text="App更新"/>
-        <ImageView
-            style="@style/setting_image_style"
-            android:src="@drawable/ic_right"/>
-    </RelativeLayout>
-            <ImageView
-                android:layout_width="match_parent"
-                android:background="@color/gray"
-                android:layout_height="0.1dp" />
-            <Button
-        android:id="@+id/btn_logout"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/btn_height"
-        android:layout_margin="@dimen/space_15"
-        android:text="退出登录"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:background="@drawable/btn_red_selector"
-        android:textSize="@dimen/title_size"
-        >
-    </Button>
+                android:id="@+id/rl_cache_time"
+                style="@style/setting_style"
+                >
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_business_authority"
+                    android:gravity="center_vertical"
+                    android:text="10天"
+                    android:layout_toLeftOf="@+id/iv_cache_time"
+                    />
+                <TextView
+                    style="@style/setting_text_style"
+                    android:text="图片视频缓存时长"/>
+                <ImageView
+                    android:id="@+id/iv_cache_time"
+                    style="@style/setting_image_style"
+                    android:src="@drawable/ic_right"/>
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
