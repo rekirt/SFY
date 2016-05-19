@@ -76,7 +76,6 @@ public class ChangePwdActivity extends BaseActivity {
                     SharedPreferencesHelper.setString("LoginSerect",newPwd);// 保存字符串
                     SharedPreferencesHelper.setString("gaimima", "0000");
                     SharedPreferencesHelper.setString("Is_exit", "1");
-
                     Intent intent = new Intent(ChangePwdActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }

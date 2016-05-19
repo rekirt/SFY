@@ -14,6 +14,8 @@
     <string name="setting_activity">管理中心</string>
     <string name="new_sign_activity">持卡人信息录入</string>
     <string name="element_verification_activity">要素验证</string>
+    <string name="query_sign_activity">签约查询</string>
+    <string name="query_unfinish_sign_activity">查询未完成签约</string>
 
     <!-- Error View -->
     <string name="error_view_click_to_refresh">Click on the screen to reload</string>
@@ -27,4 +29,9 @@
     <string name="loading">loading…</string>
     <string name="loading_no_more">No more.</string>
 
+    <string-array name="status">
+        <item>待签约</item>
+        <item>签约生效</item>
+        <item>签约失效</item>
+    </string-array>
 </resources>

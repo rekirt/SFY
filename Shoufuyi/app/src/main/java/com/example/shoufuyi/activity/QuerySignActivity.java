@@ -7,6 +7,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.alibaba.fastjson.JSON;
 import com.example.shoufuyi.R;
@@ -39,7 +43,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class UnfinishedActivity extends BaseActivity implements
+
+public class QuerySignActivity extends BaseActivity implements
         RecycleBaseAdapter.OnItemClickListener, RecycleBaseAdapter.OnItemLongClickListener {
     protected static final int STATE_NONE = 0;
     protected static final int STATE_REFRESH = 1;
@@ -56,6 +61,17 @@ public class UnfinishedActivity extends BaseActivity implements
     protected int mCurrentPage = 1;//列表第几页
     private ParserTask mParserTask;
 
+    // 上一天下一天按钮
+    private Button mBtnPre;
+    private Button mBtnNext;
+    // 查询按钮
+    private Button mBtnQuery;
+
+    private Spinner spinstatus;
+    private EditText editdate;
+
+    // 采集状态默认待采集
+    private int collstate = 1;
 
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
 
@@ -76,7 +92,7 @@ public class UnfinishedActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_unfinished);
+        setContentView(R.layout.activity_query_sign);
         initView();
         setCanBack(true);
     }
@@ -107,11 +123,11 @@ public class UnfinishedActivity extends BaseActivity implements
         mRecycleView.setOnScrollListener(mScrollListener);
 
         if(isNeedListDivider()) {
-            mRecycleView.addItemDecoration(new DividerItemDecoration(UnfinishedActivity.this,
+            mRecycleView.addItemDecoration(new DividerItemDecoration(QuerySignActivity.this,
                     DividerItemDecoration.VERTICAL_LIST));
         }
 
-        mLayoutManager = new LinearLayoutManager(UnfinishedActivity.this);
+        mLayoutManager = new LinearLayoutManager(QuerySignActivity.this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecycleView.setLayoutManager(mLayoutManager);
         mRecycleView.setHasFixedSize(true);
@@ -141,8 +157,63 @@ public class UnfinishedActivity extends BaseActivity implements
         if (!TextUtils.isEmpty(mStoreEmptyMessage)) {
             mErrorLayout.setErrorMessage(mStoreEmptyMessage);
         }
+        spinstatus = (Spinner) findViewById(R.id.spinstatus);
+        editdate = (EditText) findViewById(R.id.edit_date);
+        mBtnPre = (Button) findViewById(R.id.bt_pre);
+        mBtnPre.setOnClickListener(this);
+        mBtnNext = (Button) findViewById(R.id.bt_next);
+        mBtnNext.setOnClickListener(this);
+        mBtnQuery = (Button) findViewById(R.id.bt_query);
+        mBtnQuery.setOnClickListener(this);
+        spinstatus.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                collstate = arg2 + 1;
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
     }
 
+    @Override
+    public void onClick(View view) {
+        super.onClick(view);
+        switch (view.getId()){
+            case R.id.bt_pre:
+            case R.id.bt_next:
+                dealDateChoose(view);
+                break;
+            case R.id.bt_query:
+                sendRequestData();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void dealDateChoose(View v){
+        Date lastDate = null;
+        long time = (Long) editdate.getTag();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        long strtime = System.currentTimeMillis();
+        Date date = new Date(strtime);
+        String systime = formatter.format(date);
+        if (v.getId() == R.id.bt_pre) {
+            lastDate = new Date(time - 24 * 60 * 60 * 1000);
+        } else {
+            if (time + 60 * 1000 < strtime) {
+                lastDate = new Date(time + 24 * 60 * 60 * 1000);
+            } else {
+                lastDate = new Date(time);
+            }
+
+        }
+        editdate.setText(formatter.format(lastDate));
+        time = lastDate.getTime();
+        editdate.setTag(time);
+    }
 
     APP_120023 mReturnApp = new APP_120023();
     private ArrayList<Result_120023> mSignList = new ArrayList<Result_120023>();
@@ -158,13 +229,14 @@ public class UnfinishedActivity extends BaseActivity implements
         app.setCreateUser(SharedPreferencesHelper.getString(Constant.PHONE, ""));
         Page page = new Page();
         page.setPageNo(String.valueOf(mCurrentPage));
-        page.setPageSize(String.valueOf(200));
+        page.setPageSize(String.valueOf(TDevice.getPageSize()));
         app.setPage(page);
-        app.setState(String.valueOf(1));
-        app.setCreateDateStart("20151121");
+        app.setState(String.valueOf(collstate));
+
+        app.setCreateDateStart(editdate.getText().toString().replace("-", ""));
         app.setCreateDateEnd(endtime);
-        DialogHelper.showProgressDialog(UnfinishedActivity.this, "正在查询，请稍候...", true, false);
-        ApiRequest.requestData(app,SharedPreferencesHelper.getString(Constant.PHONE, ""),new JsonHttpHandler() {
+        DialogHelper.showProgressDialog(QuerySignActivity.this, "正在查询，请稍候...", true, false);
+        ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
                     @Override
                     public void onDo(JSONObject responseJsonObject) {
                         try {
@@ -229,7 +301,7 @@ public class UnfinishedActivity extends BaseActivity implements
     private SignRecycleAdapter signRecycleAdapter;
 
     protected SignRecycleAdapter getListAdapter() {
-        signRecycleAdapter = new SignRecycleAdapter(UnfinishedActivity.this);
+        signRecycleAdapter = new SignRecycleAdapter(QuerySignActivity.this);
         return signRecycleAdapter;
     }
 
@@ -245,14 +317,14 @@ public class UnfinishedActivity extends BaseActivity implements
 
 
 
-    static class ReadCacheTask extends WeakAsyncTask<Void, Void, byte[], UnfinishedActivity> {
+    static class ReadCacheTask extends WeakAsyncTask<Void, Void, byte[], QuerySignActivity> {
 
-        public ReadCacheTask(UnfinishedActivity target) {
+        public ReadCacheTask(QuerySignActivity target) {
             super(target);
         }
 
         @Override
-        protected byte[] doInBackground(UnfinishedActivity target,
+        protected byte[] doInBackground(QuerySignActivity target,
                                         Void... params) {
             if (target == null) {
                 return null;
@@ -269,7 +341,7 @@ public class UnfinishedActivity extends BaseActivity implements
         }
 
         @Override
-        protected void onPostExecute(UnfinishedActivity target,
+        protected void onPostExecute(QuerySignActivity target,
                                      byte[] result) {
             super.onPostExecute(target, result);
             if (target == null)
@@ -301,13 +373,13 @@ public class UnfinishedActivity extends BaseActivity implements
 
     // Parse model when request data success.
     private static class ParserTask extends AsyncTask<Void, Void, String> {
-        private WeakReference<UnfinishedActivity> mInstance;
+        private WeakReference<QuerySignActivity> mInstance;
         private byte[] responseData;
         private boolean parserError;
         private boolean fromCache;
         private List<?> list;
 
-        public ParserTask(UnfinishedActivity instance, byte[] data, boolean fromCache) {
+        public ParserTask(QuerySignActivity instance, byte[] data, boolean fromCache) {
             this.mInstance = new WeakReference<>(instance);
             this.responseData = data;
             this.fromCache = fromCache;
@@ -315,7 +387,7 @@ public class UnfinishedActivity extends BaseActivity implements
 
         @Override
         protected String doInBackground(Void... params) {
-            UnfinishedActivity instance = mInstance.get();
+            QuerySignActivity instance = mInstance.get();
             if (instance == null){
                 return null;
             }
@@ -332,7 +404,7 @@ public class UnfinishedActivity extends BaseActivity implements
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            UnfinishedActivity instance = mInstance.get();
+            QuerySignActivity instance = mInstance.get();
             if (instance != null) {
                 if (parserError) {
                     instance.executeOnLoadDataError(null);
@@ -353,7 +425,7 @@ public class UnfinishedActivity extends BaseActivity implements
     }
 
 
-    private static final String CACHE_KEY_PREFIX = "unfinishedSignList_";
+    private static final String CACHE_KEY_PREFIX = "QuerySignList_";
     private static final long MAX_CACAHE_TIME = 12 * 3600 * 1000;// 资讯的缓存最长时间为12小时
     protected static int mCatalog = 1;
 

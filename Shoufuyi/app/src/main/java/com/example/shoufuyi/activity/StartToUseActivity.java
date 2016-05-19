@@ -90,7 +90,7 @@ public class StartToUseActivity extends BaseActivity{
         //为了方便测试，暂时将号码写入输入框
         editphone.setText("134 3099 0001");
         editphone.setSelection(editphone.getText().toString().length());
-        if (PhoneUtils.isPhoneNumberValid(editphone.getText().toString())) {
+        if (PhoneUtils.isPhoneNumberValid(editphone.getText().toString().replaceAll(" ",""))) {
             btn_getcode.setClickable(true);
             btn_getcode.setEnabled(true);
         } else {
@@ -119,10 +119,10 @@ public class StartToUseActivity extends BaseActivity{
      *
      */
     Timer timer ;
-    private int recLen = 30;
+    private int recLen = 10;
     private MyTask task;
     public void Countdown(){
-        recLen= 30;
+        recLen= 10;
         if (timer == null){
             timer = new Timer();
         }else {
@@ -182,10 +182,11 @@ public class StartToUseActivity extends BaseActivity{
                 Countdown();
                 // 发送报文获取验证码
                 APP_120031 app = new APP_120031();
-                app.setMobile(editphone.getText().toString());
-                app.setUserName(editphone.getText().toString());
+                app.setMobile(editphone.getText().toString().replaceAll(" ", ""));
+                app.setUserName(editphone.getText().toString().replaceAll(" ",""));
+                app.setTrxCode("120031");
                 app.setType("2");
-                ApiRequest.getMsgCode(app, editphone.getText().toString(), new JsonHttpHandler() {
+                ApiRequest.getMsgCode(app, editphone.getText().toString().replaceAll(" ", ""), new JsonHttpHandler() {
                     @Override
                     public void onDo(JSONObject responseJsonObject) {
                         APP_120031 returnapp = JSON.parseObject(responseJsonObject.toString(),
@@ -217,8 +218,9 @@ public class StartToUseActivity extends BaseActivity{
     // 启用
     private void StartToUse(){
         final APP_120032 app = new APP_120032();
-        app.setUserName(editphone.getText().toString());
-        String strserect = editcode.getText().toString().trim();
+        app.setTrxCode("120032");
+        app.setUserName(editphone.getText().toString().replaceAll(" ", ""));
+        String strserect = editcode.getText().toString().replaceAll(" ","");
         if (strserect.equals("")) {
             ToastHelper.ShowToast("验证码不能为空");
             return;
@@ -228,8 +230,9 @@ public class StartToUseActivity extends BaseActivity{
         } catch (Exception e) {
             e.printStackTrace();
         }
-        DialogHelper.showProgressDialog(StartToUseActivity.this, "正在请求...", true, true);
-        ApiRequest.requestData(app, editphone.getText().toString(), new JsonHttpHandler() {
+
+        DialogHelper.showProgressDialog(StartToUseActivity.this, "正在请求启用...", true, false);
+        ApiRequest.requestData(app, editphone.getText().toString().replaceAll(" ",""), new JsonHttpHandler() {
                     @Override
                     public void onDo(JSONObject responseJsonObject) {
                         returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120032.class);

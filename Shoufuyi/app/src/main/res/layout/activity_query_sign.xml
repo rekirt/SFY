@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar"/>
+
+    <LinearLayout
+        android:id="@+id/date"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/toolbar"
+        android:layout_marginTop="@dimen/space_10"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="开始提交日期"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/edit_date"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/bt_pre"
+            android:layout_width="45dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:text="上"
+            android:background="@drawable/btn_green_selector"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/bt_next"
+            android:layout_width="45dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:text="下"
+            android:background="@drawable/btn_green_selector"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/choose"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/date"
+        android:orientation="horizontal" >
+
+        <Spinner
+            android:id="@+id/spinstatus"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:entries="@array/status"
+            android:layout_weight="1" />
+        <Button
+            android:id="@+id/bt_query"
+            android:layout_width="58dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:text="查询"
+            android:background="@drawable/btn_green_selector"
+            android:textSize="@dimen/second_title_size"
+            android:layout_marginRight="@dimen/space_10"
+            />
+    </LinearLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srl_refresh"
+        android:layout_below="@+id/choose"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:background="@color/transparent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycleView"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent"
+            />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <com.example.shoufuyi.uitls.view.EmptyLayout
+        android:id="@+id/error_layout"
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+</RelativeLayout>
