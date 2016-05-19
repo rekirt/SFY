@@ -49,6 +49,7 @@ public class Constant {
 	public static String ISLOGIN = "Is_Login";
 	public static String LOGINSERECT = "LoginSerect";
 	public static String GESNUMBER = "gesnumber";
+	public static final long CACHE_EXPIRE_OND_DAY = 3600000;//一天
 
 
 }

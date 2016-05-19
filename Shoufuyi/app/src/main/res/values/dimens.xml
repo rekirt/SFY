@@ -5,6 +5,9 @@
     <dimen name="tab_indicator_text_size">@dimen/text_size_15</dimen>
     <dimen name="title_size">@dimen/text_size_21</dimen>
     <dimen name="second_title_size">@dimen/text_size_18</dimen>
+    <dimen name="text_large_primary_size">16.0dip</dimen>
+
+    <dimen name="error_icon_size">39dp</dimen>
     <dimen name="text_size_32">32.0sp</dimen>
     <dimen name="text_size_31">31.0sp</dimen>
     <dimen name="text_size_30">30.0sp</dimen>

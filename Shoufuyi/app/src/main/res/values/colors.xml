@@ -52,8 +52,16 @@
     <color name="normal_red_color">#f0ff3220</color>
     <color name="dark_red_color">#f0ff0000</color>
 
-
-
+    <color name="main_gray">#9A9A9A</color>
+    <color name="main_purple">#576B95</color>
+    <color name="list_divider_color">#DADADA</color>
+    <color name="ui_dialog_divider">@color/list_divider_color</color>
+    <color name="ui_dialog_list_text">#5E5E5E</color>
+    <color name="text_dark">#af000000</color>
+    <color name="text_light">#3f000000</color>
+    <color name="light_gray">#1a000000</color>
+    <color name="lightest_gray">#0a000000</color>
+    <color name="bg_touch">@color/lightest_gray</color>
     <!-- 输入框提示信息颜色 -->
     <color name="hintcolor">#707070</color>
 
@@ -61,4 +69,7 @@
 
     <color name="list_item_background_normal">#ffffff</color>
     <color name="list_item_background_pressed">#F1F1F1</color>
+
+    <color name="window_background">#EBEBEB</color>
+
 </resources>

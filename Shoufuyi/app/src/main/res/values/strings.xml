@@ -15,4 +15,16 @@
     <string name="new_sign_activity">持卡人信息录入</string>
     <string name="element_verification_activity">要素验证</string>
 
+    <!-- Error View -->
+    <string name="error_view_click_to_refresh">Click on the screen to reload</string>
+    <string name="error_view_no_data">No content</string>
+    <string name="error_view_loading">Loading…</string>
+    <string name="error_view_load_error_click_to_refresh">Content load failed \r\n Click to reload</string>
+    <string name="error_view_network_error_click_to_refresh">No network available</string>
+    <string name="tip_network_error">No network available</string>
+    <string name="tip_load_data_error">Sorry, unable to load data.</string>
+
+    <string name="loading">loading…</string>
+    <string name="loading_no_more">No more.</string>
+
 </resources>
