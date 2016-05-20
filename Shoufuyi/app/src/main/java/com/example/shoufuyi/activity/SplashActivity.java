@@ -2,7 +2,6 @@ package com.example.shoufuyi.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.gesture.Gesture;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -64,37 +63,29 @@ public class SplashActivity extends BaseActivity {
     private void redirectTo(){
         String number = sharedPreferencesHelper.getString(Constant.NUMBER, "");
         // 如果退出字段是1就跳转到登录界面
-        String is_exit = sharedPreferencesHelper.getString(Constant.ISEXIT, "");
+        boolean haveChangePwd = sharedPreferencesHelper.getBoolean(Constant.GAIMIMA, false);
         // 激活状态
-        String is_login = sharedPreferencesHelper.getString(Constant.ACTIVATION, "");
+        boolean is_login = sharedPreferencesHelper.getBoolean(Constant.ISLOGIN, false);
         // 是否修改密码状态
-        String is_gaimima = sharedPreferencesHelper.getString(Constant.GAIMIMA, "");
+        boolean isActive  = sharedPreferencesHelper.getBoolean(Constant.ACTIVATION, false);
         //如果帐号存在，表示已登录
-        if (is_exit.equals("1") || number.equals("0")) {
-            Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        } else {
-            if (is_login.equals("")) {
-                Intent intent = new Intent(SplashActivity.this,StartToUseActivity.class);
+       if (is_login) {
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
-            } else if (is_login.equals("0000") && is_gaimima.equals("")) {
-                Intent intent = new Intent(SplashActivity.this,ChangePwdActivity.class);
-                startActivity(intent);
-                finish();
-            } else if (is_login.equals("0000") && is_gaimima.equals("0000")) {
-                // 是否修改密码状态
-                Intent intent = new Intent(SplashActivity.this, Gesture.class);
-                startActivity(intent);
-                finish();
-            } else if (is_login.equals("0000") && is_gaimima.equals("1111")) {
-                sharedPreferencesHelper.setString(Constant.GAIMIMA, "0000");
+       } else if (isActive && haveChangePwd) {
                 Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
+       }else if (isActive && !haveChangePwd) {
+           Intent intent = new Intent(SplashActivity.this, ChangePwdActivity.class);
+           startActivity(intent);
+           finish();
+       }else {
+                Intent intent = new Intent(SplashActivity.this, StartToUseActivity.class);
+                startActivity(intent);
+                finish();
             }
-        }
     }
 
     /**

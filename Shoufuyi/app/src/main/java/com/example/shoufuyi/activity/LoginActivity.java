@@ -3,6 +3,7 @@ package com.example.shoufuyi.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -15,6 +16,7 @@ import com.example.shoufuyi.api.ApiRequest;
 import com.example.shoufuyi.api.JsonHttpHandler;
 import com.example.shoufuyi.uitls.Constant;
 import com.example.shoufuyi.uitls.SharedPreferencesHelper;
+import com.example.shoufuyi.uitls.ToastHelper;
 import com.example.shoufuyi.uitls.dialog.DialogHelper;
 import com.itech.message.APP_120033;
 
@@ -53,6 +55,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		strphone = SharedPreferencesHelper.getString(Constant.PHONE, "");
 		strserect = SharedPreferencesHelper.getString(Constant.LOGINSERECT, "");
         mEditPhone.setText(strphone);
+		mEditPhone.setEnabled(false);
 		butlogin.setOnClickListener(this);
 	}
 
@@ -81,28 +84,12 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
                     SharedPreferencesHelper.setString(Constant.TOKEN, returnapp.getToken());
                     SharedPreferencesHelper.setString(Constant.DESKEY, returnapp.getDesKey());
                     SharedPreferencesHelper.setString(Constant.DESK3KEY, returnapp.getDes3Key());
-					boolean log = SharedPreferencesHelper.getBoolean(Constant.LOGIN, false);
-					if (log) {
-                        SharedPreferencesHelper.setBoolean(Constant.LOGIN, false);
-						finish();
-						return;
-					}
-					String is_exit = SharedPreferencesHelper.getString(Constant.ISEXIT, "");
-					// 如果是退出就不要修改字段的值
-					if (is_exit.equals("1")) {
-						Intent intent = new Intent();
-						intent.setClass(LoginActivity.this,SetGestureActivity.class);
-						startActivity(intent);
-						finish();
-					} else {
-                        SharedPreferencesHelper.setString(Constant.ISLOGIN, "");// 保存字符串
-                        SharedPreferencesHelper.setString(Constant.MIMA, "");// 保存字符串
-						Intent intent = new Intent();
-						intent.setClass(LoginActivity.this,SetGestureActivity.class);
-						startActivity(intent);
-						finish();
-						}
-					}
+					SharedPreferencesHelper.setBoolean(Constant.ISLOGIN, true);// 保存字符串
+					Intent intent = new Intent();
+					intent.setClass(LoginActivity.this,SetGestureActivity.class);
+					startActivity(intent);
+					finish();
+				}
 			}
 
 			@Override
@@ -127,7 +114,12 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 	public void onClick(View view) {
 		super.onClick(view);
 		if(view.getId() == R.id.btn_login){
-			login();
+			if (TextUtils.isEmpty(mEditPwd.getText().toString())){
+				ToastHelper.ShowToast("请输入密码！");
+				return;
+			}else {
+				login();
+			}
 		}
 	}
 }

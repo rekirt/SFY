@@ -4,14 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:src="@color/gray"
+        android:layout_marginTop="@dimen/space_10"
+        />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/space_48"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/space_20"
         android:layout_marginRight="@dimen/space_20"
-        android:layout_marginTop="@dimen/space_10"
+        android:layout_marginTop="@dimen/space_5"
         android:gravity="center">
         <TextView
             android:id="@+id/tv_sign_name"
@@ -23,7 +28,7 @@
             android:textColor="@color/blue"/>
         <ImageView
             android:id="@+id/iv_sign_stye"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="match_parent"
             android:src="@drawable/ic_unsign"
             android:layout_alignParentRight="true"
@@ -56,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/space_20"
         android:layout_marginRight="@dimen/space_20"
-        android:layout_marginTop="@dimen/space_10"
+        android:layout_marginTop="@dimen/space_5"
         android:orientation="horizontal">
         <TextView
             android:textSize="@dimen/second_title_size"
@@ -76,7 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/space_20"
         android:layout_marginRight="@dimen/space_20"
-        android:layout_marginTop="@dimen/space_10"
+        android:layout_marginTop="@dimen/space_5"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -95,11 +100,11 @@
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:src="@color/gray"
-        android:layout_marginTop="@dimen/space_10"
+        android:layout_marginTop="@dimen/space_5"
         />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/space_48"
+        android:layout_height="@dimen/space_40"
         android:orientation="horizontal"
         >
         <TextView

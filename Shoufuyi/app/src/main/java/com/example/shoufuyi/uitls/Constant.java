@@ -51,5 +51,10 @@ public class Constant {
 	public static String GESNUMBER = "gesnumber";
 	public static final long CACHE_EXPIRE_OND_DAY = 3600000;//一天
 
-
+//运行参数
+	public static String VEDIOANDPHOTOCACHELONG = "VEDIOANDPHOTOCACHELONG";//视频图片缓存时长
+	public static String FINGERPASSWORDTIMES = "FINGERPASSWORDTIMES";//手势密码次数
+	public static String VEDIOLONG = "VEDIOLONG";//视频时长
+	public static String TIMEOUT = "ITMEOUT";//超时时长
+	public static String PAGESIZE = "PAGESIZE";//每页数据量
 }

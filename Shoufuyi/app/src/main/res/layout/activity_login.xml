@@ -63,6 +63,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:maxLength="6"
+                android:text="123950"
                 />
         </LinearLayout>
         <LinearLayout
@@ -97,8 +98,6 @@
             android:textColor="@color/white"
             android:background="@drawable/btn_red_selector"
             android:textSize="@dimen/title_size"
-            android:enabled="false"
-            android:clickable="false"
             >
         </Button>
         <LinearLayout

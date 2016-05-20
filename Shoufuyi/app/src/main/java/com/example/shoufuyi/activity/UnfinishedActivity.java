@@ -18,12 +18,10 @@ import com.example.shoufuyi.bean.ListEntity;
 import com.example.shoufuyi.bean.SignList;
 import com.example.shoufuyi.cache.v2.CacheManager;
 import com.example.shoufuyi.uitls.Constant;
-import com.example.shoufuyi.uitls.GsonUtils;
 import com.example.shoufuyi.uitls.SharedPreferencesHelper;
 import com.example.shoufuyi.uitls.TDevice;
 import com.example.shoufuyi.uitls.ToastHelper;
 import com.example.shoufuyi.uitls.WeakAsyncTask;
-import com.example.shoufuyi.uitls.dialog.DialogHelper;
 import com.example.shoufuyi.uitls.view.DividerItemDecoration;
 import com.example.shoufuyi.uitls.view.EmptyLayout;
 import com.itech.message.APP_120023;
@@ -163,17 +161,17 @@ public class UnfinishedActivity extends BaseActivity implements
         app.setState(String.valueOf(1));
         app.setCreateDateStart("20151121");
         app.setCreateDateEnd(endtime);
-        DialogHelper.showProgressDialog(UnfinishedActivity.this, "正在查询，请稍候...", true, false);
         ApiRequest.requestData(app,SharedPreferencesHelper.getString(Constant.PHONE, ""),new JsonHttpHandler() {
                     @Override
                     public void onDo(JSONObject responseJsonObject) {
                         try {
                             mReturnApp = JSON.parseObject(responseJsonObject.toString(), APP_120023.class);
-                            mSignList = GsonUtils.fromJsonArrayToArrayList(mReturnApp.getResultList().toString(), Result_120023.class);
+//                            mSignList = GsonUtils.fromJsonArrayToArrayList(mReturnApp.getResultList().toString(), Result_120023.class);
+                            mSignList = (ArrayList<Result_120023>) mReturnApp.getResultList();
                             //更换解析方法
                             // save the cache
                             if (mCurrentPage == 1 && !TextUtils.isEmpty(getCacheKey())) {
-                                CacheManager.setCache(getCacheKey(), responseJsonObject.getJSONArray("data").toString().getBytes(),
+                                CacheManager.setCache(getCacheKey(), mReturnApp.getResultList().toString().getBytes(),
                                         getCacheExpire(), CacheManager.TYPE_INTERNAL);
                             }
                         } catch (Exception e) {

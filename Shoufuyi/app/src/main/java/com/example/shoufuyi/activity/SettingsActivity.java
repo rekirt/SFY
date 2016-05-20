@@ -157,6 +157,7 @@ public class SettingsActivity extends BaseActivity {
                         strprivilage.append(pri.getAppPrvCode()).append(",");
                     }
                     SharedPreferencesHelper.setString("privilage", strprivilage.toString() + "");// 保存字符串
+                    ToastHelper.ShowToast(returnapp.getDetailInfo());
                 } else {
                     ToastHelper.ShowToast(returnapp.getDetailInfo());
                 }
@@ -181,44 +182,38 @@ public class SettingsActivity extends BaseActivity {
 
 	// 运行参数功能
 	private void runparameter() {
-		DialogHelper.showProgressDialog(SettingsActivity.this, "正在查询，请稍候...", true, true);
+		DialogHelper.showProgressDialog(SettingsActivity.this, "正在查询，请稍候...", true, false);
 		APP_RunParm app = new APP_RunParm();
 		app.setType("1000");
-        ApiRequest.requestData(app, phone, new JsonHttpHandler() {
+        ApiRequest.requestData(app, phone, new JsonHttpHandler("detailCode","errMsg","data") {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 final APP_RunParm returnapp = JSON.parseObject(responseJsonObject.toString(), APP_RunParm.class);
                 if (returnapp.getDetailCode().equals("0000")) {
                     StringBuffer sb = new StringBuffer();
                     List<APP_Parameters> list = returnapp.getParametersList();
-                    String str001 = "", str002 = "", str003 = "", str004 = "", str005 = "";
                     for (APP_Parameters par : list) {
                         switch (par.getParCode()){
                             case "0001":
-                                str001 = par.getParValue();
+                                SharedPreferencesHelper.setString(Constant.PAGESIZE,par.getParValue());
                                 break;
                             case "0002":
-                                str002 = par.getParValue();
+                                SharedPreferencesHelper.setString(Constant.FINGERPASSWORDTIMES,par.getParValue());
                                 break;
                             case "0003":
-                                str003 = par.getParValue();
+                                SharedPreferencesHelper.setString(Constant.VEDIOLONG,par.getParValue());
                                 break;
                             case "0004":
-                                str004 = par.getParValue();
+                                SharedPreferencesHelper.setString(Constant.VEDIOANDPHOTOCACHELONG,par.getParValue());
                                 break;
                             case "0005":
-                                str005 = par.getParValue();
+                                SharedPreferencesHelper.setString(Constant.TIMEOUT,par.getParValue());
                                 break;
                             default:
                                 break;
                         }
                     }
-                    sb.append(str001).append(",").append(str002).append(",").append(str003).append(",")
-                            .append(str004).append(",").append(str005);
                     Intent intent = new Intent(SettingsActivity.this, RunningSettingActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("info", sb.toString());
-                    intent.putExtras(bundle);
                     startActivity(intent);
                 } else {
                     ToastHelper.ShowToast(returnapp.getDetailInfo());

@@ -99,10 +99,9 @@ public class MainActivity extends BaseActivity {
                         startActivity(intent);
                         break;
                     case 1:
-//                        Intent intent = new Intent();
-//                        intent.setClass(TestUIActivity.this,
-//                                com.example.shoufuyi.Unfinished.class);
-//                        startActivity(intent);
+                        Intent intentToUnfinished = new Intent();
+                        intentToUnfinished.setClass(MainActivity.this, UnfinishedActivity.class);
+                        startActivity(intentToUnfinished);
                         break;
                     case 2:
 //                        Intent intent = new Intent();

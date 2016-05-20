@@ -62,19 +62,18 @@ public class ChangePwdActivity extends BaseActivity {
 	private void modifyPwd(){
 // 修改登录密码
         APP_120034 app = new APP_120034();
-        app.setUserName(userPhone);
         try {
-            DialogHelper.showProgressDialog(ChangePwdActivity.this,
-                    "正在请求...", true, true);
+            DialogHelper.showProgressDialog(ChangePwdActivity.this, "正在请求...", true, false);
             final String newPwd = mEditNew.getText().toString();
+            app.setUserName(userPhone);
             app.setOriPass(des3key, mEditOld.getText().toString());
-            app.setNewPass(des3key,newPwd);
+            app.setNewPass(des3key, newPwd);
             ApiRequest.requestData(app, userPhone, new JsonHttpHandler() {
                 @Override
                 public void onDo(JSONObject responseJsonObject) {
                     returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120034.class);
                     SharedPreferencesHelper.setString("LoginSerect",newPwd);// 保存字符串
-                    SharedPreferencesHelper.setString("gaimima", "0000");
+                    SharedPreferencesHelper.setBoolean(Constant.GAIMIMA, true);
                     SharedPreferencesHelper.setString("Is_exit", "1");
                     Intent intent = new Intent(ChangePwdActivity.this, LoginActivity.class);
                     startActivity(intent);

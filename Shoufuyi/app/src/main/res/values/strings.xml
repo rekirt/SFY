@@ -16,6 +16,8 @@
     <string name="element_verification_activity">要素验证</string>
     <string name="query_sign_activity">签约查询</string>
     <string name="query_unfinish_sign_activity">查询未完成签约</string>
+    <string name="sign_detail_activity">信息详情</string>
+    <string name="running_setting_activity">系统参数设置</string>
 
     <!-- Error View -->
     <string name="error_view_click_to_refresh">Click on the screen to reload</string>

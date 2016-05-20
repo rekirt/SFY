@@ -2,9 +2,7 @@ package com.example.shoufuyi.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -53,7 +51,7 @@ public class SetGestureActivity extends BaseActivity {
 			}
 		} else {
             mTvShowMsg.setText("忘记手势");
-            mTvShowMsg.setOnClickListener(textlis);
+            mTvShowMsg.setOnClickListener(this);
 		}
 
 		content = new ContentView(this, is_regserect, new DrawlRoute.GestureCallBack() {
@@ -61,7 +59,6 @@ public class SetGestureActivity extends BaseActivity {
 			@Override
 			public void checkedSuccess() {
                 Intent intent = new Intent(SetGestureActivity.this, MainActivity.class);
-                intent.putExtra("ispicture", "1111");
                 startActivity(intent);
                 finish();
 			}
@@ -72,6 +69,7 @@ public class SetGestureActivity extends BaseActivity {
                 int number = errorTime - 1;
 				if (number < 1) {
                     SharedPreferencesHelper.setString("Is_exit", "1");
+                    SharedPreferencesHelper.setBoolean(Constant.ISLOGIN,false);
                     Intent intent = new Intent(SetGestureActivity.this,ChangePwdActivity.class);
                     startActivity(intent);
                     finish();
@@ -94,20 +92,13 @@ public class SetGestureActivity extends BaseActivity {
     private void initData(){
         setCanBack(true);
     }
-	private OnClickListener textlis = new OnClickListener() {
 
-		@Override
-		public void onClick(View arg0) {
-            SharedPreferencesHelper.setString("Is_exit", "");// 保存字符串
-			new Handler().postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					Intent intent = new Intent(SetGestureActivity.this, LoginActivity.class);
-					startActivity(intent);
-					finish();
-				}
-			}, 500);
-		}
-	};
-
+    @Override
+    public void onClick(View view) {
+        super.onClick(view);
+        SharedPreferencesHelper.setBoolean(Constant.ISLOGIN, false);// 保存字符串
+        Intent intent = new Intent(SetGestureActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

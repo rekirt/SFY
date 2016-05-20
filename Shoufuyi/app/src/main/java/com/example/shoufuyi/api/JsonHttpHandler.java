@@ -68,7 +68,7 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
                 JSONObject responsedata = new JSONObject(new String(data, "UTF-8"));
                 String status = responsedata.getString(this.mStatusTag);
 
-                    if ("0000".equals(status)) {
+                    if ("0000".equals(status) ) {
                         try {
                             if (isNeedToReturnResponseBody) {
                                 onDo(responsedata);

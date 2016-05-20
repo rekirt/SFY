@@ -29,7 +29,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -157,7 +156,6 @@ public class UpdateManager {
 			pi = pm.getPackageInfo(mContext.getPackageName(), 0);
 			oldCode = pi.versionName;
 		} catch (NameNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		// getPackageName()是你当前类的包名，0代表是获取版本信息
@@ -223,11 +221,11 @@ public class UpdateManager {
 
 			if (!isupdate) {
 				proDia.setButton("后台处理", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						proDia.dismiss(); // 关闭对话框
-					}
-				});
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        proDia.dismiss(); // 关闭对话框
+                    }
+                });
 			}
 
 			proDia.onStart(); // 启动进度
@@ -238,26 +236,6 @@ public class UpdateManager {
 		} else {
 			proDia.show(); // 显示对话框
 		}
-
-		// AlertDialog.Builder builder = new Builder(mContext);
-		// builder.setTitle("软件版本更新");
-		//
-		// final LayoutInflater inflater = LayoutInflater.from(mContext);
-		// View v = inflater.inflate(R.layout.progress, null);
-		// mProgress = (ProgressBar) v.findViewById(R.id.progress);
-		//
-		// builder.setView(v);
-		// builder.setNegativeButton("取消", new OnClickListener() {
-		// @Override
-		// public void onClick(DialogInterface dialog, int which) {
-		// dialog.dismiss();
-		// interceptFlag = true;
-		// }
-		// });
-		// builder.setCancelable(false);
-		// downloadDialog = builder.create();
-		// downloadDialog.show();
-		// downloadApk();
 	}
 
 	private Runnable mdownApkRunnable = new Runnable() {
@@ -266,14 +244,10 @@ public class UpdateManager {
 			try {
 				Looper.prepare();
 				URL url = new URL(apkUrl);
-				System.out.println("qqqqqqqqqq"+apkUrl);
-
-				HttpURLConnection conn = (HttpURLConnection) url
-						.openConnection();
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.connect();
 				int length = conn.getContentLength();
 				InputStream is = conn.getInputStream();
-
 				File file = new File(savePath);
 				if (!file.exists()) {
 					file.mkdir();
@@ -283,7 +257,6 @@ public class UpdateManager {
 				String apkFile = saveFileName;
 				File ApkFile = new File(apkFile);
 				FileOutputStream fos = new FileOutputStream(ApkFile);
-
 				int count = 0;
 				byte buf[] = new byte[1024];
 
@@ -306,8 +279,8 @@ public class UpdateManager {
 				is.close();
 				Looper.loop();
 			} catch (FileNotFoundException e) {
-
 				mHandler.sendEmptyMessage(FILENOFOUND);
+                proDia.dismiss(); // 关闭对话框
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -320,7 +293,6 @@ public class UpdateManager {
 	/**
 	 * 下载apk
 	 * 
-	 * @param url
 	 */
 
 	private void downloadApk() {
@@ -331,7 +303,6 @@ public class UpdateManager {
 	/**
 	 * 安装apk
 	 * 
-	 * @param url
 	 */
 	private void installApk() {
 		File apkfile = new File(saveFileName);
