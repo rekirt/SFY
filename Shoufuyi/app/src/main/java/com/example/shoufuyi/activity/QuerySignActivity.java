@@ -121,12 +121,10 @@ public class QuerySignActivity extends BaseActivity implements
 
         mRecycleView = (RecyclerView) findViewById(R.id.recycleView);
         mRecycleView.setOnScrollListener(mScrollListener);
-
         if(isNeedListDivider()) {
             mRecycleView.addItemDecoration(new DividerItemDecoration(QuerySignActivity.this,
                     DividerItemDecoration.VERTICAL_LIST));
         }
-
         mLayoutManager = new LinearLayoutManager(QuerySignActivity.this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecycleView.setLayoutManager(mLayoutManager);
@@ -268,11 +266,7 @@ public class QuerySignActivity extends BaseActivity implements
                         executeOnLoadDataError(msg);
                         executeOnLoadFinish();
                     }
-
-
-                }.setProgressDialogCanceledOnTouchOutside(true)
-                        .setProgressDialogCancleable(true)
-                        .setIsNeedToReturnResponseBody(true)
+                }
         );
     }
 
@@ -426,7 +420,7 @@ public class QuerySignActivity extends BaseActivity implements
 
 
     private static final String CACHE_KEY_PREFIX = "QuerySignList_";
-    private static final long MAX_CACAHE_TIME = 12 * 3600 * 1000;// 资讯的缓存最长时间为12小时
+    private static final long MAX_CACAHE_TIME = 12 * 3600 * 1000;// 缓存最长时间为12小时
     protected static int mCatalog = 1;
 
     protected String getCacheKeyPrefix() {

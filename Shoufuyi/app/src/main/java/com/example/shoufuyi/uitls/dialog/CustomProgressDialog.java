@@ -2,9 +2,7 @@ package com.example.shoufuyi.uitls.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.drawable.AnimationDrawable;
 import android.view.Gravity;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.shoufuyi.R;
@@ -44,9 +42,9 @@ public class CustomProgressDialog extends Dialog {
             return;
         }
 
-        ImageView imageView = (ImageView) customProgressDialog.findViewById(R.id.iv_loading);
-        AnimationDrawable animationDrawable = (AnimationDrawable) imageView.getBackground();
-        animationDrawable.start();
+//        ImageView imageView = (ImageView) customProgressDialog.findViewById(R.id.iv_loading);
+//        AnimationDrawable animationDrawable = (AnimationDrawable) imageView.getBackground();
+//        animationDrawable.start();
     }
 
     /**
