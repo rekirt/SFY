@@ -9,8 +9,21 @@
     <com.cchtw.videorecorderlib.wxlikevideo.views.CameraPreviewView
         android:id="@+id/camera_preview"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
-    <include
-        android:id="@+id/capture_video"
-        layout="@layout/capture_video" />
+        android:layout_height="wrap_content"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/capture_video_record"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_video_record" />
+    </RelativeLayout>
+
 </LinearLayout>

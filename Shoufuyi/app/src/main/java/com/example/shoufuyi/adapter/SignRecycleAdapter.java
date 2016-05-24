@@ -16,6 +16,7 @@ import com.example.shoufuyi.api.JsonHttpHandler;
 import com.example.shoufuyi.uitls.Constant;
 import com.example.shoufuyi.uitls.ImageHelper;
 import com.example.shoufuyi.uitls.SharedPreferencesHelper;
+import com.example.shoufuyi.uitls.ToastHelper;
 import com.example.shoufuyi.uitls.dialog.DialogHelper;
 import com.itech.message.APP_120009;
 import com.itech.message.Result_120023;
@@ -111,6 +112,7 @@ public class SignRecycleAdapter extends RecycleBaseAdapter {
         bundle.putSerializable("info", signBean);
         intent.putExtras(bundle);
         intent.setClass(context, SignDetailActivity.class);
+        context.startActivity(intent);
     }
 
     private void giveUpSign(final Result_120023 signBean){
@@ -126,10 +128,8 @@ public class SignRecycleAdapter extends RecycleBaseAdapter {
                 APP_120009 app120009 = JSON.parseObject(responseJsonObject.toString(), APP_120009.class);
                     if (app120009.getDetailCode().equals("0000")) {
                         removeItem(signBean);
-                        DialogHelper.showProgressDialog(context, app120009.getDetailInfo(), true, false);
-                    } else {
-                        DialogHelper.showProgressDialog(context, app120009.getDetailInfo(), true, false);
                     }
+                ToastHelper.ShowToast(app120009.getDetailInfo());
             }
 
             @Override
@@ -140,6 +140,11 @@ public class SignRecycleAdapter extends RecycleBaseAdapter {
             @Override
             public void onDo(String responseString) {
 
+            }
+
+            @Override
+            public void onFinish() {
+                DialogHelper.dismissProgressDialog();
             }
         });
 

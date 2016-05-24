@@ -8,6 +8,7 @@
     <drawable name="tweet_user_color">#FF52991F</drawable>
     <drawable name="tweet_color">#FF000000</drawable>
     <drawable name="tweet_meta_color">#FF999999</drawable>
+    <color name="common_bg">#ebebeb</color>
 
     <color name="light_blue">#6593cb</color>
     <color name="opaque_red">#f00</color>

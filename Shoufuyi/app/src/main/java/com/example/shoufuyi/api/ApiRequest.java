@@ -100,7 +100,7 @@ public class ApiRequest {
 
         String deskey = SharedPreferencesHelper.getString("deskey", "");
 
-        String jihuo = SharedPreferencesHelper.getString("jihuo", "");
+        Boolean isActivation = SharedPreferencesHelper.getBoolean(Constant.ACTIVATION, false);
 
         String uuid = SharedPreferencesHelper.getString("uuid", "");
 
@@ -111,11 +111,10 @@ public class ApiRequest {
             strToken = SequenceUtil.TOKEN;
             SharedPreferencesHelper.getInstance().setString("token", strToken);
         }
-        if (jihuo.equals("")) {
+        if (!isActivation) {
             returnapp.getTrxCode().equals("120031");
             returnapp.setTrxCode("120032");
         }
-
         APPMsgPack pack;
         if (deskey.equals("")) {
             pack = new APPMsgPack(json.getBytes(), MOBILE, Constant.secretType,

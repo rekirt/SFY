@@ -1,24 +1,44 @@
 package com.example.shoufuyi.activity;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cchtw.videorecorderlib.utils.FileUtil;
 import com.cchtw.videorecorderlib.wxlikevideo.camera.CameraHelper;
 import com.cchtw.videorecorderlib.wxlikevideo.recorder.WXLikeVideoRecorder;
 import com.cchtw.videorecorderlib.wxlikevideo.views.CameraPreviewView;
+import com.cchtw.videorecorderlib.wxlikevideo.views.RecordProgressBar;
 import com.example.shoufuyi.R;
+import com.example.shoufuyi.uitls.ToastHelper;
 
 import java.lang.ref.WeakReference;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
+/**
+ * 新视频录制页面
+ *
+ * @author Martin
+ */
 public class NewRecordVideoActivity extends BaseActivity implements View.OnTouchListener {
+
+    private static final String TAG = "NewRecordVideoActivity";
 
     // 输出宽度
     private static final int OUTPUT_WIDTH = 320;
@@ -34,13 +54,47 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
     private static final int CANCEL_RECORD_OFFSET = -100;
     private float mDownX, mDownY;
     private boolean isCancelRecord = false;
-
+    public static final int MY_PERMISSIONS_REQUEST_CAMERA = 42;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //全屏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
-        int cameraId = CameraHelper.getFrontCameraID();
+        setContentView(R.layout.activity_new_recorder);
+
+        // check Android 6 permission
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            initCamera();
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO},
+                    MY_PERMISSIONS_REQUEST_CAMERA);
+        }
+      //  ((TextView) findViewById(R.id.filePathTextView)).setText("请在" + FileUtil.MEDIA_FILE_DIR + "查看录制的视频文件");
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CAMERA: {
+                if (grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted
+                    initCamera();
+                } else {
+                    setResult(Activity.RESULT_CANCELED);
+                    ToastHelper.ShowToast("请同意访问你的手机相机以及录音功能");
+                    finish();
+                }
+            }
+        }
+    }
+
+    private RecordProgressBar recordProgressBar;
+    CameraPreviewView preview;
+    private TextView mTvCancelTip;
+    private void initCamera() {
+        int cameraId = CameraHelper.getDefaultCameraID();
         // Create an instance of Camera
         mCamera = CameraHelper.getCameraInstance(cameraId);
         if (null == mCamera) {
@@ -52,16 +106,38 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
         mRecorder = new WXLikeVideoRecorder(this, FileUtil.MEDIA_FILE_DIR);
         mRecorder.setOutputSize(OUTPUT_WIDTH, OUTPUT_HEIGHT);
 
-        setContentView(R.layout.activity_capture_video);
-        CameraPreviewView preview = (CameraPreviewView) findViewById(R.id.camera_preview);
+        preview = (CameraPreviewView) findViewById(R.id.camera_preview);
         preview.setCamera(mCamera, cameraId);
-
         mRecorder.setCameraPreviewView(preview);
+        mTvTime = (TextView) findViewById(R.id.tv_time);
+        mTvCancelTip = (TextView) findViewById(R.id.tv_cancel_tip);
 
-        findViewById(R.id.capture_video_record).setOnTouchListener(this);
-
-      //  ((TextView) findViewById(R.id.filePathTextView)).setText("请在" + FileUtil.MEDIA_FILE_DIR + "查看录制的视频文件");
+        findViewById(R.id.button_start).setOnTouchListener(this);
+        recordProgressBar = (RecordProgressBar) findViewById(R.id.record_progressbar);
     }
+
+    private int mTimeCount = 0;// 时间计数
+    private Timer mTimer;// 计时器
+    private TextView mTvTime;
+    private TimerTask mTimerTask;
+
+    Handler handlerTime = new Handler(){
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 1:
+                    mTvTime.setText(msg.what+"秒");
+                    break;
+                case -1:
+                    mTvTime.setText("0"+"秒");
+                    break;
+                default:
+                    mTvTime.setText(msg.what+"秒");
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+
+    };
 
     @Override
     protected void onPause() {
@@ -115,7 +191,6 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
             Toast.makeText(this, "SD卡不可用！", Toast.LENGTH_SHORT).show();
             return false;
         }
-
         return true;
     }
 
@@ -133,41 +208,117 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
         if (isCancelRecord) {
             FileUtil.deleteFile(videoPath);
         } else {
-            startActivity(new Intent(this, NewRecordVideoActivity.class).putExtra(PlayVideoActiviy.KEY_FILE_PATH, videoPath));
+            startActivity(new Intent(this, PlayVideoActiviy.class).putExtra(PlayVideoActiviy.KEY_FILE_PATH, videoPath));
         }
     }
 
+    private boolean isCancel;
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-             v.setPressed(true);
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                mTvCancelTip.setVisibility(View.VISIBLE);
+                mTvCancelTip.setText("向上取消");
+                mTvCancelTip.setTextColor(getResources().getColor(R.color.light_blue));
+                recordProgressBar.start();
+                isCancelRecord = false;
+                mDownX = event.getX();
+                mDownY = event.getY();
+                startRecord();
+                StartCount();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (!mRecorder.isRecording())
+                    return false;
+
+                float y = event.getY();
+                if (y - mDownY < CANCEL_RECORD_OFFSET) {
+                    isCancelRecord = true;
+                    recordProgressBar.cancel();
+                    mTvCancelTip.setText("松开取消");
+                    mTvCancelTip.setTextColor(getResources().getColor(R.color.red));
+                } else {
+                    mTvCancelTip.setText("向上取消");
+                    mTvCancelTip.setTextColor(getResources().getColor(R.color.light_blue));
                     isCancelRecord = false;
-                    mDownX = event.getX();
-                    mDownY = event.getY();
-                    startRecord();
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    if (!mRecorder.isRecording())
-                        return false;
+                    recordProgressBar.resumeRunning();
 
-                    float y = event.getY();
-                    if (y - mDownY < CANCEL_RECORD_OFFSET) {
-                        if (!isCancelRecord) {
-                            // cancel record
-                            isCancelRecord = true;
-                            Toast.makeText(this, "cancel record", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
+                    if (mTimeCount>6){
                         isCancelRecord = false;
+                        stopRecord();
                     }
-                    break;
-                case MotionEvent.ACTION_UP:
-                    stopRecord();
-                    break;
-            }
+                }
 
+                break;
+            case MotionEvent.ACTION_UP:
+
+                mTvCancelTip.setVisibility(View.INVISIBLE);
+                recordProgressBar.stop();
+                if (mTimer != null){
+                    if (mTimerTask != null){
+                        mTimerTask.cancel();  //将原任务从队列中移除
+                        mTimer.cancel();
+                    }
+                }
+
+                if (mTimeCount<4){
+                    isCancelRecord = true;
+                }
+                Message message = new Message();
+                message.what = -1;
+                handlerTime.sendMessage(message);
+                mTimeCount = 0;
+                stopRecord();
+                break;
+            case MotionEvent.ACTION_BUTTON_PRESS:
+                if (mTimeCount>6){
+                    mTvCancelTip.setVisibility(View.INVISIBLE);
+                    recordProgressBar.stop();
+                    if (mTimer != null){
+                        if (mTimerTask != null){
+                            mTimerTask.cancel();  //将原任务从队列中移除
+                            mTimer.cancel();
+                        }
+                    }
+                    isCancelRecord = false;
+                    Message messageTimeOut = new Message();
+                    messageTimeOut.what = -1;
+                    handlerTime.sendMessage(messageTimeOut);
+                    mTimeCount = 0;
+                    stopRecord();
+                }
+                break;
+        }
         return true;
+    }
+
+    private void StartCount(){
+        mTimeCount = 0;// 时间计数器重新赋值
+        mTimer = new Timer();
+        mTimerTask =new TimerTask() {
+
+            @Override
+            public void run() {
+                mTimeCount++;
+                Message message = new Message();
+                message.what = mTimeCount;
+                handlerTime.sendMessage(message);
+                if(mTimeCount>6){
+                    if (mTimer != null){
+                        if (mTimerTask != null){
+                            mTimerTask.cancel();  //将原任务从队列中移除
+                            mTimer.cancel();
+                        }
+                    }
+                    Message msg = new Message();
+                    msg.what = -1;
+                    handlerTime.sendMessage(msg);
+                    mTimeCount = 0;
+                    stopRecord();
+                }
+            }
+        };
+        mTimer.schedule(mTimerTask, 0, 1000);
     }
 
     /**

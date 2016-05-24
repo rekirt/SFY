@@ -42,8 +42,8 @@ public class SetGestureActivity extends BaseActivity {
 	private void initView() {
 		// 初始化一个显示各个点的viewGroup
 		is_regserect = SharedPreferencesHelper.getString(Constant.MIMA, "");
-		String str_islogin = SharedPreferencesHelper.getString(Constant.ISLOGIN, "");
-		if (str_islogin.equals("")) {
+		boolean islogin = SharedPreferencesHelper.getBoolean(Constant.ISLOGIN, false);
+		if (islogin) {
 			if (is_regserect.equals("")) {
                 mTvShowMsg.setText("请设定手势");
 			} else {

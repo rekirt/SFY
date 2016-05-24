@@ -8,8 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.alibaba.fastjson.JSON;
@@ -22,12 +20,10 @@ import com.example.shoufuyi.bean.ListEntity;
 import com.example.shoufuyi.bean.SignList;
 import com.example.shoufuyi.cache.v2.CacheManager;
 import com.example.shoufuyi.uitls.Constant;
-import com.example.shoufuyi.uitls.GsonUtils;
 import com.example.shoufuyi.uitls.SharedPreferencesHelper;
 import com.example.shoufuyi.uitls.TDevice;
 import com.example.shoufuyi.uitls.ToastHelper;
 import com.example.shoufuyi.uitls.WeakAsyncTask;
-import com.example.shoufuyi.uitls.dialog.DialogHelper;
 import com.example.shoufuyi.uitls.view.DividerItemDecoration;
 import com.example.shoufuyi.uitls.view.EmptyLayout;
 import com.itech.message.APP_120023;
@@ -60,15 +56,7 @@ public class QuerySignActivity extends BaseActivity implements
     protected EmptyLayout mErrorLayout;//错误页
     protected int mCurrentPage = 1;//列表第几页
     private ParserTask mParserTask;
-
-    // 上一天下一天按钮
-    private Button mBtnPre;
-    private Button mBtnNext;
-    // 查询按钮
-    private Button mBtnQuery;
-
     private Spinner spinstatus;
-    private EditText editdate;
 
     // 采集状态默认待采集
     private int collstate = 1;
@@ -156,13 +144,6 @@ public class QuerySignActivity extends BaseActivity implements
             mErrorLayout.setErrorMessage(mStoreEmptyMessage);
         }
         spinstatus = (Spinner) findViewById(R.id.spinstatus);
-        editdate = (EditText) findViewById(R.id.edit_date);
-        mBtnPre = (Button) findViewById(R.id.bt_pre);
-        mBtnPre.setOnClickListener(this);
-        mBtnNext = (Button) findViewById(R.id.bt_next);
-        mBtnNext.setOnClickListener(this);
-        mBtnQuery = (Button) findViewById(R.id.bt_query);
-        mBtnQuery.setOnClickListener(this);
         spinstatus.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
 
             @Override
@@ -179,39 +160,11 @@ public class QuerySignActivity extends BaseActivity implements
     public void onClick(View view) {
         super.onClick(view);
         switch (view.getId()){
-            case R.id.bt_pre:
-            case R.id.bt_next:
-                dealDateChoose(view);
-                break;
-            case R.id.bt_query:
-                sendRequestData();
-                break;
             default:
                 break;
         }
     }
 
-    private void dealDateChoose(View v){
-        Date lastDate = null;
-        long time = (Long) editdate.getTag();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        long strtime = System.currentTimeMillis();
-        Date date = new Date(strtime);
-        String systime = formatter.format(date);
-        if (v.getId() == R.id.bt_pre) {
-            lastDate = new Date(time - 24 * 60 * 60 * 1000);
-        } else {
-            if (time + 60 * 1000 < strtime) {
-                lastDate = new Date(time + 24 * 60 * 60 * 1000);
-            } else {
-                lastDate = new Date(time);
-            }
-
-        }
-        editdate.setText(formatter.format(lastDate));
-        time = lastDate.getTime();
-        editdate.setTag(time);
-    }
 
     APP_120023 mReturnApp = new APP_120023();
     private ArrayList<Result_120023> mSignList = new ArrayList<Result_120023>();
@@ -231,15 +184,14 @@ public class QuerySignActivity extends BaseActivity implements
         app.setPage(page);
         app.setState(String.valueOf(collstate));
 
-        app.setCreateDateStart(editdate.getText().toString().replace("-", ""));
+//        app.setCreateDateStart(editdate.getText().toString().replace("-", ""));
         app.setCreateDateEnd(endtime);
-        DialogHelper.showProgressDialog(QuerySignActivity.this, "正在查询，请稍候...", true, false);
         ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
                     @Override
                     public void onDo(JSONObject responseJsonObject) {
                         try {
                             mReturnApp = JSON.parseObject(responseJsonObject.toString(), APP_120023.class);
-                            mSignList = GsonUtils.fromJsonArrayToArrayList(mReturnApp.getResultList().toString(), Result_120023.class);
+                            mSignList = (ArrayList<Result_120023>) mReturnApp.getResultList();
                             //更换解析方法
                             // save the cache
                             if (mCurrentPage == 1 && !TextUtils.isEmpty(getCacheKey())) {

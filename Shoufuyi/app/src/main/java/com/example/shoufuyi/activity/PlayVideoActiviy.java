@@ -1,11 +1,11 @@
 package com.example.shoufuyi.activity;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -16,8 +16,12 @@ import com.yqritc.scalablevideoview.ScalableVideoView;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-
-public class PlayVideoActiviy extends Activity {
+/**
+ * 播放视频页面
+ *
+ * @author Martin
+ */
+public class PlayVideoActiviy extends BaseActivity {
 
     public static final String TAG = "PlayVideoActiviy";
 
@@ -82,6 +86,7 @@ public class PlayVideoActiviy extends Activity {
     }
 
     public void onClick(View v) {
+        super.onClick(v);
         switch (v.getId()) {
             case R.id.video_view:
                 mScalableVideoView.stop();
@@ -98,10 +103,14 @@ public class PlayVideoActiviy extends Activity {
                     mThumbnailImageView.setVisibility(View.GONE);
                 } catch (IOException e) {
                     Log.e(TAG, e.getLocalizedMessage());
-                    Toast.makeText(this, "播放视频异常", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "播放视频异常~", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return super.onKeyDown(keyCode, event);
+    }
 }

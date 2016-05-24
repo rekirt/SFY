@@ -96,6 +96,7 @@ public class CameraHelper {
         return c; // returns null if camera is unavailable
     }
 
+
     /** Check if this device has a camera */
     public static boolean checkCameraHardware(Context context) {
         if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){

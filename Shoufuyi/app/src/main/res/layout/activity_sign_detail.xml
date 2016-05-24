@@ -8,6 +8,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/common_bg"
         android:layout_below="@id/toolbar">
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,7 +23,7 @@
             <LinearLayout
                 android:id="@+id/ll_merchant_name"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/space_59"
+                android:layout_height="@dimen/space_48"
                 android:gravity="center_vertical"
                 android:background="@color/white"
                 android:orientation="horizontal">
@@ -501,6 +502,17 @@
                 android:src="@color/gray"/>
 
 <!--提交按钮-->
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/btn_height"
+                android:layout_margin="@dimen/space_15"
+                android:text="提交"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_red_selector"
+                android:textSize="@dimen/title_size"
+                />
         </LinearLayout>
     </ScrollView>
     <com.example.shoufuyi.uitls.view.EmptyLayout

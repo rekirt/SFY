@@ -104,9 +104,9 @@ public class MainActivity extends BaseActivity {
                         startActivity(intentToUnfinished);
                         break;
                     case 2:
-//                        Intent intent = new Intent();
-//                        intent.setClass(TestUIActivity.this, Query.class);
-//                        startActivity(intent);
+                        Intent intentQuery = new Intent();
+                        intentQuery.setClass(MainActivity.this, QuerySignActivity.class);
+                        startActivity(intentQuery);
                         break;
                     default:
                         break;
