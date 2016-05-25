@@ -68,7 +68,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.NewSignActivity"
+            android:name=".activity.SplashActivity"
            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -88,10 +88,10 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
-         <activity android:name=".activity.SplashActivity"
-             android:windowSoftInputMode="adjustUnspecified|stateHidden"
-             android:screenOrientation="portrait"
-             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+         <!--<activity android:name=".activity.SplashActivity"-->
+             <!--android:windowSoftInputMode="adjustUnspecified|stateHidden"-->
+             <!--android:screenOrientation="portrait"-->
+             <!--android:theme="@style/Theme.AppCompat.Light.NoActionBar" />-->
 
         <activity
             android:name=".activity.MainActivity"
@@ -113,11 +113,11 @@
             android:label="@string/set_gesture_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
-        <!--<activity-->
-            <!--android:name=".activity.NewSignActivity"-->
-            <!--android:label="@string/new_sign_activity"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:windowSoftInputMode="adjustUnspecified|stateHidden" />-->
+        <activity
+            android:name=".activity.NewSignActivity"
+            android:label="@string/new_sign_activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".activity.ElementVerificationActivity"
             android:label="@string/element_verification_activity"
@@ -173,6 +173,13 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.csii.powerenter.PEKbdActivity"
+            android:configChanges="orientation"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Translucent" >
         </activity>
 
         <service

@@ -193,12 +193,9 @@ public class UnfinishedActivity extends BaseActivity implements
                     public void onFail(String msg) {
                         executeOnLoadDataError(msg);
                         executeOnLoadFinish();
+                        new ReadCacheTask(UnfinishedActivity.this).execute();
                     }
-
-
-                }.setProgressDialogCanceledOnTouchOutside(true)
-                        .setProgressDialogCancleable(true)
-                        .setIsNeedToReturnResponseBody(true)
+                }
         );
     }
 

@@ -146,7 +146,7 @@ public class NewSignActivity extends BaseActivity{
 
         DialogHelper.showProgressDialog(NewSignActivity.this, "正在操作，请稍候...", true, false);
 
-        ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler("detailCode","detailInfo","verifyGroupList") {
+        ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 try {
@@ -185,6 +185,8 @@ public class NewSignActivity extends BaseActivity{
                         Constant.CACHE_EXPIRE_OND_DAY, CacheManager.TYPE_INTERNAL);
                 ToastHelper.ShowToast("已保存在本地数据库.");
                 super.onFail(msg);
+                Intent intent = new Intent(NewSignActivity.this, UnfinishedActivity.class);
+                startActivity(intent);
             }
         });
     }
