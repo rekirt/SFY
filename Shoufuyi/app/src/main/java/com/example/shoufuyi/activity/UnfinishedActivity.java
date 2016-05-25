@@ -259,7 +259,9 @@ public class UnfinishedActivity extends BaseActivity implements
                 return null;
             }
 
-            byte[] data = CacheManager.getCache(target.getCacheKey());
+//            byte[] data = CacheManager.getCache(target.getCacheKey());
+            byte[] data = CacheManager.getCacheByte(CacheManager.TYPE_INTERNAL);
+
             if (data == null) {
                 return null;
             }

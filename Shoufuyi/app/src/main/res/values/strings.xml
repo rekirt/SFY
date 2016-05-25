@@ -1,5 +1,36 @@
 <resources>
     <string name="app_name">收付易系统</string>
+    <string name="company_name">广州银联网络支付有限公司</string>
+    <string name="title_activity_information">Information</string>
+    <string name="title_activity_scan_camera">ScanCamera</string>
+    <string name="title_activity_show_result">确认结果页面</string>
+
+    <string name="return_activity_toast">请填写返回界面参数</string>
+    <string name="take_pic">开始拍照</string>
+    <string name="no_flash">当前设备不支持闪光灯</string>
+    <string name="auth_overdue_front">您的授权已于</string>
+    <string name="auth_overdue_after">到期，请更新授权，否则识别功能将停止使用！</string>
+    <string name="auth_error_00">在strings文件中未找到company_name字段</string>
+    <string name="toast_code">错误代码:</string>
+    <string name="preview_hint_msg">请将银行卡正面置于此区域，尝试对齐边缘</string>
+    <string name="back_confirm">再按一次退出</string>
+    <string name="card_num_hint">点击输入卡号</string>
+    <string name="confirm">确认</string>
+    <string name="bank_name">银行名称:</string>
+    <string name="bank_code">银行行号:</string>
+    <string name="card_name">卡片名称:</string>
+    <string name="card_type">卡片类型:</string>
+    <string name="unknow_card_type">未知的卡片类型</string>
+    <!-- 需要加到英文 -->
+    <string name="ActivationProgram">激活程序</string>
+    <string name="dialog_title">首次使用若能联网请在此填写序列号，不区分大小写，并点击“授权验证”按钮.</string>
+    <string name="online_activation">在线激活</string>
+    <string name="activation_success">激活成功</string>
+    <string name="cancel">取消</string>
+    <string name="please_connect_network">请连接网络</string>
+    <string name="network_unused">网络不可用</string>
+
+
     <string name="error_http_fail_connet_server">Unable to connect to the server, please check the network</string>
     <string name="error_http_request">The server is not responding. Please try again later.</string>
     <string name="error_http_server_error">The server is not responding. Please try again later.</string>
@@ -38,4 +69,7 @@
         <item>签约生效</item>
         <item>签约失效</item>
     </string-array>
+
+
+
 </resources>

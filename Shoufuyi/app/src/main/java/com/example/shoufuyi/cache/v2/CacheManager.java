@@ -227,6 +227,64 @@ public class CacheManager {
         return null;
     }
 
+    public static byte[] getCacheByte(int type) {
+        ArrayList<Cache> cacheArrayList = getCacheFileByState(type);
+            try {
+                byte[] data = null;
+                for (Cache cache : cacheArrayList){
+                   data = byteMerger(FileUtils.readFileToByte(cache.getFile()),data);
+                }
+                return data;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        return null;
+    }
+
+    public static byte[] byteMerger(byte[] byte_1, byte[] byte_2){
+        if (byte_2 == null || byte_1 == null){
+            return byte_1;
+        }else {
+            byte[] byte_3 = new byte[byte_1.length+byte_2.length];
+            return byte_3;
+        }
+    }
+
+    public static synchronized ArrayList<Cache> getCacheFileByState(int type) {
+        ArrayList<Cache> cacheArrayList = new ArrayList<Cache>();
+        Cache cache = null;
+        if (dbHelper != null) {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery("select * from app_cache  where status = "
+                    + type + " order by expire", null);
+            if (cursor != null && cursor.getCount() > 0) {
+                if (cursor.moveToNext()) {
+                    try {
+                        cache = new Cache();
+                        cache.parse(cursor);
+                        cacheArrayList.add(cache);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    TLog.log(TAG, "cache cursor is no data with type:" + type);
+                }
+            } else {
+                TLog.log(TAG, "cache cursor is empty with type:" + type);
+            }
+            if (cursor != null)
+                cursor.close();
+        } else {
+            TLog.log(TAG, "db helper is null");
+        }
+        TLog.log(TAG, "get cache file :" + cache);
+        return cacheArrayList;
+    }
+
+
+
+
+
     public static String getCacheData(String key) {
         byte[] data = getCache(key);
         if (data != null) {

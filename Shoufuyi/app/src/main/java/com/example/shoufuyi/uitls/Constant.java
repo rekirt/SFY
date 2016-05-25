@@ -29,8 +29,10 @@ public class Constant {
 	public static String four="FOUR_ELEMENT";
 	public static String five="FIVE_ELEMENT";
 	public static String six="SIX_ELEMENT";
-	
+
 	public static String devcode = "5BMA5BEE6ZO26IG";
+//	public static String devcode = "5YYX5LQS5PAH6YC";
+
 	public static String banknumber="";
 
 	public static String SHARED_PREFERENCE_NAME = "SFY_SHARED_PREFERENCE_NAME";
@@ -49,7 +51,8 @@ public class Constant {
 	public static String ISLOGIN = "Is_Login";
 	public static String LOGINSERECT = "LoginSerect";
 	public static String GESNUMBER = "gesnumber";
-	public static final long CACHE_EXPIRE_OND_DAY = 3600000;//一天
+    public static final long CACHE_EXPIRE_DAY = 3600000*200;//两百天
+    public static final long CACHE_EXPIRE_OND_DAY = 3600000*2;//两天
 
 //运行参数
 	public static String VEDIOANDPHOTOCACHELONG = "VEDIOANDPHOTOCACHELONG";//视频图片缓存时长
@@ -57,6 +60,6 @@ public class Constant {
 	public static String VEDIOLONG = "VEDIOLONG";//视频时长
 	public static String TIMEOUT = "ITMEOUT";//超时时长
 	public static String PAGESIZE = "PAGESIZE";//每页数据量
-	public static String PRIVILAGE = "privilage";//用户权限
+    public static String PRIVILAGE = "privilage";//用户权限
 
 }

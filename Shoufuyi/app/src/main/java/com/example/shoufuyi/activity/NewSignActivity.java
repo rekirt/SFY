@@ -13,6 +13,8 @@ import com.alibaba.fastjson.JSON;
 import com.example.shoufuyi.R;
 import com.example.shoufuyi.api.ApiRequest;
 import com.example.shoufuyi.api.JsonHttpHandler;
+import com.example.shoufuyi.cache.FileUtils;
+import com.example.shoufuyi.cache.v2.CacheManager;
 import com.example.shoufuyi.uitls.Constant;
 import com.example.shoufuyi.uitls.PhoneUtils;
 import com.example.shoufuyi.uitls.SharedPreferencesHelper;
@@ -35,7 +37,8 @@ import java.util.regex.Pattern;
  * blog:http://fuhongliang.com/
  */
 public class NewSignActivity extends BaseActivity{
-
+    private String returnAction = "android.intent.action.MAIN";
+    private String resultAction = "";
     private EditText mEdtNewSignId;
     private EditText mEdtNewSignName;
     private EditText mEdtNewSignCardNumber;
@@ -83,21 +86,15 @@ public class NewSignActivity extends BaseActivity{
                 }
                 break;
             case R.id.iv_id_camera:
-//                Intent intent = new Intent(NewSignActivity.this, CameraActivity.class);
-//                intent.putExtra("nMainId", SharedPreferencesHelper.getInt("nMainId", 2));
-//                intent.putExtra("devcode", devcode);
-//                startActivityForResult(intent, 1);
+                ToastHelper.ShowToast("暂时没法通过拍照识别");
                 break;
             case R.id.iv_card_camera:
+                ToastHelper.ShowToast("暂时没法通过拍照识别");
 //                Intent intentTack = new Intent("com.wintone.bankcard.camera.ScanCamera");
-//                intentTack.putExtra("devCode", devcode);
-//                String str = devcode;
+//                intentTack.putExtra("devCode", Constant.devcode);
 //                intentTack.putExtra("CopyrightInfo", "");
 //                intentTack.putExtra("ReturnAciton", returnAction);
 //                intentTack.putExtra("ResultAciton", resultAction);
-//                imageName = TakeBankCardPictureActivity.getTimeName(System.currentTimeMillis()) + ".jpg";
-//                path = BitmapHelper.compressBitmap(InfomationInput.this, imageName, 100, 100, true);
-//                intentTack.putExtra("capturePath", path);
 //                startActivity(intentTack);
                 break;
 
@@ -149,37 +146,18 @@ public class NewSignActivity extends BaseActivity{
 
         DialogHelper.showProgressDialog(NewSignActivity.this, "正在操作，请稍候...", true, false);
 
-        ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
+        ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler("detailCode","detailInfo","verifyGroupList") {
             @Override
             public void onDo(JSONObject responseJsonObject) {
-                if (responseJsonObject == null) {
-                    ToastHelper.ShowToast("连接服务器失败");
-                    return;
-                }
                 try {
                     mReturnApp = JSON.parseObject(responseJsonObject.toString(), APP_120001.class);
-                    if (!("0000".equals(mReturnApp.getDetailCode()))) {
-                        ToastHelper.ShowToast(mReturnApp.getDetailInfo());
-                    }
-                    if (!("0004".equals(mReturnApp.getDetailCode()))) {
-//                        boolean isSeccess = dbCardHelperManager.addCardHolder(mCardHolder);
-//                            if (isSeccess) {
-//                                ToastHelper.ShowToast("数据上传失败，已保存本地数据库");
-//                            } else {
-//                                ToastHelper.ShowToast("数据上传失败，保存本地数据库失败");
-//                            }
-
-                    } else {
-                        ToastHelper.ShowToast("录入成功");
-//                        inputdate();
-//                        dbCardHelperManager.deleteOverdueCardHolder(mCardHolder);
-                        Intent intent = new Intent();
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("return", mReturnApp);
-                        intent.putExtras(bundle);
-                        intent.setClass(NewSignActivity.this, ElementVerificationActivity.class);
-                        startActivity(intent);
-                    }
+                    ToastHelper.ShowToast("录入成功");
+                    Intent intent = new Intent();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("return", mReturnApp);
+                    intent.putExtras(bundle);
+                    intent.setClass(NewSignActivity.this, ElementVerificationActivity.class);
+                    startActivity(intent);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -202,13 +180,11 @@ public class NewSignActivity extends BaseActivity{
 
             @Override
             public void onFail(String msg) {
+
+                CacheManager.setCache(FileUtils.getCacheKey(app.getIdCard(), app.getAccountNo()), app.toString().getBytes(),
+                        Constant.CACHE_EXPIRE_OND_DAY, CacheManager.TYPE_INTERNAL);
+                ToastHelper.ShowToast("已保存在本地数据库.");
                 super.onFail(msg);
-//                boolean isSeccess = dbCardHelperManager.addCardHolder(mCardHolder);
-//                if (isSeccess) {
-//                    ToastHelper.ShowToast("由于"+msg+"原因，数据上传失败，已保存本地数据库");
-//                } else {
-//                    ToastHelper.ShowToast("由于"+msg+"原因，新建失败");
-//                }
             }
         });
     }

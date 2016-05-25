@@ -1,0 +1,104 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    tools:context="com.wintone.smartvision_bankCard.ShowResult" >
+
+    <ImageView
+        android:id="@+id/word_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/please_ok" />
+
+    <ImageView
+        android:id="@+id/showbitmap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/lin_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/num1_show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numeric="integer"
+            android:singleLine="true"
+            android:textColor="#000000" />
+
+        <EditText
+            android:id="@+id/num2_show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numeric="integer"
+            android:singleLine="true"
+            android:textColor="#000000" />
+
+        <EditText
+            android:id="@+id/num3_show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numeric="integer"
+            android:singleLine="true"
+            android:textColor="#000000" />
+
+        <EditText
+            android:id="@+id/num4_show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numeric="integer"
+            android:singleLine="true"
+            android:textColor="#000000" />
+
+        <EditText
+            android:id="@+id/num5_show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numeric="integer"
+            android:singleLine="true"
+            android:textColor="#000000" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/bank_name_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/bank_code_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/card_name_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/card_type_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black" />
+
+    <Button
+        android:id="@+id/OK_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm" />
+
+    <TextView
+        android:id="@+id/surplusTimes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>
