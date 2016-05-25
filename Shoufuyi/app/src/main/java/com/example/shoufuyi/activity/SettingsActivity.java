@@ -10,15 +10,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.example.shoufuyi.R;
 import com.example.shoufuyi.api.ApiRequest;
 import com.example.shoufuyi.api.JsonHttpHandler;
-import com.example.shoufuyi.uitls.ActivityCollector;
 import com.example.shoufuyi.uitls.Constant;
 import com.example.shoufuyi.uitls.SharedPreferencesHelper;
 import com.example.shoufuyi.uitls.ToastHelper;
@@ -34,10 +31,7 @@ import com.itech.message.AppPrivilage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class SettingsActivity extends BaseActivity {
 
@@ -48,13 +42,7 @@ public class SettingsActivity extends BaseActivity {
     private RelativeLayout mRlAppUpdate;
     private RelativeLayout mRlSetting;
 
-	// 商户手机号；
 	private String phone;
-	// 权限
-	private String privilagestr;
-	private String[] privilagearr;
-	private LinearLayout lintitle;
-	private TextView texttitle;
     private String strtoclass;
     private UpdateManager update;
 
@@ -73,28 +61,8 @@ public class SettingsActivity extends BaseActivity {
         mRlChangePwd = (RelativeLayout) findViewById(R.id.rl_change_pwd);
         mRlAppUpdate = (RelativeLayout) findViewById(R.id.rl_app_update);
         mRlSetting = (RelativeLayout) findViewById(R.id.rl_setting);
-
-//         Drawable drawable1 = getResources().getDrawable(R.drawable.login_user);
-//                drawable1.setBounds(0, 0, 40, 40);//第一0是距左边距离，第二0是距上边距离，40分别是长宽
-//                editText1.setCompoundDrawables(drawable1, null, null, null);//只放左边
 		update = new UpdateManager(SettingsActivity.this);
 		phone = SharedPreferencesHelper.getString("phone", "");
-		privilagestr = SharedPreferencesHelper.getString("privilage", "");
-		privilagearr = privilagestr.split(",");
-//		if (!useSet(privilagearr, "007")) {
-//			Map<String, String> map = new HashMap<String, String>();
-//			map.put("details", Arr[0]);
-//			map.put("image", imgarr[0]);
-//			map.put("check", "0000");
-//			mylist.remove(map);
-//		}
-//		if (!useSet(privilagearr, "008")) {
-//			Map<String, String> map = new HashMap<String, String>();
-//			map.put("details", Arr[3]);
-//			map.put("image", imgarr[3]);
-//			map.put("check", "0000");
-//			mylist.remove(map);
-//		}
 	}
 
     private void initData(){
@@ -135,11 +103,6 @@ public class SettingsActivity extends BaseActivity {
         }
     }
 
-    public static boolean useSet(String[] arr, String targetValue) {
-		Set<String> set = new HashSet<String>(Arrays.asList(arr));
-		return set.contains(targetValue);
-	}
-
 	// 业务权限
 	private void busslimit() {
 		DialogHelper.showProgressDialog(SettingsActivity.this, "正在查询，请稍候...", true, true);
@@ -156,7 +119,7 @@ public class SettingsActivity extends BaseActivity {
                     for (AppPrivilage pri : privilagelist) {
                         strprivilage.append(pri.getAppPrvCode()).append(",");
                     }
-                    SharedPreferencesHelper.setString("privilage", strprivilage.toString() + "");// 保存字符串
+                    SharedPreferencesHelper.setString(Constant.PRIVILAGE, strprivilage.toString() + "");// 保存字符串
                     ToastHelper.ShowToast(returnapp.getDetailInfo());
                 } else {
                     ToastHelper.ShowToast(returnapp.getDetailInfo());
@@ -190,7 +153,6 @@ public class SettingsActivity extends BaseActivity {
             public void onDo(JSONObject responseJsonObject) {
                 final APP_RunParm returnapp = JSON.parseObject(responseJsonObject.toString(), APP_RunParm.class);
                 if (returnapp.getDetailCode().equals("0000")) {
-                    StringBuffer sb = new StringBuffer();
                     List<APP_Parameters> list = returnapp.getParametersList();
                     for (APP_Parameters par : list) {
                         switch (par.getParCode()){
@@ -245,6 +207,7 @@ public class SettingsActivity extends BaseActivity {
 		app.setUserName(phone);
 		app.setUserPass("");
 		app.setLoginState("0001");
+        DialogHelper.showProgressDialog(SettingsActivity.this, "正在退出，请稍候...", true, false);
         ApiRequest.requestData(app, phone, new JsonHttpHandler() {
             @Override
             public void onDo(JSONObject responseJsonObject) {
@@ -252,10 +215,9 @@ public class SettingsActivity extends BaseActivity {
                 try {
                     returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120033.class);
                     if (returnapp.getDetailCode().equals("0000")) {
-                        // Is_exit 设置为1的时候表示要重新登录
-                        SharedPreferencesHelper.setString("Is_exit", "1");// 保存字符串
+                        SharedPreferencesHelper.setBoolean(Constant.ISLOGIN, false);
+                        startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
                         finish();
-                        ActivityCollector.finishAll();
                     } else {
                         ToastHelper.ShowToast(returnapp.getDetailInfo());
                     }
@@ -276,7 +238,7 @@ public class SettingsActivity extends BaseActivity {
 
             @Override
             public void onFinish() {
-                DialogHelper.showProgressDialog(SettingsActivity.this, "正在退出，请稍候...", true, false);
+                DialogHelper.dismissProgressDialog();
             }
         });
 	}
@@ -341,26 +303,22 @@ public class SettingsActivity extends BaseActivity {
 		public void onClick(DialogInterface dialog, int which) {
 			if (strtoclass.equals("手势密码")) {
 				switch (which) {
-                    case AlertDialog.BUTTON_POSITIVE:// "确认"按钮退出程序
-                        SharedPreferencesHelper.setString(Constant.ISLOGIN, "");// 保存字符串
-                        SharedPreferencesHelper.setString(Constant.MIMA, "");// 保存字符串
+                    case AlertDialog.BUTTON_POSITIVE:
                         Intent intent = new Intent();
                         intent.setClass(SettingsActivity.this, SetGestureActivity.class);
                         startActivity(intent);
-    //                    finish();
                         break;
-                    case AlertDialog.BUTTON_NEGATIVE:// "取消"第二个按钮取消对话框
+                    case AlertDialog.BUTTON_NEGATIVE:
                         break;
                     default:
                         break;
 				}
 			} else if (strtoclass.equals("登录密码")) {
 				switch (which) {
-                    case AlertDialog.BUTTON_POSITIVE:// "确认"按钮退出程序
+                    case AlertDialog.BUTTON_POSITIVE:
                         Intent intent = new Intent();
                         intent.setClass(SettingsActivity.this, ChangePwdActivity.class);
                         startActivity(intent);
-    //				    finish();
                         break;
                     case AlertDialog.BUTTON_NEGATIVE:// "取消"第二个按钮取消对话框
                         break;
@@ -370,10 +328,10 @@ public class SettingsActivity extends BaseActivity {
 
 			} else if (strtoclass.equals("退出登录")) {
 				switch (which) {
-                    case AlertDialog.BUTTON_POSITIVE:// "确认"按钮退出程序
+                    case AlertDialog.BUTTON_POSITIVE:
                         exit();
                         break;
-                    case AlertDialog.BUTTON_NEGATIVE:// "取消"第二个按钮取消对话框
+                    case AlertDialog.BUTTON_NEGATIVE:
                         break;
                     default:
                         break;

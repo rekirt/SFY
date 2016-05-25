@@ -82,10 +82,10 @@ public class SplashActivity extends BaseActivity {
            startActivity(intent);
            finish();
        }else {
-                Intent intent = new Intent(SplashActivity.this, StartToUseActivity.class);
-                startActivity(intent);
-                finish();
-            }
+           Intent intent = new Intent(SplashActivity.this, StartToUseActivity.class);
+           startActivity(intent);
+           finish();
+       }
     }
 
     /**
