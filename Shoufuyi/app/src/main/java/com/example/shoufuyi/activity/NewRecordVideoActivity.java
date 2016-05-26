@@ -2,7 +2,6 @@ package com.example.shoufuyi.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -12,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -208,7 +208,25 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
         if (isCancelRecord) {
             FileUtil.deleteFile(videoPath);
         } else {
-            startActivity(new Intent(this, PlayVideoActiviy.class).putExtra(PlayVideoActiviy.KEY_FILE_PATH, videoPath));
+            // 实例化 Bundle，设置需要传递的参数
+            Bundle bundle = new Bundle();
+            bundle.putString(PlayVideoActiviy.KEY_FILE_PATH, videoPath);
+            NewRecordVideoActivity.this.setResult(RESULT_OK, NewRecordVideoActivity.this.getIntent().putExtras(bundle));
+            NewRecordVideoActivity.this.finish();
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+        // 实例化 Bundle，设置需要传递的参数 
+//            Bundle bundle = new Bundle();
+//            bundle.putString("phoneNO", "020-123");
+            setResult(RESULT_CANCELED, this.getIntent());
+            this.finish();
+            return true;
+            }else {
+                return super.onKeyDown(keyCode, event);
         }
     }
 

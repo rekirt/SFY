@@ -1,0 +1,1 @@
+package com.example.shoufuyi.uitls.dialog;import android.content.DialogInterface;/** *  * Description: * Created by FuHL on * Date:2015-09-06 * Time:下午4:39 * Copyright © 2015年 FuHL. All rights reserved. */public abstract class ChooseDialogDoClickHelper {    public abstract void doClick(DialogInterface dialog, int which);}

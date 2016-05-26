@@ -160,7 +160,9 @@ public class NewSignActivity extends BaseActivity{
                         intent.setClass(NewSignActivity.this, ElementVerificationActivity.class);
                         startActivity(intent);
                     }else {
-                        ToastHelper.ShowToast(mReturnApp.getDetailInfo());
+                        CacheManager.setCache(FileUtils.getCacheKey(app.getIdCard(), app.getAccountNo()), app.toString().getBytes(),
+                                Constant.CACHE_EXPIRE_OND_DAY, CacheManager.TYPE_INTERNAL);
+                        ToastHelper.ShowToast("录入失败提示："+mReturnApp.getDetailInfo()+",已自动保存在本地数据库");
                     }
 
                 }catch (Exception e){
@@ -189,9 +191,8 @@ public class NewSignActivity extends BaseActivity{
                 CacheManager.setCache(FileUtils.getCacheKey(app.getIdCard(), app.getAccountNo()), app.toString().getBytes(),
                         Constant.CACHE_EXPIRE_OND_DAY, CacheManager.TYPE_INTERNAL);
                 ToastHelper.ShowToast("已保存在本地数据库.");
-                super.onFail(msg);
-                Intent intent = new Intent(NewSignActivity.this, UnfinishedActivity.class);
-                startActivity(intent);
+//                super.onFail(msg);
+                NewSignActivity.this.finish();
             }
         });
     }

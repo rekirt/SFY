@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar"/>
+
+    <FrameLayout
+        android:id="@+id/fl_video"
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/space_15"
+        android:layout_height="320dp">
+
+        <com.yqritc.scalablevideoview.ScalableVideoView
+            android:id="@+id/video_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:onClick="onClick"
+            app:scalableType="fitCenter"/>
+        <ImageView
+            android:id="@+id/thumbnailImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:onClick="onClick"
+            />
+
+        <ImageView
+            android:id="@+id/playImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            android:src="@drawable/video_play"
+            />
+        <ImageView
+            android:id="@+id/iv_video"
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            android:src="@drawable/video_bg"
+            android:background="@color/common_bg"
+            />
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/btn_upload"
+        android:layout_below="@+id/fl_video"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/btn_height"
+        android:layout_margin="@dimen/space_25"
+        android:text="上传"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:background="@drawable/btn_red_selector"
+        android:textSize="@dimen/title_size"
+        >
+    </Button>
+</RelativeLayout>

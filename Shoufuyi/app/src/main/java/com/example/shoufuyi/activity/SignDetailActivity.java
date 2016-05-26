@@ -39,7 +39,6 @@ public class SignDetailActivity extends BaseActivity {
 		mResult = (Result_120023) bundle.get("info");
 		assignViews();
 		initData();
-		getSignDetail();
 	}
 
 	private TextView tv_merchant_name;// 用户名称
@@ -103,6 +102,12 @@ public class SignDetailActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        getSignDetail();
+    }
+
+    @Override
     public void onClick(View view) {
         super.onClick(view);
         switch (view.getId()){
@@ -132,11 +137,21 @@ public class SignDetailActivity extends BaseActivity {
     }
 
     private void gotoTakeVideo(){
-        startActivity(new Intent(SignDetailActivity.this, NewRecordVideoActivity.class));
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("info", mResult);
+        intent.putExtras(bundle);
+        intent.setClass(SignDetailActivity.this, TakeVideoActivity.class);
+        startActivity(intent);
     }
 
     private void gotoTakeBankCardPhoto(){
-        startActivity(new Intent(SignDetailActivity.this,TakeBankCardPhotoActivity.class));
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("info", mResult);
+        intent.putExtras(bundle);
+        intent.setClass(SignDetailActivity.this, TakeBankCardPhotoActivity.class);
+        startActivity(intent);
     }
     /**
      * 获取签约详情
