@@ -21,10 +21,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.example.shoufuyi.uitls.ToastHelper;
+import com.example.shoufuyi.activity.NewRecordVideoActivity;
+import com.example.shoufuyi.activity.PlayVideoActiviy;
 import com.wintone.bankcard.BankCardAPI;
 import com.wintone.bankcard.BankCardRecogUtils;
-import com.wintone.bankcard.camera.ScanCamera;
 import com.wintone.utils.Utils;
 import com.wintone.view.ViewfinderView;
 
@@ -121,14 +121,14 @@ public class CardScanCameraActivity extends Activity implements SurfaceHolder.Ca
                 parameters.setFlashMode("off");
                 camera.setParameters(parameters);
                 camera.stopPreview();
-                Intent intent = new Intent(CardScanCameraActivity.this.resultAciton);
+                Intent intent = new Intent();
                 intent.putExtra("Success", 3);
                 intent.putExtra("Path", path);
                 intent.putExtra("l", l);
                 intent.putExtra("t", t1);
                 intent.putExtra("w", r - l);
                 intent.putExtra("h", b - t1);
-                CardScanCameraActivity.this.startActivity(intent);
+                CardScanCameraActivity.this.setResult(RESULT_OK, intent);
                 CardScanCameraActivity.this.finish();
             }
 
