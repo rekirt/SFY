@@ -27,10 +27,11 @@
             />
         <ImageView
             android:id="@+id/iv_id_camera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="-20dp"
-            android:src="@drawable/ic_camera"/>
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_camera"
+            />
     </LinearLayout>
 
     <ImageView
@@ -80,9 +81,9 @@
             android:text="12345678912345678"/>
         <ImageView
             android:id="@+id/iv_card_camera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="-20dp"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
             android:src="@drawable/ic_camera"/>
     </LinearLayout>
     <ImageView

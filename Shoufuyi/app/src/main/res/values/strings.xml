@@ -51,6 +51,8 @@
     <string name="running_setting_activity">系统参数设置</string>
     <string name="new_record_video_activity">录制视频</string>
     <string name="play_video_activiy">回放视频</string>
+    <string name="take_bank_card_photo_activity">采集银行卡照片</string>
+
 
     <!-- Error View -->
     <string name="error_view_click_to_refresh">请点击屏幕重新加载</string>
@@ -69,7 +71,6 @@
         <item>签约生效</item>
         <item>签约失效</item>
     </string-array>
-
 
 
 </resources>

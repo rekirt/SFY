@@ -151,13 +151,18 @@ public class NewSignActivity extends BaseActivity{
             public void onDo(JSONObject responseJsonObject) {
                 try {
                     mReturnApp = JSON.parseObject(responseJsonObject.toString(), APP_120001.class);
-                    ToastHelper.ShowToast("录入成功");
-                    Intent intent = new Intent();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("return", mReturnApp);
-                    intent.putExtras(bundle);
-                    intent.setClass(NewSignActivity.this, ElementVerificationActivity.class);
-                    startActivity(intent);
+                    if("0000".equals(mReturnApp.getDetailCode())){
+                        ToastHelper.ShowToast("录入成功");
+                        Intent intent = new Intent();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("return", mReturnApp);
+                        intent.putExtras(bundle);
+                        intent.setClass(NewSignActivity.this, ElementVerificationActivity.class);
+                        startActivity(intent);
+                    }else {
+                        ToastHelper.ShowToast(mReturnApp.getDetailInfo());
+                    }
+
                 }catch (Exception e){
                     e.printStackTrace();
                 }

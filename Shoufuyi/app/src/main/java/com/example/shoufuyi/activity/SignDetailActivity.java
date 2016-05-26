@@ -102,6 +102,42 @@ public class SignDetailActivity extends BaseActivity {
         setCanBack(true);
     }
 
+    @Override
+    public void onClick(View view) {
+        super.onClick(view);
+        switch (view.getId()){
+            case R.id.tv_bank_card_front_state:
+                gotoTakeBankCardPhoto();
+                break;
+            case R.id.tv_bank_card_back_state:
+                gotoTakeBankCardPhoto();
+                break;
+            case R.id.tv_id_card_front_state:
+                break;
+            case R.id.tv_id_card_back_state:
+                break;
+            case R.id.tv_id_number_state:
+                break;
+            case R.id.tv_id_card_holder_video_state:
+                gotoTakeVideo();
+                break;
+            case R.id.tv_agreement_pic_state:
+                break;
+            case R.id.tv_e_agreement_state:
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void gotoTakeVideo(){
+        startActivity(new Intent(SignDetailActivity.this, NewRecordVideoActivity.class));
+    }
+
+    private void gotoTakeBankCardPhoto(){
+        startActivity(new Intent(SignDetailActivity.this,TakeBankCardPhotoActivity.class));
+    }
     /**
      * 获取签约详情
      */
@@ -194,9 +230,9 @@ public class SignDetailActivity extends BaseActivity {
         //1：未验证 2：验证通过 3：验证不通过
         switch (verifyGroup.getVerifyState()){
             case "1":
-                tv_id_card_front_state.setText("未验证");
-                tv_id_card_back_state.setText("未验证");
-                tv_avatar_state.setText("未验证");
+                tv_id_card_front_state.setText("点击采集");
+                tv_id_card_back_state.setText("点击采集");
+                tv_avatar_state.setText("点击采集");
                 break;
             case "2":
                 tv_id_card_front_state.setText("验证通过");
@@ -240,11 +276,11 @@ public class SignDetailActivity extends BaseActivity {
     private String mBackBankCardFileId = "";
 
     private void handleBankCardPhoto(VerifyGroup verifyGroup){
-        //1：未验证 2：验证通过 3：验证不通过
+        //1：点击采集 2：验证通过 3：验证不通过
         switch (verifyGroup.getVerifyState()){
             case "1":
-                tv_bank_card_front_state.setText("未验证");
-                tv_bank_card_back_state.setText("未验证");
+                tv_bank_card_front_state.setText("点击采集");
+                tv_bank_card_back_state.setText("点击采集");
                 break;
             case "2":
                 tv_bank_card_front_state.setText("验证通过");
@@ -282,7 +318,7 @@ public class SignDetailActivity extends BaseActivity {
         //1：未验证 2：验证通过 3：验证不通过
         switch (verifyGroup.getVerifyState()){
             case "1":
-                tv_agreement_pic_state.setText("未验证");
+                tv_agreement_pic_state.setText("点击采集");
                 break;
             case "2":
                 tv_agreement_pic_state.setText("验证通过");
@@ -324,7 +360,7 @@ public class SignDetailActivity extends BaseActivity {
                 tv_e_agreement_state.setText("验证不通过");
                 break;
             default:
-                tv_e_agreement_state.setText("点击采集");
+                tv_e_agreement_state.setText("签订");
                 break;
         }
         for (VerifyItem verifyItem : verifyGroup.getVerifyItemList()){
@@ -349,8 +385,8 @@ public class SignDetailActivity extends BaseActivity {
         //1：未验证 2：验证通过 3：验证不通过
         switch (verifyGroup.getVerifyState()){
             case "1":
-                tv_id_card_holder_video_state.setText("未验证");
-                tv_avatar_state.setText("未验证");
+                tv_id_card_holder_video_state.setText("点击采集");
+                tv_avatar_state.setText("点击采集");
                 break;
             case "2":
                 tv_id_card_holder_video_state.setText("验证通过");
@@ -390,8 +426,8 @@ public class SignDetailActivity extends BaseActivity {
         //1：未验证 2：验证通过 3：验证不通过
         switch (verifyGroup.getVerifyState()){
             case "1":
-                tv_deal_pwd_state.setText("未验证");
-                tv_id_number_state.setText("未验证");
+                tv_deal_pwd_state.setText("点击采集");
+                tv_id_number_state.setText("点击采集");
                 break;
             case "2":
                 tv_deal_pwd_state.setText("验证通过");

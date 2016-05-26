@@ -149,6 +149,7 @@ public class QuerySignActivity extends BaseActivity implements
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 collstate = arg2 + 1;
+                refresh();
             }
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
@@ -183,8 +184,6 @@ public class QuerySignActivity extends BaseActivity implements
         page.setPageSize(String.valueOf(TDevice.getPageSize()));
         app.setPage(page);
         app.setState(String.valueOf(collstate));
-
-//        app.setCreateDateStart(editdate.getText().toString().replace("-", ""));
         app.setCreateDateEnd(endtime);
         ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
                     @Override

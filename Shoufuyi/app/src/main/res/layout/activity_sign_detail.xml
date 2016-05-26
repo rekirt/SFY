@@ -30,7 +30,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/space_20"
+                    android:layout_marginLeft="@dimen/space_15"
                     android:text="用户"
                     android:textSize="@dimen/second_title_size"/>
                 <TextView
@@ -39,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:layout_marginRight="@dimen/space_20"
+                    android:layout_marginRight="@dimen/space_15"
                     android:text="中国太平洋保险有限公司 \n 张大三"
                     android:textSize="@dimen/second_title_size" />
             </LinearLayout>
@@ -58,7 +58,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/space_20"
+                    android:layout_marginLeft="@dimen/space_15"
                     android:text="卡号"
                     android:textSize="@dimen/second_title_size"/>
                 <TextView
@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:layout_marginRight="@dimen/space_20"
+                    android:layout_marginRight="@dimen/space_15"
                     android:text="622220293420348"
                     android:textSize="@dimen/second_title_size" />
 
@@ -87,7 +87,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/space_20"
+                    android:layout_marginLeft="@dimen/space_15"
                     android:text="银行卡正面照片"
                     android:textSize="@dimen/second_title_size"/>
                 <TextView
@@ -103,7 +103,7 @@
                 <ImageView
                     android:layout_width="13dp"
                     android:layout_height="23dp"
-                    android:layout_marginRight="@dimen/space_20"
+                    android:layout_marginRight="@dimen/space_15"
                     android:src="@drawable/ic_right"/>
             </LinearLayout>
             <ImageView
@@ -121,7 +121,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/space_20"
+                    android:layout_marginLeft="@dimen/space_15"
                     android:text="银行卡背面照片"
                     android:textSize="@dimen/second_title_size"/>
                 <TextView
@@ -137,7 +137,7 @@
                 <ImageView
                     android:layout_width="13dp"
                     android:layout_height="23dp"
-                    android:layout_marginRight="@dimen/space_20"
+                    android:layout_marginRight="@dimen/space_15"
                     android:src="@drawable/ic_right"/>
             </LinearLayout>
             <ImageView
@@ -155,7 +155,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/space_20"
+                    android:layout_marginLeft="@dimen/space_15"
                     android:text="交易密码"
                     android:textSize="@dimen/second_title_size"/>
                 <TextView
@@ -164,7 +164,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:layout_marginRight="@dimen/space_20"
+                    android:layout_marginRight="@dimen/space_15"
                     android:text="已验证"
                     android:textSize="@dimen/second_title_size" />
             </LinearLayout>
@@ -192,7 +192,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/space_20"
+                    android:layout_marginLeft="@dimen/space_15"
                     android:text="手机号"
                     android:textSize="@dimen/second_title_size"/>
                 <TextView
@@ -203,7 +203,7 @@
                     android:textColor="@color/blue"
                     android:gravity="right"
                     android:text="18989883838"
-                    android:layout_marginRight="@dimen/space_20"
+                    android:layout_marginRight="@dimen/space_15"
                     android:textSize="@dimen/second_title_size" />
 
             </LinearLayout>
@@ -222,7 +222,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/space_20"
+                    android:layout_marginLeft="@dimen/space_15"
                     android:text="持卡人"
                     android:textSize="@dimen/second_title_size"/>
                 <TextView
@@ -231,7 +231,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:layout_marginRight="@dimen/space_20"
+                    android:layout_marginRight="@dimen/space_15"
                     android:text="张大三"
                     android:textSize="@dimen/second_title_size" />
             </LinearLayout>
@@ -250,7 +250,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/space_20"
+                    android:layout_marginLeft="@dimen/space_15"
                     android:text="头像"
                     android:textSize="@dimen/second_title_size"/>
                 <TextView
@@ -266,7 +266,7 @@
                 <ImageView
                     android:layout_width="13dp"
                     android:layout_height="23dp"
-                    android:layout_marginRight="@dimen/space_20"
+                    android:layout_marginRight="@dimen/space_15"
                     android:src="@drawable/ic_right"/>
             </LinearLayout>
             <ImageView
@@ -291,7 +291,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/space_20"
+                    android:layout_marginLeft="@dimen/space_15"
                     android:text="身份证"
                     android:textSize="@dimen/second_title_size"/>
                 <TextView
@@ -308,7 +308,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
-                    android:layout_marginRight="@dimen/space_20"
+                    android:layout_marginRight="@dimen/space_15"
                     android:text="已验证"
                     android:textSize="@dimen/second_title_size" />
 
@@ -328,7 +328,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/space_20"
+                    android:layout_marginLeft="@dimen/space_15"
                     android:text="身份证正面照片"
                     android:textSize="@dimen/second_title_size"/>
                 <TextView
@@ -344,7 +344,7 @@
                 <ImageView
                     android:layout_width="13dp"
                     android:layout_height="23dp"
-                    android:layout_marginRight="@dimen/space_20"
+                    android:layout_marginRight="@dimen/space_15"
                     android:src="@drawable/ic_right"/>
             </LinearLayout>
             <ImageView
@@ -362,7 +362,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/space_20"
+                    android:layout_marginLeft="@dimen/space_15"
                     android:text="身份证背面照片"
                     android:textSize="@dimen/second_title_size"/>
                 <TextView
@@ -378,7 +378,7 @@
                 <ImageView
                     android:layout_width="13dp"
                     android:layout_height="23dp"
-                    android:layout_marginRight="@dimen/space_20"
+                    android:layout_marginRight="@dimen/space_15"
                     android:src="@drawable/ic_right"/>
             </LinearLayout>
             <ImageView
@@ -406,7 +406,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/space_20"
+                    android:layout_marginLeft="@dimen/space_15"
                     android:text="持卡人视频"
                     android:textSize="@dimen/second_title_size"/>
                 <TextView
@@ -422,7 +422,7 @@
                 <ImageView
                     android:layout_width="13dp"
                     android:layout_height="23dp"
-                    android:layout_marginRight="@dimen/space_20"
+                    android:layout_marginRight="@dimen/space_15"
                     android:src="@drawable/ic_right"/>
             </LinearLayout>
             <ImageView
@@ -441,7 +441,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/space_20"
+                    android:layout_marginLeft="@dimen/space_15"
                     android:text="协议照片"
                     android:textSize="@dimen/second_title_size"/>
                 <TextView
@@ -457,7 +457,7 @@
                 <ImageView
                     android:layout_width="13dp"
                     android:layout_height="23dp"
-                    android:layout_marginRight="@dimen/space_20"
+                    android:layout_marginRight="@dimen/space_15"
                     android:src="@drawable/ic_right"/>
             </LinearLayout>
   <!--电子协议-->
@@ -476,7 +476,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/space_20"
+                    android:layout_marginLeft="@dimen/space_15"
                     android:text="电子协议"
                     android:textSize="@dimen/second_title_size"/>
                 <TextView
@@ -492,7 +492,7 @@
                 <ImageView
                     android:layout_width="13dp"
                     android:layout_height="23dp"
-                    android:layout_marginRight="@dimen/space_20"
+                    android:layout_marginRight="@dimen/space_15"
                     android:src="@drawable/ic_right"/>
             </LinearLayout>
             <ImageView

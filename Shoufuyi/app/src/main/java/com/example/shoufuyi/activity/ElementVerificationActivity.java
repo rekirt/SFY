@@ -87,7 +87,7 @@ public class ElementVerificationActivity extends BaseActivity {
                         case "THREE_ELEMENT"://三要素(卡号\户名\身份证号)
                             mElementMember = 3;
                             break;
-                        case "FOUR_ELEMENT"://四要素(卡号\户名\身份证号\手机号)                        mElementMember = 4;
+                        case "FOUR_ELEMENT"://四要素(卡号\户名\身份证号\手机号)
                             mElementMember = 4;
                             break;
                         default:
@@ -152,10 +152,10 @@ public class ElementVerificationActivity extends BaseActivity {
 
     /**
      * 根据验证要素显示布局
-     * @param mElementMember 几要素
+     * @param mMember 几要素
      */
-    private void changeView(int mElementMember){
-        switch (mElementMember) {
+    private void changeView(int mMember){
+        switch (mMember) {
             case 2:
                 password.setVisibility(View.GONE);
                 ll_new_sign_id.setVisibility(View.GONE);
@@ -365,7 +365,7 @@ public class ElementVerificationActivity extends BaseActivity {
                         bundle.putSerializable("info", mResult);
                         intent.putExtras(bundle);
                         startActivity(intent);
-                        finish();
+                        ElementVerificationActivity.this.finish();
                     }else {
                         ToastHelper.ShowToast(returnapp.getDetailInfo());
                     }

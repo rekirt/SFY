@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar"/>
+
+    <ImageView
+        android:id="@+id/iv_front"
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/space_15"
+        android:layout_height="180dp"
+        android:src="@drawable/ic_bank_card_front_tip"
+        />
+
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_below="@+id/iv_front"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/space_15"
+        android:layout_height="180dp"
+        android:src="@drawable/ic_bank_card_back_tip" />
+    <Button
+        android:id="@+id/btn_upload"
+        android:layout_below="@+id/iv_back"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/btn_height"
+        android:layout_margin="@dimen/space_15"
+        android:layout_marginTop="@dimen/space_10"
+        android:text="上传"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:background="@drawable/btn_red_selector"
+        android:textSize="@dimen/title_size"
+        >
+    </Button>
+</RelativeLayout>
