@@ -53,7 +53,9 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
 
     private static final int CANCEL_RECORD_OFFSET = -100;
     private float mDownX, mDownY;
-    private boolean isCancelRecord = false;
+    private boolean isCancelRecord = true;
+    private boolean isTimeOutOfRecord = false;
+    private boolean isRecordTimeNotLong = false;
     public static final int MY_PERMISSIONS_REQUEST_CAMERA = 42;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,6 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
                     new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO},
                     MY_PERMISSIONS_REQUEST_CAMERA);
         }
-      //  ((TextView) findViewById(R.id.filePathTextView)).setText("请在" + FileUtil.MEDIA_FILE_DIR + "查看录制的视频文件");
     }
 
     @Override
@@ -113,7 +114,16 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
         mTvCancelTip = (TextView) findViewById(R.id.tv_cancel_tip);
 
         findViewById(R.id.button_start).setOnTouchListener(this);
+        findViewById(R.id.capture_top_back).setOnClickListener(this);
         recordProgressBar = (RecordProgressBar) findViewById(R.id.record_progressbar);
+    }
+
+    @Override
+    public void onClick(View view) {
+        super.onClick(view);
+        if (view.getId() == R.id.capture_top_back){
+            NewRecordVideoActivity.this.finish();
+        }
     }
 
     private int mTimeCount = 0;// 时间计数
@@ -128,7 +138,33 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
                     mTvTime.setText(msg.what+"秒");
                     break;
                 case -1:
+                    mTvCancelTip.setVisibility(View.INVISIBLE);
+                    recordProgressBar.stop();
+                    if (mTimer != null){
+                        if (mTimerTask != null){
+                            mTimerTask.cancel();  //将原任务从队列中移除
+                            mTimer.cancel();
+                        }
+                    }
+                    isCancelRecord = false;
+                    isRecordTimeNotLong = false;
+                    isTimeOutOfRecord = true;
+                    mTvTime.setText("6" + "秒");
+                    stopRecord();
+                    mTimeCount = 0;
+                    break;
+                case -2:
+                    mTvCancelTip.setVisibility(View.INVISIBLE);
+                    recordProgressBar.stop();
+                    if (mTimer != null){
+                        if (mTimerTask != null){
+                            mTimerTask.cancel();  //将原任务从队列中移除
+                            mTimer.cancel();
+                        }
+                    }
+                    mTimeCount = 0;
                     mTvTime.setText("0"+"秒");
+                    stopRecord();
                     break;
                 default:
                     mTvTime.setText(msg.what+"秒");
@@ -143,9 +179,9 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
     protected void onPause() {
         super.onPause();
         if (mRecorder != null) {
-            boolean recording = mRecorder.isRecording();
             // 页面不可见就要停止录制
             mRecorder.stopRecording();
+            boolean recording = mRecorder.isRecording();
             // 录制时退出，直接舍弃视频
             if (recording) {
                 FileUtil.deleteFile(mRecorder.getFilePath());
@@ -177,8 +213,12 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
         // initialize video camera
         if (prepareVideoRecorder()) {
             // 录制视频
-            if (!mRecorder.startRecording())
+            if (!mRecorder.startRecording()){
                 Toast.makeText(this, "录制失败…", Toast.LENGTH_SHORT).show();
+            }else {
+                StartCount();
+                recordProgressBar.start();
+            }
         }
     }
 
@@ -198,6 +238,7 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
      * 停止录制
      */
     private void stopRecord() {
+        mTvTime.setText("0"+"秒");
         mRecorder.stopRecording();
         String videoPath = mRecorder.getFilePath();
         // 没有录制视频
@@ -205,7 +246,7 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
             return;
         }
         // 若取消录制，则删除文件，否则通知宿主页面发送视频
-        if (isCancelRecord) {
+        if (isCancelRecord || isRecordTimeNotLong) {
             FileUtil.deleteFile(videoPath);
         } else {
             // 实例化 Bundle，设置需要传递的参数
@@ -238,38 +279,44 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
                 mTvCancelTip.setVisibility(View.VISIBLE);
                 mTvCancelTip.setText("向上取消");
                 mTvCancelTip.setTextColor(getResources().getColor(R.color.light_blue));
-                recordProgressBar.start();
-                isCancelRecord = false;
                 mDownX = event.getX();
                 mDownY = event.getY();
                 startRecord();
-                StartCount();
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (!mRecorder.isRecording())
                     return false;
-
                 float y = event.getY();
                 if (y - mDownY < CANCEL_RECORD_OFFSET) {
-                    isCancelRecord = true;
-                    recordProgressBar.cancel();
+                    //recordProgressBar.cancel();
                     mTvCancelTip.setText("松开取消");
                     mTvCancelTip.setTextColor(getResources().getColor(R.color.red));
+                    isCancelRecord = true;
                 } else {
                     mTvCancelTip.setText("向上取消");
                     mTvCancelTip.setTextColor(getResources().getColor(R.color.light_blue));
                     isCancelRecord = false;
-                    recordProgressBar.resumeRunning();
-
-                    if (mTimeCount>6){
-                        isCancelRecord = false;
-                        stopRecord();
-                    }
+                    //recordProgressBar.resumeRunning();
                 }
-
+//                if (mTimeCount>6){
+//                    isCancelRecord = false;
+//                    isRecordTimeNotLong = false;
+//                    mTvCancelTip.setVisibility(View.INVISIBLE);
+//                    recordProgressBar.stop();
+//                    if (mTimer != null){
+//                        if (mTimerTask != null){
+//                            mTimerTask.cancel();  //将原任务从队列中移除
+//                            mTimer.cancel();
+//                        }
+//                    }
+//                    Message messageTimeOut = new Message();
+//                    messageTimeOut.what = -1;
+//                    handlerTime.sendMessage(messageTimeOut);
+//                    mTimeCount = 0;
+//                    stopRecord();
+//                }
                 break;
             case MotionEvent.ACTION_UP:
-
                 mTvCancelTip.setVisibility(View.INVISIBLE);
                 recordProgressBar.stop();
                 if (mTimer != null){
@@ -278,33 +325,35 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
                         mTimer.cancel();
                     }
                 }
-
-                if (mTimeCount<4){
-                    isCancelRecord = true;
+                if (!isTimeOutOfRecord){
+                    if (mTimeCount<4){
+                        isRecordTimeNotLong = true;
+                    }else {
+                        isRecordTimeNotLong = false;
+                    }
+                    Message message = new Message();
+                    message.what = -2;
+                    handlerTime.sendMessage(message);
                 }
-                Message message = new Message();
-                message.what = -1;
-                handlerTime.sendMessage(message);
-                mTimeCount = 0;
-                stopRecord();
                 break;
             case MotionEvent.ACTION_BUTTON_PRESS:
-                if (mTimeCount>6){
-                    mTvCancelTip.setVisibility(View.INVISIBLE);
-                    recordProgressBar.stop();
-                    if (mTimer != null){
-                        if (mTimerTask != null){
-                            mTimerTask.cancel();  //将原任务从队列中移除
-                            mTimer.cancel();
-                        }
-                    }
-                    isCancelRecord = false;
-                    Message messageTimeOut = new Message();
-                    messageTimeOut.what = -1;
-                    handlerTime.sendMessage(messageTimeOut);
-                    mTimeCount = 0;
-                    stopRecord();
-                }
+//                if (mTimeCount>6){
+//                    mTvCancelTip.setVisibility(View.INVISIBLE);
+//                    recordProgressBar.stop();
+//                    if (mTimer != null){
+//                        if (mTimerTask != null){
+//                            mTimerTask.cancel();  //将原任务从队列中移除
+//                            mTimer.cancel();
+//                        }
+//                    }
+//                    isCancelRecord = false;
+//                    isRecordTimeNotLong = false;
+//                    Message messageTimeOut = new Message();
+//                    messageTimeOut.what = -1;
+//                    handlerTime.sendMessage(messageTimeOut);
+//                    mTimeCount = 0;
+//                    stopRecord();
+//                }
                 break;
         }
         return true;
@@ -317,22 +366,15 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
 
             @Override
             public void run() {
-                mTimeCount++;
-                Message message = new Message();
-                message.what = mTimeCount;
-                handlerTime.sendMessage(message);
-                if(mTimeCount>6){
-                    if (mTimer != null){
-                        if (mTimerTask != null){
-                            mTimerTask.cancel();  //将原任务从队列中移除
-                            mTimer.cancel();
-                        }
-                    }
-                    Message msg = new Message();
-                    msg.what = -1;
-                    handlerTime.sendMessage(msg);
-                    mTimeCount = 0;
-                    stopRecord();
+                ++mTimeCount;
+                if (mTimeCount>6){
+                    Message messageTimeOut = new Message();
+                    messageTimeOut.what = -1;
+                    handlerTime.sendMessage(messageTimeOut);
+                }else {
+                    Message message = new Message();
+                    message.what = mTimeCount;
+                    handlerTime.sendMessage(message);
                 }
             }
         };

@@ -18,6 +18,7 @@ import com.example.shoufuyi.cache.v2.CacheManager;
 import com.example.shoufuyi.uitls.Constant;
 import com.example.shoufuyi.uitls.PhoneUtils;
 import com.example.shoufuyi.uitls.SharedPreferencesHelper;
+import com.example.shoufuyi.uitls.TDevice;
 import com.example.shoufuyi.uitls.ToastHelper;
 import com.example.shoufuyi.uitls.dialog.DialogHelper;
 import com.itech.message.APP_120001;
@@ -160,9 +161,7 @@ public class NewSignActivity extends BaseActivity{
                         intent.setClass(NewSignActivity.this, ElementVerificationActivity.class);
                         startActivity(intent);
                     }else {
-                        CacheManager.setCache(FileUtils.getCacheKey(app.getIdCard(), app.getAccountNo()), app.toString().getBytes(),
-                                Constant.CACHE_EXPIRE_OND_DAY, CacheManager.TYPE_INTERNAL);
-                        ToastHelper.ShowToast("录入失败提示："+mReturnApp.getDetailInfo()+",已自动保存在本地数据库");
+                        ToastHelper.ShowToast("录入失败提示："+mReturnApp.getDetailInfo());
                     }
 
                 }catch (Exception e){
@@ -187,12 +186,14 @@ public class NewSignActivity extends BaseActivity{
 
             @Override
             public void onFail(String msg) {
-
-                CacheManager.setCache(FileUtils.getCacheKey(app.getIdCard(), app.getAccountNo()), app.toString().getBytes(),
-                        Constant.CACHE_EXPIRE_OND_DAY, CacheManager.TYPE_INTERNAL);
-                ToastHelper.ShowToast("已保存在本地数据库.");
-//                super.onFail(msg);
-                NewSignActivity.this.finish();
+                if(TDevice.hasInternet()){
+                    ToastHelper.ShowToast("失败提示："+msg);
+                }else {
+                    CacheManager.setCache(FileUtils.getCacheKey(app.getIdCard(), app.getAccountNo()), app.toString().getBytes(),
+                            Constant.CACHE_EXPIRE_OND_DAY, CacheManager.TYPE_INTERNAL);
+                    ToastHelper.ShowToast("已保存在本地数据库.");
+                    NewSignActivity.this.finish();
+                }
             }
         });
     }

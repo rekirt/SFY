@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.alibaba.fastjson.JSON;
@@ -20,10 +21,12 @@ import com.example.shoufuyi.bean.ListEntity;
 import com.example.shoufuyi.bean.SignList;
 import com.example.shoufuyi.cache.v2.CacheManager;
 import com.example.shoufuyi.uitls.Constant;
+import com.example.shoufuyi.uitls.DatePickListener;
 import com.example.shoufuyi.uitls.SharedPreferencesHelper;
 import com.example.shoufuyi.uitls.TDevice;
 import com.example.shoufuyi.uitls.ToastHelper;
 import com.example.shoufuyi.uitls.WeakAsyncTask;
+import com.example.shoufuyi.uitls.dialog.DialogHelper;
 import com.example.shoufuyi.uitls.view.DividerItemDecoration;
 import com.example.shoufuyi.uitls.view.EmptyLayout;
 import com.itech.message.APP_120023;
@@ -57,6 +60,7 @@ public class QuerySignActivity extends BaseActivity implements
     protected int mCurrentPage = 1;//列表第几页
     private ParserTask mParserTask;
     private Spinner spinstatus;
+    private EditText edt_date;
 
     // 采集状态默认待采集
     private int collstate = 1;
@@ -82,11 +86,36 @@ public class QuerySignActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_query_sign);
         initView();
+        initData();
         setCanBack(true);
     }
 
     private void initView(){
+        spinstatus = (Spinner) findViewById(R.id.spinstatus);
+        edt_date = (EditText) findViewById(R.id.edt_date);
         mErrorLayout = (EmptyLayout) findViewById(R.id.error_layout);
+        mSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.srl_refresh);
+        mRecycleView = (RecyclerView) findViewById(R.id.recycleView);
+        mLayoutManager = new LinearLayoutManager(QuerySignActivity.this);
+    }
+
+    private void initData(){
+        edt_date.setOnClickListener(new DatePickListener(this, edt_date));
+        spinstatus.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                if (arg2 > 0) {
+                    collstate = arg2;
+                    DialogHelper.showProgressDialog(QuerySignActivity.this, "正在查询...", true, false);
+                    refresh();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
         mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
 
             @Override
@@ -97,8 +126,6 @@ public class QuerySignActivity extends BaseActivity implements
                 sendRequestData();
             }
         });
-
-        mSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.srl_refresh);
         mSwipeRefresh.setColorSchemeResources(R.color.main_green, R.color.main_gray, R.color.main_black, R.color.main_purple);
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -106,14 +133,11 @@ public class QuerySignActivity extends BaseActivity implements
                 refresh();
             }
         });
-
-        mRecycleView = (RecyclerView) findViewById(R.id.recycleView);
         mRecycleView.setOnScrollListener(mScrollListener);
         if(isNeedListDivider()) {
             mRecycleView.addItemDecoration(new DividerItemDecoration(QuerySignActivity.this,
                     DividerItemDecoration.VERTICAL_LIST));
         }
-        mLayoutManager = new LinearLayoutManager(QuerySignActivity.this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecycleView.setLayoutManager(mLayoutManager);
         mRecycleView.setHasFixedSize(true);
@@ -131,7 +155,8 @@ public class QuerySignActivity extends BaseActivity implements
                 mCurrentPage = 1;
                 mState = STATE_REFRESH;
                 mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-                new ReadCacheTask(this).execute();
+                refresh();
+                // new ReadCacheTask(this).execute();
             } else {
                 mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             }
@@ -143,20 +168,7 @@ public class QuerySignActivity extends BaseActivity implements
         if (!TextUtils.isEmpty(mStoreEmptyMessage)) {
             mErrorLayout.setErrorMessage(mStoreEmptyMessage);
         }
-        spinstatus = (Spinner) findViewById(R.id.spinstatus);
-        spinstatus.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                collstate = arg2 + 1;
-                refresh();
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-            }
-        });
     }
-
     @Override
     public void onClick(View view) {
         super.onClick(view);
@@ -171,10 +183,19 @@ public class QuerySignActivity extends BaseActivity implements
     private ArrayList<Result_120023> mSignList = new ArrayList<Result_120023>();
 
     protected void sendRequestData() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-        long time = System.currentTimeMillis();
-        Date date = new Date(time);
-        String endtime = format.format(date);
+        String endTime ="";
+        String startTime = "";
+        String mDate = edt_date.getText().toString();
+        if ("提交日期".equals(mDate)){
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+            long time = System.currentTimeMillis();
+            Date date = new Date(time);
+            endTime = format.format(date);
+        }else {
+            String date[] = mDate.split("至");
+            startTime = date[0].replace(".","");
+            endTime = date[1].replace(".","");
+        }
         APP_120023 app = new APP_120023();
         app.setMerchantId(SharedPreferencesHelper.getString(Constant.MERCHANT, ""));
         app.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
@@ -184,7 +205,8 @@ public class QuerySignActivity extends BaseActivity implements
         page.setPageSize(String.valueOf(TDevice.getPageSize()));
         app.setPage(page);
         app.setState(String.valueOf(collstate));
-        app.setCreateDateEnd(endtime);
+        app.setCreateDateStart(startTime);
+        app.setCreateDateEnd(endTime);
         ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
                     @Override
                     public void onDo(JSONObject responseJsonObject) {
@@ -202,6 +224,7 @@ public class QuerySignActivity extends BaseActivity implements
                         }
                         executeOnLoadDataSuccess(mSignList);
                         executeOnLoadFinish();
+                        DialogHelper.dismissProgressDialog();
                     }
 
                     @Override

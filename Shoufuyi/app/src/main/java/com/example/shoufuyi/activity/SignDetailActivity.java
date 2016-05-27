@@ -12,6 +12,7 @@ import com.example.shoufuyi.api.JsonHttpHandler;
 import com.example.shoufuyi.uitls.Constant;
 import com.example.shoufuyi.uitls.SharedPreferencesHelper;
 import com.example.shoufuyi.uitls.view.EmptyLayout;
+import com.itech.message.APP_120001;
 import com.itech.message.APP_120024;
 import com.itech.message.Result_120023;
 import com.itech.message.VerifyGroup;
@@ -99,12 +100,12 @@ public class SignDetailActivity extends BaseActivity {
             }
         });
         setCanBack(true);
+        getSignDetail();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getSignDetail();
     }
 
     @Override
@@ -118,10 +119,10 @@ public class SignDetailActivity extends BaseActivity {
                 gotoTakeBankCardPhoto();
                 break;
             case R.id.tv_id_card_front_state:
+                gotoTakeIDCardPhoto();
                 break;
             case R.id.tv_id_card_back_state:
-                break;
-            case R.id.tv_id_number_state:
+                gotoTakeIDCardPhoto();
                 break;
             case R.id.tv_id_card_holder_video_state:
                 gotoTakeVideo();
@@ -130,12 +131,44 @@ public class SignDetailActivity extends BaseActivity {
                 break;
             case R.id.tv_e_agreement_state:
                 break;
+            case R.id.tv_deal_pwd_state:
+            case R.id.tv_id_number_state:
+                gotoElementVerify();
+                break;
+            case R.id.tv_avatar_state:
+                gotoTakeAvatarPhoto();
+                break;
 
             default:
                 break;
         }
     }
 
+    private void gotoTakeAvatarPhoto(){
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("info", mResult);
+        intent.putExtras(bundle);
+        intent.setClass(SignDetailActivity.this, TakeAvatarPhotoActivity.class);
+        startActivity(intent);
+    }
+
+    private void gotoElementVerify(){
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        APP_120001 mReturn = new APP_120001();
+        mReturn.setVerifyGroupList(mSignDetail.getVerifyGroupList());
+        mReturn.setAccountName(mResult.getAccountName());
+        mReturn.setAccountNo(mResult.getAccountNo());
+        mReturn.setIdCard(mResult.getIdCard());
+        mReturn.setMerchantId(mResult.getMerchantId());
+        mReturn.setMobile(mResult.getMobile());
+        mReturn.setTrxCode("120001");
+        bundle.putSerializable("return", mReturn);
+        intent.putExtras(bundle);
+        intent.setClass(SignDetailActivity.this, ElementVerificationActivity.class);
+        startActivity(intent);
+    }
     private void gotoTakeVideo(){
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
@@ -153,6 +186,16 @@ public class SignDetailActivity extends BaseActivity {
         intent.setClass(SignDetailActivity.this, TakeBankCardPhotoActivity.class);
         startActivity(intent);
     }
+
+    private void gotoTakeIDCardPhoto(){
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("info", mResult);
+        intent.putExtras(bundle);
+        intent.setClass(SignDetailActivity.this, TakeIDCardPhotoActivity.class);
+        startActivity(intent);
+    }
+
     /**
      * 获取签约详情
      */
@@ -391,9 +434,6 @@ public class SignDetailActivity extends BaseActivity {
     }
 
 
-    /**
-     * 处理人像视频验证
-     */
     private String mVideoFileId ="";
 
     private void handlePhotoVideo(VerifyGroup verifyGroup){
@@ -441,20 +481,24 @@ public class SignDetailActivity extends BaseActivity {
         //1：未验证 2：验证通过 3：验证不通过
         switch (verifyGroup.getVerifyState()){
             case "1":
-                tv_deal_pwd_state.setText("点击采集");
-                tv_id_number_state.setText("点击采集");
+                tv_deal_pwd_state.setText("未验证");
+                tv_id_number_state.setText("未验证");
+                tv_deal_pwd_state.setTextColor(getResources().getColor(R.color.red));
+                tv_id_number_state.setTextColor(getResources().getColor(R.color.red));
                 break;
             case "2":
                 tv_deal_pwd_state.setText("验证通过");
                 tv_id_number_state.setText("验证通过");
+                tv_deal_pwd_state.setEnabled(false);
+                tv_id_number_state.setEnabled(false);
                 break;
             case "3":
                 tv_deal_pwd_state.setText("验证不通过");
                 tv_id_number_state.setText("验证不通过");
                 break;
             default:
-                tv_deal_pwd_state.setText("点击采集");
-                tv_id_number_state.setText("点击采集");
+                tv_deal_pwd_state.setText("未验证");
+                tv_id_number_state.setText("未验证");
                 break;
         }
         for (VerifyItem verifyItem : verifyGroup.getVerifyItemList()){

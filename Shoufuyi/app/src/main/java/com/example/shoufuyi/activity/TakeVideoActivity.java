@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSON;
+import com.cchtw.videorecorderlib.utils.FileUtil;
 import com.example.shoufuyi.R;
 import com.example.shoufuyi.api.ApiRequest;
 import com.example.shoufuyi.api.JsonHttpHandler;
@@ -41,11 +42,13 @@ import java.util.concurrent.TimeUnit;
 public class TakeVideoActivity extends BaseActivity {
     public static final String KEY_FILE_PATH = "file_path";
     private String filePath = "";
+    private String mLastfilePath = "";
     private ScalableVideoView mScalableVideoView;
     private ImageView mPlayImageView;
     private ImageView mThumbnailImageView;
     private ImageView iv_video;
     private Button mBtnUpload;
+    private Button btn_again;
     private Result_120023 mResult;
 
     @Override
@@ -64,15 +67,16 @@ public class TakeVideoActivity extends BaseActivity {
     private void assignViews() {
         mBtnUpload = (Button) findViewById(R.id.btn_upload);
         mScalableVideoView = (ScalableVideoView) findViewById(R.id.video_view);
-        try {
-            // 这个调用是为了初始化mediaplayer并让它能及时和surface绑定
-            mScalableVideoView.setDataSource("");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            // 这个调用是为了初始化mediaplayer并让它能及时和surface绑定
+//            mScalableVideoView.setDataSource("");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         mPlayImageView = (ImageView) findViewById(R.id.playImageView);
         mThumbnailImageView = (ImageView) findViewById(R.id.thumbnailImageView);
         iv_video = (ImageView) findViewById(R.id.iv_video);
+        btn_again = (Button) findViewById(R.id.btn_again);
     }
 
     private void initData() {
@@ -80,6 +84,17 @@ public class TakeVideoActivity extends BaseActivity {
         mPlayImageView.setOnClickListener(this);
         mThumbnailImageView.setOnClickListener(this);
         iv_video.setOnClickListener(this);
+        btn_again.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (TextUtils.isEmpty(filePath)){
+            btn_again.setVisibility(View.GONE);
+        }else {
+            btn_again.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -94,6 +109,10 @@ public class TakeVideoActivity extends BaseActivity {
                 }
                 break;
             case R.id.iv_video:
+                takeVideo();
+                break;
+            case R.id.btn_again:
+                mLastfilePath = filePath;
                 takeVideo();
                 break;
             case R.id.video_view:
@@ -122,7 +141,6 @@ public class TakeVideoActivity extends BaseActivity {
     private void uploadVideo(){
         // 先调用转换编码的方法将视频mp4文件转化为BASE64编码的字符串
         // 这里调用接口上传视频
-        // 先将视频路径保存数据库中，状态标识为已采集，但并未上传，这时候页面显示点击查看，并不是点击采集。
         final APP_120008 app_120008 = new APP_120008();
         app_120008.setAccountNo(mResult.getAccountNo());
         app_120008.setIdCard(mResult.getIdCard());
@@ -228,6 +246,19 @@ public class TakeVideoActivity extends BaseActivity {
             }else {
                 mThumbnailImageView.setImageBitmap(getVideoThumbnail(filePath));
                 iv_video.setVisibility(View.GONE);
+                try {
+                    mScalableVideoView.setDataSource(filePath);
+                    mScalableVideoView.setLooping(true);
+                    mScalableVideoView.prepare();
+                    mScalableVideoView.start();
+                    mPlayImageView.setVisibility(View.GONE);
+                    mThumbnailImageView.setVisibility(View.GONE);
+                } catch (IOException e) {
+                    ToastHelper.ShowToast("播放视频异常~");
+                }
+            }
+            if (!TextUtils.isEmpty(mLastfilePath)){
+                FileUtil.deleteFile(mLastfilePath);
             }
         }
     }

@@ -6,12 +6,10 @@
     android:background="@color/black" >
     <ImageView 
         android:id="@+id/capture_top_back"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_margin="10dp"
         android:layout_alignParentLeft="true"
         android:src="@drawable/ic_close"
         />
-
-	
 </RelativeLayout>

@@ -50,7 +50,7 @@ public class ElementVerificationActivity extends BaseActivity {
     private PEEditText password;
     private Button btn_get_code;
     private Button btn_submit;
-    private APP_120001 mReturn;
+    private APP_120001 mReturn = new APP_120001();
     private String mElementVerifyGroupCode;
     int mElementMember = 0;
 

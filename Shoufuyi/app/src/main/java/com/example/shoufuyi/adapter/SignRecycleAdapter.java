@@ -66,7 +66,6 @@ public class SignRecycleAdapter extends RecycleBaseAdapter {
         super.onBindItemViewHolder(holder, position);
         SignRecycleAdapter.ViewHolder new_holder = (ViewHolder) holder;
         final Result_120023 signBean = (Result_120023) _data.get(position);
-
         new_holder.tv_sign_detail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {//跳转到详情
@@ -82,16 +81,20 @@ public class SignRecycleAdapter extends RecycleBaseAdapter {
 //      签约类型判断
         switch (signBean.getState()){
             case "1":
-                ImageHelper.displayImage("drawable://" + R.drawable.ic_unsign, new_holder.iv_sign_stye);
+//                ImageHelper.displayImage("drawable://" + R.drawable.ic_unsign, new_holder.iv_sign_stye);
+                new_holder.iv_sign_stye.setImageResource(R.drawable.ic_unsign);
                 break;
             case "2":
-                ImageHelper.displayImage("drawable://" + R.drawable.ic_sign_finish, new_holder.iv_sign_stye);
+//                ImageHelper.displayImage("drawable://" + R.drawable.ic_sign_finish, new_holder.iv_sign_stye);
+                new_holder.iv_sign_stye.setImageResource(R.drawable.ic_sign_finish);
                 break;
             case "3":
-                ImageHelper.displayImage("drawable://" + R.drawable.ic_unfinish, new_holder.iv_sign_stye);
+//                ImageHelper.displayImage("drawable://" + R.drawable.ic_unfinish, new_holder.iv_sign_stye);
+                new_holder.iv_sign_stye.setImageResource(R.drawable.ic_unfinish);
                 break;
             default:
                 ImageHelper.displayImage("drawable://" + R.drawable.ic_unfinish, new_holder.iv_sign_stye);
+                new_holder.iv_sign_stye.setImageResource(R.drawable.ic_unfinish);
                 break;
         }
 

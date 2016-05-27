@@ -2,7 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/screen"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@color/common_bg">
 
     <include layout="@layout/toolbar"
         android:id="@+id/toolbar"/>
@@ -12,7 +13,7 @@
         android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_marginTop="@dimen/space_15"
-        android:layout_height="320dp">
+        android:layout_height="300dp">
 
         <com.yqritc.scalablevideoview.ScalableVideoView
             android:id="@+id/video_view"
@@ -38,7 +39,7 @@
         <ImageView
             android:id="@+id/iv_video"
             android:layout_width="match_parent"
-            android:layout_height="320dp"
+            android:layout_height="300dp"
             android:src="@drawable/video_bg"
             android:background="@color/common_bg"
             />
@@ -55,6 +56,19 @@
         android:textColor="@color/white"
         android:background="@drawable/btn_red_selector"
         android:textSize="@dimen/title_size"
-        >
-    </Button>
+        />
+    <Button
+        android:id="@+id/btn_again"
+        android:layout_below="@+id/btn_upload"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/btn_height"
+        android:text="重拍"
+        android:layout_marginLeft="@dimen/space_25"
+        android:layout_marginRight="@dimen/space_25"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:background="@drawable/btn_red_selector"
+        android:textSize="@dimen/title_size"
+        android:visibility="gone"
+        />
 </RelativeLayout>

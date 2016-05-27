@@ -28,7 +28,6 @@ public class SplashActivity extends BaseActivity {
     View view;
     protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		requestWindowFeature(Window.FEATURE_NO_TITLE);//这只没有标题
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//设置启动页面全屏
         view = View.inflate(this, R.layout.activity_splash, null);
         setContentView(view);
@@ -38,6 +37,12 @@ public class SplashActivity extends BaseActivity {
 		} else {
             sharedPreferencesHelper.setString(Constant.UUID, "1" + getUUID());
         }
+
+	}
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         start_anima = new AlphaAnimation(0.3f, 1.0f);
         start_anima.setDuration(sleepTime);
         if (view != null) {
@@ -58,7 +63,7 @@ public class SplashActivity extends BaseActivity {
                 redirectTo();
             }
         });
-	}
+    }
 
     private void redirectTo(){
         String number = sharedPreferencesHelper.getString(Constant.NUMBER, "");

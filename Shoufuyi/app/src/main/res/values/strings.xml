@@ -52,7 +52,9 @@
     <string name="new_record_video_activity">录制视频</string>
     <string name="play_video_activiy">回放视频</string>
     <string name="take_bank_card_photo_activity">采集银行卡照片</string>
+    <string name="take_id_card_photo_activity">采集身份证照片</string>
     <string name="take_video_activity">采集持卡人视频</string>
+    <string name="take_avatar_photo_activity">采集持卡人头像</string>
 
 
     <!-- Error View -->
@@ -68,6 +70,7 @@
     <string name="loading_no_more">没有更多了...</string>
 
     <string-array name="status">
+        <item>按状态</item>
         <item>待签约</item>
         <item>签约生效</item>
         <item>签约失效</item>
