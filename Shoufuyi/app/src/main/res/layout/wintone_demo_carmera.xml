@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+     android:descendantFocusability="blocksDescendants" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+  
+        <SurfaceView
+            android:id="@+id/surfaceViwe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:visibility="visible" >
+        </SurfaceView>
+
+        <ImageButton
+            android:id="@+id/imbtn_flash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/flash_on" />
+
+        <RelativeLayout
+            android:id="@+id/bg_camera_doctype"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+           >
+
+            <TextView
+                 android:id="@+id/tv_camera_doctype"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="#f39912"
+                 />
+        </RelativeLayout>
+
+        <ImageButton
+            android:id="@+id/imbtn_camera_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/camera_back_nomal" />
+
+        <com.example.shoufuyi.uitls.view.ViewfinderView
+            android:id="@+id/viewfinder_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#00000000" />  
+    </RelativeLayout>
+
+</FrameLayout>

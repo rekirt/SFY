@@ -152,7 +152,7 @@ public class ShowResultActivity extends BaseActivity {
 		}
 		if (temp != null) {
 			if (temp != null && !temp.equals("")) {
-				String[] results = new BankCardRecogUtils(this).getBankInfo("5YYX5LQS5PAH6YC", temp);
+				String[] results = new BankCardRecogUtils(this).getBankInfo(Constant.devcode, temp);
 				if (results[0].equals(" ")) {
 					bankName = getResources().getString(
 							R.string.unknow_card_type);

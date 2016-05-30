@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="#ffffff">
+	<ImageView android:id="@+id/img"
+		android:layout_width="48dip"
+		android:layout_height="48dip"
+		android:layout_margin="5dip"/>	
+		<TextView android:id="@+id/title"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:textColor="#FF000000"
+			android:textSize="17dip" />	
+</LinearLayout>
+

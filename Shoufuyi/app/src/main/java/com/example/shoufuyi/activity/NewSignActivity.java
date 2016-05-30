@@ -87,7 +87,10 @@ public class NewSignActivity extends BaseActivity{
                 }
                 break;
             case R.id.iv_id_camera:
-                ToastHelper.ShowToast("暂时没法通过拍照识别");
+                Intent intent = new Intent(NewSignActivity.this, CameraActivity.class);
+                intent.putExtra("nMainId", SharedPreferencesHelper.getInt("nMainId", 2));
+                intent.putExtra("devcode", Constant.devcode);
+                startActivityForResult(intent,1);
                 break;
             case R.id.iv_card_camera:
                 Intent intentTack = new Intent("com.wintone.bankcard.camera.ScanCamera");
@@ -103,33 +106,19 @@ public class NewSignActivity extends BaseActivity{
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == RESULT_OK){
+            String mIDNumber = data.getStringExtra("recogResult");
+            if (!TextUtils.isEmpty(mIDNumber)){
+                mEdtNewSignId.setText(mIDNumber);
+            }
+        }else if (requestCode == 1){
+            String exception = data.getStringExtra("exception");
+            ToastHelper.ShowToast(exception);
+        }
+    }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        switch (requestCode) {
-//            case 1:
-////                String recogResult = data.getStringExtra("recogResult");
-////                idpath = data.getStringExtra("path");
-////                if (recogResult.equals("")) {
-////                } else {
-////                    String[] splite_Result = recogResult.split(",");
-////                    String recogname = splite_Result[0].substring(3,
-////                            splite_Result[0].length());
-////                    String recogidcard = splite_Result[5].substring(7,
-////                            splite_Result[5].length());
-////                    if (!recogname.equals("")) {
-////                        editname.setText(recogname);
-////                    }
-////                    if (!recogidcard.equals("")) {
-////                        editidcard.setText(recogidcard);
-////                    }
-////                }
-//            case 2:
-//                String mCardNum = data.getStringExtra("mCardNum");
-//                mEdtNewSignCardNumber.setText(mCardNum);
-//                break;
-//        }
-//    }
 
     @Override
     protected void onResume() {
@@ -221,7 +210,7 @@ public class NewSignActivity extends BaseActivity{
     private String mNewSignName;// 户名
     private String mNewSignPhoneNumber; // 手机号
 
-    private boolean prepareToPost(){
+    private boolean prepareToPost() {
         mIdCardNumber = mEdtNewSignId.getText().toString().replace(" ", "");
         mNewSignName = mEdtNewSignName.getText().toString().replace(" ", "");
         mCardNumber = mEdtNewSignCardNumber.getText().toString().replace(" ", "");
