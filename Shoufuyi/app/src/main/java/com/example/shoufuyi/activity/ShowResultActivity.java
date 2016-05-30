@@ -31,6 +31,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.shoufuyi.R;
+import com.example.shoufuyi.uitls.Constant;
+import com.example.shoufuyi.uitls.SharedPreferencesHelper;
 import com.wintone.bankcard.BankCardRecogUtils;
 import com.wintone.view.BankCardEditTextWatcher;
 
@@ -116,7 +118,7 @@ public class ShowResultActivity extends BaseActivity {
 			}
 			buttonLayoutSetup(width, height);
 		}
-
+        setCanBack(true);
 	}
 
 	@Override
@@ -367,10 +369,11 @@ public class ShowResultActivity extends BaseActivity {
 					bitmap.recycle();
 					bitmap = null;
 				}
-				Intent intent = new Intent(ShowResultActivity.this, MainActivity.class);
-				startActivity(intent);
-				finish();
-
+				StringBuffer sb = new StringBuffer(num1_show.getText() + " "
+						+ num2_show.getText() + " " + num3_show.getText() + " "
+						+ num4_show.getText() + " " + num5_show.getText());
+				SharedPreferencesHelper.setString(Constant.BANKCRADNUMBER,sb.toString());
+				ShowResultActivity.this.finish();
 			}
 		});
 

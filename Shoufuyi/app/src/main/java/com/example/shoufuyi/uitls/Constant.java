@@ -62,4 +62,7 @@ public class Constant {
 	public static String PAGESIZE = "PAGESIZE";//每页数据量
     public static String PRIVILAGE = "privilage";//用户权限
 
+	public static String BANKCRADNUMBER = "BANKCRADNUMBER";//识别后银行卡号码
+	public static String IDCRADNUMBER = "IDCRADNUMBER";//识别后ID卡号码
+
 }

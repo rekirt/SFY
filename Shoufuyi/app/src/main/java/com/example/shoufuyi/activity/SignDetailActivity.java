@@ -2,6 +2,7 @@ package com.example.shoufuyi.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -148,6 +149,7 @@ public class SignDetailActivity extends BaseActivity {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putSerializable("info", mResult);
+        bundle.putString("mPhotoFileId",mPhotoFileId);
         intent.putExtras(bundle);
         intent.setClass(SignDetailActivity.this, TakeAvatarPhotoActivity.class);
         startActivity(intent);
@@ -173,6 +175,7 @@ public class SignDetailActivity extends BaseActivity {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putSerializable("info", mResult);
+        bundle.putString("mVideoFileId",mVideoFileId);
         intent.putExtras(bundle);
         intent.setClass(SignDetailActivity.this, TakeVideoActivity.class);
         startActivity(intent);
@@ -182,6 +185,8 @@ public class SignDetailActivity extends BaseActivity {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putSerializable("info", mResult);
+        bundle.putString("mFrontBankCardFileId", mFrontBankCardFileId);
+        bundle.putString("mBackBankCardFileId", mBackBankCardFileId);
         intent.putExtras(bundle);
         intent.setClass(SignDetailActivity.this, TakeBankCardPhotoActivity.class);
         startActivity(intent);
@@ -303,30 +308,43 @@ public class SignDetailActivity extends BaseActivity {
                 tv_avatar_state.setText("验证不通过");
                 break;
             default:
-                tv_id_card_front_state.setText("点击采集");
-                tv_id_card_back_state.setText("点击采集");
-                tv_avatar_state.setText("点击采集");
                 break;
         }
-        for (VerifyItem verifyItem : verifyGroup.getVerifyItemList()){
+        getPortraitComparisonFileId(verifyGroup);
+    }
+
+    /**
+     * 获取身份证照片对于的文件id
+     * @param mVerifyGroup 验证组
+     */
+    private void getPortraitComparisonFileId(VerifyGroup mVerifyGroup){
+        for (VerifyItem verifyItem : mVerifyGroup.getVerifyItemList()){
             switch (verifyItem.getVerifyItemCode()){
                 case "IDCARD_PHOTO"://身份证正反面
                     if (verifyItem.getFileList().size() > 0)
-                    mFrontIdCardFileId = verifyItem.getFileList().get(0).getFileId();
+                        mFrontIdCardFileId = verifyItem.getFileList().get(0).getFileId();
                     if (verifyItem.getFileList().size() > 1)
-                    mBackIdCardFileId = verifyItem.getFileList().get(1).getFileId();
+                        mBackIdCardFileId = verifyItem.getFileList().get(1).getFileId();
+                    if (!TextUtils.isEmpty(mFrontIdCardFileId) && !TextUtils.isEmpty(mBackIdCardFileId)){
+                        tv_id_card_front_state.setText("点击查看");
+                        tv_id_card_back_state.setText("点击查看");
+                    }
                     break;
                 case "PHOTO":
                     if (verifyItem.getFileList().size() > 0)
-                    mPhotoFileId = verifyItem.getFileList().get(0).getFileId();
+                        mPhotoFileId = verifyItem.getFileList().get(0).getFileId();
+                    if (!TextUtils.isEmpty(mPhotoFileId)){
+                        tv_avatar_state.setText("点击查看");
+                    }
                     break;
                 default:
 
                     break;
             }
-        }
-    }
 
+        }
+
+    }
     /**
      * 处理银行卡照片
      */
@@ -360,6 +378,10 @@ public class SignDetailActivity extends BaseActivity {
                         mFrontBankCardFileId = verifyItem.getFileList().get(0).getFileId();
                     if (verifyItem.getFileList().size() > 1)
                         mBackBankCardFileId = verifyItem.getFileList().get(1).getFileId();
+                    if (!TextUtils.isEmpty(mFrontBankCardFileId) && !TextUtils.isEmpty(mBackBankCardFileId)){
+                        tv_bank_card_front_state.setText("点击查看");
+                        tv_bank_card_back_state.setText("点击查看");
+                    }
                     break;
                 default:
                     break;
@@ -461,10 +483,16 @@ public class SignDetailActivity extends BaseActivity {
                 case "VIDEO"://持卡人视频
                     if (verifyItem.getFileList().size() > 0)
                         mVideoFileId = verifyItem.getFileList().get(0).getFileId();
+                    if(!TextUtils.isEmpty(mVideoFileId)){
+                        tv_id_card_holder_video_state.setText("点击查看");
+                    }
                     break;
                 case "PHOTO":
                     if (verifyItem.getFileList().size() > 0)
                         mPhotoFileId = verifyItem.getFileList().get(0).getFileId();
+                    if (!TextUtils.isEmpty(mPhotoFileId)){
+                        tv_avatar_state.setText("点击查看");
+                    }
                     break;
                 default:
 

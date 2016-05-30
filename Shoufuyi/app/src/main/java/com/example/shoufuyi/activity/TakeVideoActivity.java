@@ -4,11 +4,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.MediaController;
+import android.widget.VideoView;
 
 import com.alibaba.fastjson.JSON;
 import com.cchtw.videorecorderlib.utils.FileUtil;
@@ -18,23 +22,24 @@ import com.example.shoufuyi.api.JsonHttpHandler;
 import com.example.shoufuyi.cache.FileUtils;
 import com.example.shoufuyi.cache.v2.CacheManager;
 import com.example.shoufuyi.uitls.Constant;
+import com.example.shoufuyi.uitls.FileHelper;
 import com.example.shoufuyi.uitls.SharedPreferencesHelper;
 import com.example.shoufuyi.uitls.ToastHelper;
 import com.example.shoufuyi.uitls.dialog.AlertDialogHelper;
 import com.example.shoufuyi.uitls.dialog.ChooseDialogDoClickHelper;
 import com.example.shoufuyi.uitls.dialog.DialogHelper;
 import com.itech.message.APP_120008;
+import com.itech.message.APP_120028;
 import com.itech.message.FileMsg;
 import com.itech.message.Result_120023;
 import com.itech.utils.HashCodeUtils;
 import com.itech.utils.ZipDataUtils;
 import com.itech.utils.encoder.Base64Utils;
-import com.yqritc.scalablevideoview.ScalableVideoView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -43,14 +48,15 @@ public class TakeVideoActivity extends BaseActivity {
     public static final String KEY_FILE_PATH = "file_path";
     private String filePath = "";
     private String mLastfilePath = "";
-    private ScalableVideoView mScalableVideoView;
-    private ImageView mPlayImageView;
-    private ImageView mThumbnailImageView;
+//    private ScalableVideoView mScalableVideoView;
+    private VideoView mVideoView;
+//    private ImageView mPlayImageView;
+//    private ImageView mThumbnailImageView;
     private ImageView iv_video;
     private Button mBtnUpload;
     private Button btn_again;
     private Result_120023 mResult;
-
+    private String mVideoFileId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,31 +64,39 @@ public class TakeVideoActivity extends BaseActivity {
         Intent intent = TakeVideoActivity.this.getIntent();
         Bundle bundle = intent.getExtras();
         mResult = (Result_120023) bundle.get("info");
+        mVideoFileId = bundle.getString("mVideoFileId","");
         assignViews();
         initData();
         setCanBack(true);
+        if (!TextUtils.isEmpty(mVideoFileId)){
+            downLoadFile(mVideoFileId);
+            mBtnUpload.setVisibility(View.GONE);
+            iv_video.setVisibility(View.GONE);
+        }
     }
 
 
     private void assignViews() {
         mBtnUpload = (Button) findViewById(R.id.btn_upload);
-        mScalableVideoView = (ScalableVideoView) findViewById(R.id.video_view);
+//        mScalableVideoView = (ScalableVideoView) findViewById(R.id.video_view);
+        mVideoView = (VideoView) findViewById(R.id.video_view);
 //        try {
 //            // 这个调用是为了初始化mediaplayer并让它能及时和surface绑定
 //            mScalableVideoView.setDataSource("");
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        mPlayImageView = (ImageView) findViewById(R.id.playImageView);
-        mThumbnailImageView = (ImageView) findViewById(R.id.thumbnailImageView);
+//        mPlayImageView = (ImageView) findViewById(R.id.playImageView);
+//        mThumbnailImageView = (ImageView) findViewById(R.id.thumbnailImageView);
         iv_video = (ImageView) findViewById(R.id.iv_video);
         btn_again = (Button) findViewById(R.id.btn_again);
     }
 
     private void initData() {
+        mVideoView.setMediaController(new MediaController(this));
         mBtnUpload.setOnClickListener(this);
-        mPlayImageView.setOnClickListener(this);
-        mThumbnailImageView.setOnClickListener(this);
+//        mPlayImageView.setOnClickListener(this);
+//        mThumbnailImageView.setOnClickListener(this);
         iv_video.setOnClickListener(this);
         btn_again.setOnClickListener(this);
     }
@@ -90,10 +104,10 @@ public class TakeVideoActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (TextUtils.isEmpty(filePath)){
-            btn_again.setVisibility(View.GONE);
-        }else {
+        if (!TextUtils.isEmpty(filePath) && TextUtils.isEmpty(mVideoFileId)){
             btn_again.setVisibility(View.VISIBLE);
+        }else {
+            btn_again.setVisibility(View.GONE);
         }
     }
 
@@ -116,21 +130,26 @@ public class TakeVideoActivity extends BaseActivity {
                 takeVideo();
                 break;
             case R.id.video_view:
-                mScalableVideoView.stop();
-                mPlayImageView.setVisibility(View.VISIBLE);
-                mThumbnailImageView.setVisibility(View.VISIBLE);
+//                mScalableVideoView.stop();
+//                mPlayImageView.setVisibility(View.VISIBLE);
+//                mThumbnailImageView.setVisibility(View.VISIBLE);
                 break;
             case R.id.playImageView:
-                try {
-                    mScalableVideoView.setDataSource(filePath);
-                    mScalableVideoView.setLooping(true);
-                    mScalableVideoView.prepare();
-                    mScalableVideoView.start();
-                    mPlayImageView.setVisibility(View.GONE);
-                    mThumbnailImageView.setVisibility(View.GONE);
-                } catch (IOException e) {
-                    ToastHelper.ShowToast("播放视频异常~");
-                }
+//                try {
+//                    mPlayImageView.setVisibility(View.GONE);
+//                    mThumbnailImageView.setVisibility(View.GONE);
+//                iv_video.setVisibility(View.GONE);
+                Uri videoUri = Uri.parse(filePath);
+                mVideoView.setVideoURI(videoUri);
+                mVideoView.start();
+//                    mScalableVideoView.setDataSource(filePath);
+//                    mScalableVideoView.setLooping(true);
+//                    mScalableVideoView.prepare();
+//                    mScalableVideoView.start();
+//                    mScalableVideoView.setVisibility(View.VISIBLE);
+//                } catch (IOException e) {
+//                    ToastHelper.ShowToast("播放视频异常~");
+//                }
                 break;
             default:
                 break;
@@ -244,18 +263,23 @@ public class TakeVideoActivity extends BaseActivity {
             if (TextUtils.isEmpty(filePath)) {
                 ToastHelper.ShowToast("视频路径错误");
             }else {
-                mThumbnailImageView.setImageBitmap(getVideoThumbnail(filePath));
+//                mThumbnailImageView.setImageBitmap(getVideoThumbnail(filePath));
                 iv_video.setVisibility(View.GONE);
-                try {
-                    mScalableVideoView.setDataSource(filePath);
-                    mScalableVideoView.setLooping(true);
-                    mScalableVideoView.prepare();
-                    mScalableVideoView.start();
-                    mPlayImageView.setVisibility(View.GONE);
-                    mThumbnailImageView.setVisibility(View.GONE);
-                } catch (IOException e) {
-                    ToastHelper.ShowToast("播放视频异常~");
-                }
+                Uri videoUri = Uri.parse(filePath);
+                mVideoView.setVideoURI(videoUri);
+                mVideoView.start();
+
+//                try {
+//                    mVideoView.setVideoPath(filePath);
+//                    mScalableVideoView.setDataSource(filePath);
+//                    mScalableVideoView.setLooping(true);
+//                    mScalableVideoView.prepare();
+//                    mScalableVideoView.start();
+//                    mPlayImageView.setVisibility(View.GONE);
+//                    mThumbnailImageView.setVisibility(View.GONE);
+//                } catch (IOException e) {
+//                    ToastHelper.ShowToast("播放视频异常~");
+//                }
             }
             if (!TextUtils.isEmpty(mLastfilePath)){
                 FileUtil.deleteFile(mLastfilePath);
@@ -263,11 +287,87 @@ public class TakeVideoActivity extends BaseActivity {
         }
     }
 
+
+    private void downLoadFile(String fileId){
+        APP_120028 app120028 = new APP_120028();
+        app120028.setTrxCode("120028");
+        app120028.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
+        FileMsg file = new FileMsg();
+        file.setFileId(fileId);
+        app120028.setFileMsg(file);
+        DialogHelper.showProgressDialog(TakeVideoActivity.this, "正在下载附件...", true, false);
+        ApiRequest.requestData(app120028, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
+            @Override
+            public void onDo(JSONObject responseJsonObject) {
+                APP_120028 result = JSON.parseObject(responseJsonObject.toString(), APP_120028.class);
+                FileMsg fileMsg = result.getFileMsg();
+                String contentString = "";
+                if (fileMsg == null) {
+                    return;
+                }
+                contentString = result.getFileMsg().getContent();
+                byte[] content = contentString.getBytes();
+                try {
+                    String path = Environment
+                            .getExternalStorageDirectory()
+                            + "/" + "SFY/Video/";
+                    File dir = new File(path);
+                    if (!dir.exists())
+                        dir.mkdirs();
+                    String videoName = mResult.getMerchantId()+mResult.getAccountNo()+".mp4";
+                    FileHelper.getFile(ZipDataUtils
+                                    .unZipForBase64(content),
+                            path, videoName);
+                    filePath = path + videoName;
+                    if (TextUtils.isEmpty(filePath)) {
+                        ToastHelper.ShowToast("视频路径错误");
+                    }else {
+//                        iv_video.setVisibility(View.GONE);
+                        Uri videoUri = Uri.parse(filePath);
+                        mVideoView.setVideoURI(videoUri);
+                        mVideoView.start();
+//                        mThumbnailImageView.setImageBitmap(getVideoThumbnail(filePath));
+//                        iv_video.setVisibility(View.GONE);
+//                        mVideoView.setVideoPath(filePath);
+
+//                        try {
+//                            mScalableVideoView.setDataSource(filePath);
+//                            mScalableVideoView.setLooping(true);
+//                            mScalableVideoView.prepare();
+//                            mScalableVideoView.start();
+//                            mPlayImageView.setVisibility(View.GONE);
+//                            mThumbnailImageView.setVisibility(View.GONE);
+//                        } catch (IOException e) {
+//                            ToastHelper.ShowToast("播放视频异常~");
+//                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onDo(JSONArray responseJsonArray) {
+
+            }
+
+            @Override
+            public void onDo(String responseString) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                DialogHelper.dismissProgressDialog();
+            }
+        });
+    }
+
+
+
     @Override
     public void onBackPressed() {
-        if (TextUtils.isEmpty(filePath)) {
-            TakeVideoActivity.this.finish();
-        } else {
+        if (!TextUtils.isEmpty(filePath) && TextUtils.isEmpty(mVideoFileId)){
             AlertDialogHelper.showAlertDialog(TakeVideoActivity.this,
                     "提示：", "视频还未上传,是否退出?", new ChooseDialogDoClickHelper() {
 
@@ -277,14 +377,14 @@ public class TakeVideoActivity extends BaseActivity {
                             TakeVideoActivity.this.finish();
                         }
                     });
+        }else {
+            TakeVideoActivity.this.finish();
         }
     }
 
     @Override
     public void goBack(View view) {
-        if (TextUtils.isEmpty(filePath)) {
-            TakeVideoActivity.this.finish();
-        } else {
+       if (!TextUtils.isEmpty(filePath) && TextUtils.isEmpty(mVideoFileId)){
             AlertDialogHelper.showAlertDialog(TakeVideoActivity.this,
                     "提示：", "视频还未上传,是否退出?", new ChooseDialogDoClickHelper() {
 
@@ -294,6 +394,8 @@ public class TakeVideoActivity extends BaseActivity {
                             TakeVideoActivity.this.finish();
                         }
                     });
-        }
+        }else {
+           TakeVideoActivity.this.finish();
+       }
     }
 }

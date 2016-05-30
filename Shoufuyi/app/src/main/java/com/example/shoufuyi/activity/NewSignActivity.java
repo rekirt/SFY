@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
  * blog:http://fuhongliang.com/
  */
 public class NewSignActivity extends BaseActivity{
-    private String returnAction = "android.intent.action.MAIN";
+    private String returnAction = "android.intent.action.NewSignActivity";
     private String resultAction = "";
     private EditText mEdtNewSignId;
     private EditText mEdtNewSignName;
@@ -90,13 +90,12 @@ public class NewSignActivity extends BaseActivity{
                 ToastHelper.ShowToast("暂时没法通过拍照识别");
                 break;
             case R.id.iv_card_camera:
-                ToastHelper.ShowToast("暂时没法通过拍照识别");
-//                Intent intentTack = new Intent("com.wintone.bankcard.camera.ScanCamera");
-//                intentTack.putExtra("devCode", Constant.devcode);
-//                intentTack.putExtra("CopyrightInfo", "");
-//                intentTack.putExtra("ReturnAciton", returnAction);
-//                intentTack.putExtra("ResultAciton", resultAction);
-//                startActivity(intentTack);
+                Intent intentTack = new Intent("com.wintone.bankcard.camera.ScanCamera");
+                intentTack.putExtra("devCode", Constant.devcode);
+                intentTack.putExtra("CopyrightInfo", "");
+                intentTack.putExtra("ReturnAciton", returnAction);
+                intentTack.putExtra("ResultAciton", resultAction);
+                startActivityForResult(intentTack, 2);
                 break;
 
             default:
@@ -104,28 +103,47 @@ public class NewSignActivity extends BaseActivity{
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        switch (requestCode) {
 //            case 1:
-//                String recogResult = data.getStringExtra("recogResult");
-//                idpath = data.getStringExtra("path");
-//                if (recogResult.equals("")) {
-//                } else {
-//                    String[] splite_Result = recogResult.split(",");
-//                    String recogname = splite_Result[0].substring(3,
-//                            splite_Result[0].length());
-//                    String recogidcard = splite_Result[5].substring(7,
-//                            splite_Result[5].length());
-//                    if (!recogname.equals("")) {
-//                        editname.setText(recogname);
-//                    }
-//                    if (!recogidcard.equals("")) {
-//                        editidcard.setText(recogidcard);
-//                    }
-//                }
+////                String recogResult = data.getStringExtra("recogResult");
+////                idpath = data.getStringExtra("path");
+////                if (recogResult.equals("")) {
+////                } else {
+////                    String[] splite_Result = recogResult.split(",");
+////                    String recogname = splite_Result[0].substring(3,
+////                            splite_Result[0].length());
+////                    String recogidcard = splite_Result[5].substring(7,
+////                            splite_Result[5].length());
+////                    if (!recogname.equals("")) {
+////                        editname.setText(recogname);
+////                    }
+////                    if (!recogidcard.equals("")) {
+////                        editidcard.setText(recogidcard);
+////                    }
+////                }
+//            case 2:
+//                String mCardNum = data.getStringExtra("mCardNum");
+//                mEdtNewSignCardNumber.setText(mCardNum);
 //                break;
 //        }
+//    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String mCardNumber = SharedPreferencesHelper.getString(Constant.BANKCRADNUMBER, "");
+        String mIDNumber = SharedPreferencesHelper.getString(Constant.IDCRADNUMBER, "");
+        if (!TextUtils.isEmpty(mCardNumber)){
+            mEdtNewSignCardNumber.setText(mCardNumber);
+            SharedPreferencesHelper.setString(Constant.BANKCRADNUMBER, "");
+        }
+        if (!TextUtils.isEmpty(mIDNumber)){
+            mEdtNewSignId.setText(mIDNumber);
+            SharedPreferencesHelper.setString(Constant.IDCRADNUMBER, "");
+        }
     }
 
     private void handlePost(){
@@ -204,10 +222,10 @@ public class NewSignActivity extends BaseActivity{
     private String mNewSignPhoneNumber; // 手机号
 
     private boolean prepareToPost(){
-        mIdCardNumber = mEdtNewSignId.getText().toString();
-        mNewSignName = mEdtNewSignName.getText().toString();
+        mIdCardNumber = mEdtNewSignId.getText().toString().replace(" ", "");
+        mNewSignName = mEdtNewSignName.getText().toString().replace(" ", "");
         mCardNumber = mEdtNewSignCardNumber.getText().toString().replace(" ", "");
-        mNewSignPhoneNumber = mEdtNewSignPhoneNumber.getText().toString();
+        mNewSignPhoneNumber = mEdtNewSignPhoneNumber.getText().toString().replace(" ", "");
         if (TextUtils.isEmpty(mIdCardNumber)|| TextUtils.isEmpty(mNewSignName) || TextUtils.isEmpty(mCardNumber)
                 || TextUtils.isEmpty(mNewSignPhoneNumber)){
             return false;

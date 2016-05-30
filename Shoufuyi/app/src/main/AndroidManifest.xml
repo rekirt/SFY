@@ -109,7 +109,11 @@
             android:name=".activity.NewSignActivity"
             android:label="@string/new_sign_activity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+            android:windowSoftInputMode="adjustUnspecified|stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.NewSignActivity" />
+            </intent-filter>
+            </activity>
         <activity
             android:name=".activity.ElementVerificationActivity"
             android:label="@string/element_verification_activity"
@@ -169,7 +173,7 @@
             android:name=".uitls.view.CardScanCameraActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|touchscreen|uiMode"
             android:label="@string/title_activity_scan_camera"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape"/>
         <activity
             android:name="com.wintone.bankcard.camera.ScanCamera"
             android:configChanges="keyboard|keyboardHidden|orientation|touchscreen|uiMode"
@@ -188,8 +192,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
-                <action android:name="com.example.shoufuyi.activity.ShowResultActivity" />
-
+                <action android:name="com.wintone.smartvision_bankCard.ShowResult" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
