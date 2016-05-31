@@ -170,6 +170,23 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
+            android:name=".activity.TakeProtocolPicActivity"
+            android:label="@string/take_protocol_photo_activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+
+        <activity
+            android:name=".activity.AgreementActivity"
+            android:label="@string/agreement_activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity
+            android:name=".activity.HandwritingActivity"
+            android:label="@string/handwriting_activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+
+        <activity
             android:name=".uitls.view.CardScanCameraActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|touchscreen|uiMode"
             android:label="@string/title_activity_scan_camera"

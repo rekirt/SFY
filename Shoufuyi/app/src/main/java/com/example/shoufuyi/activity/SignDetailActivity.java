@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -15,12 +16,15 @@ import com.example.shoufuyi.uitls.SharedPreferencesHelper;
 import com.example.shoufuyi.uitls.view.EmptyLayout;
 import com.itech.message.APP_120001;
 import com.itech.message.APP_120024;
+import com.itech.message.FileMsg;
 import com.itech.message.Result_120023;
 import com.itech.message.VerifyGroup;
 import com.itech.message.VerifyItem;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * 
@@ -58,7 +62,8 @@ public class SignDetailActivity extends BaseActivity {
 	private TextView tv_id_card_holder_video_state;//持卡人视频状态
 	private TextView tv_agreement_pic_state;//协议照片状态
 	private TextView tv_e_agreement_state;//电子协议状态
-    protected EmptyLayout mErrorLayout;//错误页
+    private EmptyLayout mErrorLayout;//错误页
+    private Button btn_submit;
 
 	public void assignViews() {
 		// 显示信息
@@ -78,9 +83,12 @@ public class SignDetailActivity extends BaseActivity {
 		tv_agreement_pic_state = (TextView) findViewById(R.id.tv_agreement_pic_state);//
 		tv_e_agreement_state = (TextView) findViewById(R.id.tv_e_agreement_state);//
         mErrorLayout = (EmptyLayout) findViewById(R.id.error_layout);
+        btn_submit = (Button) findViewById(R.id.btn_submit);//
+
     }
 
 	public void initData() {
+        btn_submit.setOnClickListener(this);
 		tv_bank_card_front_state.setOnClickListener(this);
 		tv_bank_card_back_state.setOnClickListener(this);
 		tv_deal_pwd_state.setOnClickListener(this);
@@ -114,14 +122,10 @@ public class SignDetailActivity extends BaseActivity {
         super.onClick(view);
         switch (view.getId()){
             case R.id.tv_bank_card_front_state:
-                gotoTakeBankCardPhoto();
-                break;
             case R.id.tv_bank_card_back_state:
                 gotoTakeBankCardPhoto();
                 break;
             case R.id.tv_id_card_front_state:
-                gotoTakeIDCardPhoto();
-                break;
             case R.id.tv_id_card_back_state:
                 gotoTakeIDCardPhoto();
                 break;
@@ -129,8 +133,10 @@ public class SignDetailActivity extends BaseActivity {
                 gotoTakeVideo();
                 break;
             case R.id.tv_agreement_pic_state:
+                gotoTakeProtocolPhoto();
                 break;
             case R.id.tv_e_agreement_state:
+                gotoAgreement();
                 break;
             case R.id.tv_deal_pwd_state:
             case R.id.tv_id_number_state:
@@ -139,10 +145,32 @@ public class SignDetailActivity extends BaseActivity {
             case R.id.tv_avatar_state:
                 gotoTakeAvatarPhoto();
                 break;
+            case R.id.btn_submit:
 
+                break;
             default:
                 break;
         }
+    }
+
+    private void gotoAgreement(){
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("info", mResult);
+        bundle.putString("mESignFileId", mESignFileId);
+        intent.putExtras(bundle);
+        intent.setClass(SignDetailActivity.this, AgreementActivity.class);
+        startActivity(intent);
+    }
+
+    private void gotoTakeProtocolPhoto(){
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("result", mResult);
+        bundle.putStringArrayList("mArrayListProtocolFileId", mArrayListProtocolFileId);
+        intent.putExtras(bundle);
+        intent.setClass(SignDetailActivity.this, TakeProtocolPicActivity.class);
+        startActivity(intent);
     }
 
     private void gotoTakeAvatarPhoto(){
@@ -196,6 +224,8 @@ public class SignDetailActivity extends BaseActivity {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putSerializable("info", mResult);
+        bundle.putString("mFrontIdCardFileId", mFrontIdCardFileId);
+        bundle.putString("mBackIdCardFileId", mBackIdCardFileId);
         intent.putExtras(bundle);
         intent.setClass(SignDetailActivity.this, TakeIDCardPhotoActivity.class);
         startActivity(intent);
@@ -341,9 +371,7 @@ public class SignDetailActivity extends BaseActivity {
 
                     break;
             }
-
         }
-
     }
     /**
      * 处理银行卡照片
@@ -392,7 +420,7 @@ public class SignDetailActivity extends BaseActivity {
     /**
      * 处理纸质协议
      */
-    private String mPaperProtocolFileId ="";
+    private ArrayList<String> mArrayListProtocolFileId = new ArrayList<String>();
 
     private void handlePaperProtocol(VerifyGroup verifyGroup){
         //1：未验证 2：验证通过 3：验证不通过
@@ -413,12 +441,16 @@ public class SignDetailActivity extends BaseActivity {
         for (VerifyItem verifyItem : verifyGroup.getVerifyItemList()){
             switch (verifyItem.getVerifyItemCode()){
                 case "PAPER_PROTOCOL":
-                    if (verifyItem.getFileList().size() > 0)
-                        mPaperProtocolFileId = verifyItem.getFileList().get(0).getFileId();
+                    for (FileMsg fileMsg : verifyItem.getFileList()){
+                        mArrayListProtocolFileId.add(fileMsg.getFileId());
+                    }
                     break;
                 default:
                     break;
             }
+        }
+        if (mArrayListProtocolFileId.size()>0){
+            tv_agreement_pic_state.setText("点击查看");
         }
     }
 
@@ -452,6 +484,9 @@ public class SignDetailActivity extends BaseActivity {
                 default:
                     break;
             }
+        }
+        if (!TextUtils.isEmpty(mESignFileId)){
+            tv_e_agreement_state.setText("点击查看");
         }
     }
 

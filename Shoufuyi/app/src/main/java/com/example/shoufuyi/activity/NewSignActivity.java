@@ -110,8 +110,13 @@ public class NewSignActivity extends BaseActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1 && resultCode == RESULT_OK){
             String mIDNumber = data.getStringExtra("recogResult");
+            String nameResult = data.getStringExtra("nameResult");
+
             if (!TextUtils.isEmpty(mIDNumber)){
                 mEdtNewSignId.setText(mIDNumber);
+            }
+            if (!TextUtils.isEmpty(nameResult)){
+                mEdtNewSignName.setText(nameResult);
             }
         }else if (requestCode == 1){
             String exception = data.getStringExtra("exception");

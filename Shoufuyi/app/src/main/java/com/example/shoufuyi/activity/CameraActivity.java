@@ -1000,6 +1000,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback,
                     Intent intent = new Intent();
 //                    int length = GetRecogResult.length - 1;
                     intent.putExtra("recogResult", GetRecogResult[6]);
+                    intent.putExtra("nameResult", GetRecogResult[1]);
                     CameraActivity.this.setResult(RESULT_OK, intent);
                     CameraActivity.this.finish();
                 } else {

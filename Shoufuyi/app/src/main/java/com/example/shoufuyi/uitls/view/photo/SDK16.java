@@ -1,0 +1,1 @@
+package com.example.shoufuyi.uitls.view.photo;import android.annotation.TargetApi;import android.view.View;/**   *  * Description: * Created by Fu.H.L on  * Date:2015-9-20-上午12:45:55 * Copyright © 2015年 Fu.H.L All rights reserved. */@TargetApi(16)public class SDK16 {	public static void postOnAnimation(View view, Runnable r) {		view.postOnAnimation(r);	}	}

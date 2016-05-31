@@ -55,6 +55,9 @@
     <string name="take_id_card_photo_activity">采集身份证照片</string>
     <string name="take_video_activity">采集持卡人视频</string>
     <string name="take_avatar_photo_activity">采集持卡人头像</string>
+    <string name="take_protocol_photo_activity">采集协议照片</string>
+    <string name="agreement_activity">收付易委托办理电子协议</string>
+    <string name="handwriting_activity">持卡人签名确认电子协议</string>
 
 
     <!-- Error View -->

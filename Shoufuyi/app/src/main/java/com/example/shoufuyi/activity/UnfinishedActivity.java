@@ -127,7 +127,8 @@ public class UnfinishedActivity extends BaseActivity implements
                 mCurrentPage = 1;
                 mState = STATE_REFRESH;
                 mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-                new ReadCacheTask(this).execute();
+                sendRequestData();
+//                new ReadCacheTask(this).execute();
             } else {
                 mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             }
@@ -279,7 +280,7 @@ public class UnfinishedActivity extends BaseActivity implements
                     e.printStackTrace();
                 }
             }
-            target.refresh();
+            //target.refresh();
         }
     }
 
@@ -342,9 +343,9 @@ public class UnfinishedActivity extends BaseActivity implements
 //                    }
                     instance.executeOnLoadFinish();
                 }
-                if (fromCache) {
-                    instance.refresh();
-                }
+//                if (fromCache) {
+//                    instance.refresh();
+//                }
             }
         }
     }

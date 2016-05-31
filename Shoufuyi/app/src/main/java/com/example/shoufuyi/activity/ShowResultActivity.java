@@ -37,6 +37,7 @@ import com.wintone.bankcard.BankCardRecogUtils;
 import com.wintone.view.BankCardEditTextWatcher;
 
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 public class ShowResultActivity extends BaseActivity {
 	private static final int resultBitmapOfW = 400;
@@ -86,7 +87,8 @@ public class ShowResultActivity extends BaseActivity {
 			if (results != null) {
 				String resultS = String.valueOf(results);
 				String[] temp = null;
-				temp = resultS.split(" ");
+//				temp = resultS.split(" ");
+				temp = resultS.split("[^0-9]");
 				HiddenView(temp.length, temp);
 				setBankInfo();
 				buttonLayoutSetup(width, card_type_view);
@@ -369,9 +371,16 @@ public class ShowResultActivity extends BaseActivity {
 					bitmap.recycle();
 					bitmap = null;
 				}
+
 				StringBuffer sb = new StringBuffer(num1_show.getText() + " "
 						+ num2_show.getText() + " " + num3_show.getText() + " "
-						+ num4_show.getText() + " " + num5_show.getText());
+						+ num4_show.getText().toString());
+
+                boolean isNumber = isNumeric(num5_show.getText().toString());
+                if (isNumber){
+                    sb = sb.append(num5_show.getText());
+                }
+//                String[] result = sb.toString().split("[^0-9]");
 				SharedPreferencesHelper.setString(Constant.BANKCRADNUMBER,sb.toString());
 				ShowResultActivity.this.finish();
 			}
@@ -379,7 +388,11 @@ public class ShowResultActivity extends BaseActivity {
 
 	}
 
-	private void buttonLayoutSetup(int width, int height) {
+    public static boolean isNumeric(String str){
+        Pattern pattern = Pattern.compile("[0-9]*");
+        return pattern.matcher(str).matches();
+    }
+    private void buttonLayoutSetup(int width, int height) {
 		LayoutParams layoutParams;
 		int ok_show_w = (int) (width * 0.81041666666666666666666666666667);
 		int ok_show_h = (int) (ok_show_w * 0.1533847472150814053127677806341);

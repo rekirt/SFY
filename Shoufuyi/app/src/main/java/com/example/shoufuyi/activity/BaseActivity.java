@@ -159,6 +159,14 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             mIvRight.setOnClickListener(this);
         }
     }
+    public void setRightView(int drawable) {
+        if (mToolbar != null) {
+            ImageView mIvRight = (ImageView) mToolbar.findViewById(R.id.img_right);
+            mIvRight.setImageResource(drawable);
+            mIvRight.setVisibility(View.VISIBLE);
+            mIvRight.setOnClickListener(this);
+        }
+    }
     public void setLeftText(String leftText) {
         if (mToolbar != null) {
             TextView tv_toolbar_left_title = (TextView) mToolbar.findViewById(R.id.tv_left);
