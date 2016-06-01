@@ -6,7 +6,7 @@
     <include layout="@layout/toolbar"
         android:id="@+id/toolbar"/>
 
-    <com.example.shoufuyi.uitls.view.photo.ViewPagerFixed
+    <com.cchtw.sfy.uitls.view.photo.ViewPagerFixed
         android:id="@+id/view_pager_fixed"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

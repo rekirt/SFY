@@ -56,7 +56,7 @@
             />
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <com.example.shoufuyi.uitls.view.EmptyLayout
+    <com.cchtw.sfy.uitls.view.EmptyLayout
         android:id="@+id/error_layout"
         android:layout_below="@+id/choose"
         android:layout_width="match_parent"

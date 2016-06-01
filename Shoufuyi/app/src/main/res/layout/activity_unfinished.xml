@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/common_bg"
-    tools:context="com.example.shoufuyi.activity.UnfinishedActivity">
+    tools:context="com.cchtw.sfy.activity.UnfinishedActivity">
     <include layout="@layout/toolbar"/>
 
     <LinearLayout
@@ -55,7 +55,7 @@
             />
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <com.example.shoufuyi.uitls.view.EmptyLayout
+    <com.cchtw.sfy.uitls.view.EmptyLayout
         android:id="@+id/error_layout"
         android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
