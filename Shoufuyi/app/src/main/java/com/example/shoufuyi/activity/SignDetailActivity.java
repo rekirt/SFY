@@ -1,5 +1,8 @@
 package com.example.shoufuyi.activity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,8 +16,11 @@ import com.example.shoufuyi.api.ApiRequest;
 import com.example.shoufuyi.api.JsonHttpHandler;
 import com.example.shoufuyi.uitls.Constant;
 import com.example.shoufuyi.uitls.SharedPreferencesHelper;
+import com.example.shoufuyi.uitls.ToastHelper;
+import com.example.shoufuyi.uitls.dialog.DialogHelper;
 import com.example.shoufuyi.uitls.view.EmptyLayout;
 import com.itech.message.APP_120001;
+import com.itech.message.APP_120003;
 import com.itech.message.APP_120024;
 import com.itech.message.FileMsg;
 import com.itech.message.Result_120023;
@@ -25,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -35,7 +42,7 @@ public class SignDetailActivity extends BaseActivity {
 
 	private Result_120023 mResult;
     private APP_120024 mSignDetail = new APP_120024();
-
+    private String mPhoneNumber;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,6 +50,7 @@ public class SignDetailActivity extends BaseActivity {
         Intent intent = SignDetailActivity.this.getIntent();
 		Bundle bundle = intent.getExtras();
 		mResult = (Result_120023) bundle.get("info");
+        mPhoneNumber = SharedPreferencesHelper.getString(Constant.PHONE, "");
 		assignViews();
 		initData();
 	}
@@ -146,13 +154,143 @@ public class SignDetailActivity extends BaseActivity {
                 gotoTakeAvatarPhoto();
                 break;
             case R.id.btn_submit:
-
+                submitSign();
                 break;
             default:
                 break;
         }
     }
 
+    private void submitSign(){
+        //应该先进行签约要素验证
+
+        newSign();//正式提交签约
+    }
+
+    // 提交签约
+
+    private StringBuffer strbuf = new StringBuffer();
+    private void newSign() {
+        final APP_120003 app = new APP_120003();
+        app.setTrxCode("120003");
+        app.setMerchantId(mResult.getMerchantId());
+        app.setAccountNo(mResult.getAccountNo());
+        app.setIdCard(mResult.getIdCard());
+        app.setUserName(mPhoneNumber);
+        DialogHelper.upDateProgressDialog(SignDetailActivity.this, "正在提交签约...", true, false);
+        ApiRequest.requestData(app, mPhoneNumber, new JsonHttpHandler() {
+            @Override
+            public void onDo(JSONObject responseJsonObject) {
+                APP_120003 mReturnApp = JSON.parseObject(responseJsonObject.toString(), APP_120003.class);
+                    if (mReturnApp != null && "0000".equals(mReturnApp.getDetailCode())) {
+                        ToastHelper.ShowToast("签约成功");
+                        SignDetailActivity.this.finish();
+                    } else {
+                        if (mReturnApp != null) {
+                            List<VerifyGroup> list = mReturnApp.getVerifyGroupList();
+                            for (VerifyGroup v : list) {
+                                if (!v.getDetailCode().equals("0000")) {
+                                    if (v.getVerifyGroupCode().equals(
+                                            "PORTRAIT_COMPARISON")) {
+                                        strbuf.append(
+                                                "人像对比"
+                                                        + v.getDetailInfo())
+                                                .append("\n");
+                                    }
+
+                                    else if (v.getVerifyGroupCode()
+                                            .equals("BANK_CARD_PHOTO")) {
+                                        strbuf.append(
+                                                "银行卡"
+                                                        + v.getDetailInfo())
+                                                .append("\n");
+
+                                    } else if (v.getVerifyGroupCode()
+                                            .equals("PAPER_PROTOCOL")) {
+                                        strbuf.append(
+                                                "纸质协议"
+                                                        + v.getDetailInfo())
+                                                .append("\n");
+
+                                    } else if (v.getVerifyGroupCode()
+                                            .equals("E_SIGN")) {
+                                        strbuf.append(
+
+                                                "电子签名" + v.getDetailInfo())
+                                                .append("\n");
+
+                                    } else if (v.getVerifyGroupCode()
+                                            .equals("PHOTO_VIDEO")) {
+                                        strbuf.append(
+                                                "视频"
+                                                        + v.getDetailInfo())
+                                                .append("\n");
+
+                                    } else if (v.getVerifyGroupCode()
+                                            .equals(Constant.six)) {
+                                        strbuf.append(
+                                                "六要素"
+                                                        + v.getDetailInfo())
+                                                .append("\n");
+                                    } else if (v.getVerifyGroupCode()
+                                            .equals("PHOTO")) {
+                                        strbuf.append(
+                                                "头像照片"
+                                                        + v.getDetailInfo())
+                                                .append("\n");
+
+                                    } else if (v.getVerifyGroupCode()
+                                            .equals(Constant.five)) {
+                                        strbuf.append(
+                                                "五要素"
+                                                        + v.getDetailInfo())
+                                                .append("\n");
+                                    } else if (v.getVerifyGroupCode()
+                                            .equals(Constant.four)) {
+                                        strbuf.append(
+                                                "四要素"
+                                                        + v.getDetailInfo())
+                                                .append("\n");
+
+                                    }
+                                }
+                            }
+                        }
+                        showfail();
+                    }
+            }
+
+            @Override
+            public void onDo(JSONArray responseJsonArray) {
+
+            }
+
+            @Override
+            public void onDo(String responseString) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                DialogHelper.dismissProgressDialog();
+            }
+        });
+    }
+    private void showfail() {
+        Dialog dialog = new AlertDialog.Builder(SignDetailActivity.this)
+                .setTitle("签约失败") // 创建标题
+                .setMessage(strbuf.toString()) // 表示对话框中的内容
+//                .setIcon(R.drawable.fail) // 设置LOGO
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create(); // 创建了一个对话框
+        dialog.show(); // 显示对话框
+        strbuf = new StringBuffer();
+
+    }
     private void gotoAgreement(){
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
@@ -199,6 +337,7 @@ public class SignDetailActivity extends BaseActivity {
         intent.setClass(SignDetailActivity.this, ElementVerificationActivity.class);
         startActivity(intent);
     }
+
     private void gotoTakeVideo(){
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
@@ -421,7 +560,6 @@ public class SignDetailActivity extends BaseActivity {
      * 处理纸质协议
      */
     private ArrayList<String> mArrayListProtocolFileId = new ArrayList<String>();
-
     private void handlePaperProtocol(VerifyGroup verifyGroup){
         //1：未验证 2：验证通过 3：验证不通过
         switch (verifyGroup.getVerifyState()){
@@ -489,7 +627,6 @@ public class SignDetailActivity extends BaseActivity {
             tv_e_agreement_state.setText("点击查看");
         }
     }
-
 
     private String mVideoFileId ="";
 

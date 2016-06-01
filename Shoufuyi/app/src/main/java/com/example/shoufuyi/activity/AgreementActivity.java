@@ -1,9 +1,10 @@
 package com.example.shoufuyi.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -11,11 +12,24 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.example.shoufuyi.R;
+import com.example.shoufuyi.api.ApiRequest;
+import com.example.shoufuyi.api.JsonHttpHandler;
+import com.example.shoufuyi.uitls.Constant;
+import com.example.shoufuyi.uitls.SharedPreferencesHelper;
+import com.example.shoufuyi.uitls.dialog.DialogHelper;
+import com.itech.message.APP_120028;
+import com.itech.message.FileMsg;
 import com.itech.message.Result_120023;
+import com.itech.utils.ZipDataUtils;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +44,7 @@ public class AgreementActivity extends BaseActivity {
 	// 是否已经同意协议了；
 	private boolean isshow;
     private String mESignFileId;
+	private ImageView iv_sign_name;
 	String path;
 
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +69,9 @@ public class AgreementActivity extends BaseActivity {
 		textphone.setText(textphone.getText().toString() + mResult.getMobile());
 		textcard.setText(textcard.getText().toString() + mResult.getIdCard());
 		textid.setText(textid.getText().toString() + mResult.getAccountNo());
-		String test = readStream(this.getResources()
+        iv_sign_name = (ImageView) findViewById(R.id.iv_sign_name);
+
+        String test = readStream(this.getResources()
 				.openRawResource(R.raw.test));
 		textview.setText(test);
 
@@ -77,8 +94,51 @@ public class AgreementActivity extends BaseActivity {
 		});
         if (!TextUtils.isEmpty(mESignFileId)){
             ll_footbar.setVisibility(View.GONE);
+            iv_sign_name.setVisibility(View.VISIBLE);
+            downLoadFile(mESignFileId);
         }
 	}
+
+    private void downLoadFile(String fileId){
+        APP_120028 app120028 = new APP_120028();
+        app120028.setTrxCode("120028");
+        app120028.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
+        FileMsg file = new FileMsg();
+        file.setFileId(fileId);
+        app120028.setFileMsg(file);
+        DialogHelper.showProgressDialog(AgreementActivity.this, "正在加载...", true, false);
+        ApiRequest.requestData(app120028, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
+            @Override
+            public void onDo(JSONObject responseJsonObject) {
+                APP_120028 result = JSON.parseObject(responseJsonObject.toString(), APP_120028.class);
+                FileMsg fileMsg = result.getFileMsg();
+                String contentString = "";
+                if (fileMsg == null) {
+                    return;
+                }
+                contentString = result.getFileMsg().getContent();
+                byte[] content = contentString.getBytes();
+                Bitmap bitmap = BitmapFactory.decodeByteArray(ZipDataUtils.unZipForBase64(content),
+                        0, ZipDataUtils.unZipForBase64(content).length);
+                iv_sign_name.setImageBitmap(bitmap);
+            }
+
+            @Override
+            public void onDo(JSONArray responseJsonArray) {
+
+            }
+
+            @Override
+            public void onDo(String responseString) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                DialogHelper.dismissProgressDialog();
+            }
+        });
+    }
 
 	private OnClickListener agreelis = new OnClickListener() {
 
@@ -95,30 +155,6 @@ public class AgreementActivity extends BaseActivity {
 			}
 	};
 
-//	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//		String isSuccess = data.getStringExtra("isSuccess");// 得到新Activity//
-//															// 关闭后返回的数据
-//		String handWritingPath = data.getStringExtra("path");
-//		if ("true".equals(isSuccess)) {
-//			Intent intent = new Intent();
-//			intent.putExtra("result", "0000");
-//			intent.putExtra("path", handWritingPath);
-//			intent.putExtra("isSuccess", true);
-//			AgreementActivity.this.setResult(RESULT_OK, intent);
-//			// 关闭Activity
-//			AgreementActivity.this.finish();
-//		} else {
-//			Intent intent = new Intent();
-//			intent.putExtra("path", handWritingPath);
-//			intent.putExtra("result", "0001");
-//			intent.putExtra("isSuccess", false);
-//			AgreementActivity.this.setResult(RESULT_OK, intent);
-//			// 关闭Activity
-//			AgreementActivity.this.finish();
-//		}
-//
-//	}
-
 	private String readStream(InputStream is) {
 		String res;
 		try {
@@ -132,18 +168,4 @@ public class AgreementActivity extends BaseActivity {
 		}
 		return (res);
 	}
-
-	public boolean dispatchKeyEvent(KeyEvent event) {
-		if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
-				&& event.getAction() == KeyEvent.ACTION_UP) {
-			Intent intent = new Intent();
-			intent.putExtra("result", "0001");
-
-			AgreementActivity.this.setResult(RESULT_OK, intent);
-			AgreementActivity.this.finish();
-			return true;
-		}
-		return super.dispatchKeyEvent(event);
-	}
-
 }

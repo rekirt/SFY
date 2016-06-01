@@ -199,6 +199,11 @@ public class WXLikeVideoRecorder implements Camera.PreviewCallback, CameraPrevie
      * @param x 裁切起始x坐标
      * @param y 裁切起始y坐标
      * @param transpose 图像旋转参数
+     * cclock_flip = 90CounterCLockwise and Vertical Flip (default)
+     * clock = 90Clockwise
+     * cclock = 90CounterClockwise
+     * clock_flip = 90Clockwise and Vertical Flip
+
      * @return 帧图像数据处理参数
      */
     public static String generateFilters(int w, int h, int x, int y, String transpose) {
@@ -210,7 +215,7 @@ public class WXLikeVideoRecorder implements Camera.PreviewCallback, CameraPrevie
      */
     private void initFrameFilter() {
         if (TextUtils.isEmpty(mFilters)) {
-            mFilters = generateFilters((int) (1f * outputHeight / outputWidth * imageHeight), imageHeight, 0, 0, "clock");
+            mFilters = generateFilters((int) (1f * outputHeight / outputWidth * imageHeight), imageHeight, 0, 0, "cclock_flip");
         }
         mFrameFilter = new FFmpegFrameFilter(mFilters, imageWidth, imageHeight);
         mFrameFilter.setPixelFormat(org.bytedeco.javacpp.avutil.AV_PIX_FMT_NV21); // default camera format on Android
