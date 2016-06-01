@@ -57,8 +57,11 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		des3key = SharedPreferencesHelper.getString(Constant.DESK3KEY, "");
 		strphone = SharedPreferencesHelper.getString(Constant.PHONE, "");
 		strserect = SharedPreferencesHelper.getString(Constant.LOGINSERECT, "");
-        mEditPhone.setText(strphone);
-		mEditPhone.setEnabled(false);
+		if (!TextUtils.isEmpty(strphone)){
+			mEditPhone.setText(strphone);
+		}
+//        mEditPhone.setText(strphone);
+//		mEditPhone.setEnabled(false);
 		butlogin.setOnClickListener(this);
         tv_start_to_use.setOnClickListener(this);
 	}
