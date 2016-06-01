@@ -9,6 +9,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.R;
@@ -27,6 +28,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 	private Button butlogin;
 	private EditText mEditPhone;
     private EditText mEditPwd;
+	private TextView tv_start_to_use;
 	private String strcode, strphone, strserect;
 	private SharedPreferences.Editor edit;
 
@@ -47,6 +49,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
         mEditPhone = (EditText) findViewById(R.id.edt_phone);
         mEditPwd = (EditText) findViewById(R.id.edt_pwd);
 		butlogin = (Button) findViewById(R.id.btn_login);
+        tv_start_to_use = (TextView) findViewById(R.id.tv_start_to_use);
 	}
 
 	private void initData(){
@@ -57,6 +60,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
         mEditPhone.setText(strphone);
 		mEditPhone.setEnabled(false);
 		butlogin.setOnClickListener(this);
+        tv_start_to_use.setOnClickListener(this);
 	}
 
 	// 登录
@@ -113,13 +117,20 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 	@Override
 	public void onClick(View view) {
 		super.onClick(view);
-		if(view.getId() == R.id.btn_login){
-			if (TextUtils.isEmpty(mEditPwd.getText().toString())){
-				ToastHelper.ShowToast("请输入密码！");
-				return;
-			}else {
-				login();
-			}
+		switch (view.getId()){
+			case R.id.tv_start_to_use:
+				startActivity(new Intent(LoginActivity.this,StartToUseActivity.class));
+				break;
+			case R.id.btn_login:
+				if (TextUtils.isEmpty(mEditPwd.getText().toString())){
+					ToastHelper.ShowToast("请输入密码！");
+					return;
+				}else {
+					login();
+				}
+				break;
+			default:
+				break;
 		}
 	}
 }

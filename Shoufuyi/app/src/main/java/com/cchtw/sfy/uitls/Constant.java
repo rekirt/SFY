@@ -51,8 +51,10 @@ public class Constant {
 	public static String ISLOGIN = "Is_Login";
 	public static String LOGINSERECT = "LoginSerect";
 	public static String GESNUMBER = "gesnumber";
-    public static final long CACHE_EXPIRE_DAY = 3600000*200;//两百天
-    public static final long CACHE_EXPIRE_OND_DAY = 3600000*2;//两天
+	public static String HAVESETFINGERPWD = "HAVESETFINGERPWD";
+
+	public static final long CACHE_EXPIRE_DAY = 3600000*200;//两百天
+    public static final long CACHE_EXPIRE_OND_DAY =3600000*(Integer.parseInt(SharedPreferencesHelper.getString(Constant.VEDIOANDPHOTOCACHELONG, "10")));//默认十天
 
 //运行参数
 	public static String VEDIOANDPHOTOCACHELONG = "VEDIOANDPHOTOCACHELONG";//视频图片缓存时长

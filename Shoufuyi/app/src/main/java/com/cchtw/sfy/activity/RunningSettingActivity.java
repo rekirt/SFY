@@ -42,8 +42,8 @@ public class RunningSettingActivity extends BaseActivity{
     private void initData(){
         tv_page_size.setText(new StringBuilder().append(SharedPreferencesHelper.getString(Constant.PAGESIZE, "4")).append("条").toString());
         tv_time_out.setText(new StringBuilder().append(SharedPreferencesHelper.getString(Constant.TIMEOUT, "30")).append("秒").toString());
-        tv_finger_times.setText(new StringBuilder().append(SharedPreferencesHelper.getString(Constant.PAGESIZE, "4")).append("次").toString());
-        tv_video_time.setText(new StringBuilder().append(SharedPreferencesHelper.getString(Constant.PAGESIZE, "10")).append("秒").toString());
-        tv_video_cache_time.setText(new StringBuilder().append(SharedPreferencesHelper.getString(Constant.PAGESIZE, "10")).append("天").toString());
+        tv_finger_times.setText(new StringBuilder().append(SharedPreferencesHelper.getString(Constant.FINGERPASSWORDTIMES, "5")).append("次").toString());
+        tv_video_time.setText(new StringBuilder().append(SharedPreferencesHelper.getString(Constant.VEDIOLONG, "10")).append("秒").toString());
+        tv_video_cache_time.setText(new StringBuilder().append(SharedPreferencesHelper.getString(Constant.VEDIOANDPHOTOCACHELONG, "10")).append("天").toString());
     }
 }

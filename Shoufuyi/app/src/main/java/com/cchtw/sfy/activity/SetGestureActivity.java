@@ -42,30 +42,38 @@ public class SetGestureActivity extends BaseActivity {
 	private void initView() {
 		// 初始化一个显示各个点的viewGroup
 		is_regserect = SharedPreferencesHelper.getString(Constant.MIMA, "");
-		boolean islogin = SharedPreferencesHelper.getBoolean(Constant.ISLOGIN, false);
-		if (islogin) {
+//		boolean islogin = SharedPreferencesHelper.getBoolean(Constant.ISLOGIN, false);
+		boolean haveSetFingerPwd = SharedPreferencesHelper.getBoolean(Constant.HAVESETFINGERPWD, false);
+
+		if (haveSetFingerPwd) {//如果已经设置了手势密码
 			if (is_regserect.equals("")) {
-                mTvShowMsg.setText("请设定手势");
+				mTvShowMsg.setText("请输入原来手势密码");
 			} else {
                 mTvShowMsg.setText("请再次输入手势");
 			}
-		} else {
-            mTvShowMsg.setText("忘记手势");
-            mTvShowMsg.setOnClickListener(this);
+			mTvShowMsg.setText("忘记手势");
+			mTvShowMsg.setOnClickListener(this);
+		} else {//如果是没有设置过手势密码
+			if (is_regserect.equals("")) {
+				mTvShowMsg.setText("请输入手势密码");
+			} else {
+				mTvShowMsg.setText("请再次输入手势密码");
+			}
 		}
 
 		content = new ContentView(this, is_regserect, new DrawlRoute.GestureCallBack() {
 
 			@Override
 			public void checkedSuccess() {
-                Intent intent = new Intent(SetGestureActivity.this, MainActivity.class);
+				SharedPreferencesHelper.setBoolean(Constant.HAVESETFINGERPWD, true);
+				Intent intent = new Intent(SetGestureActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
 			}
 
 			@Override
 			public void checkedFail() {
-				int errorTime = SharedPreferencesHelper.getInt(Constant.GESNUMBER, 5);
+				int errorTime = SharedPreferencesHelper.getInt(Constant.FINGERPASSWORDTIMES, 5);
                 int number = errorTime - 1;
 				if (number < 1) {
                     SharedPreferencesHelper.setString("Is_exit", "1");

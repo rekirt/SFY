@@ -18,6 +18,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cchtw.sfy.uitls.Constant;
+import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.videorecorderlib.utils.FileUtil;
 import com.cchtw.videorecorderlib.wxlikevideo.camera.CameraHelper;
 import com.cchtw.videorecorderlib.wxlikevideo.recorder.WXLikeVideoRecorder;
@@ -37,9 +39,6 @@ import java.util.TimerTask;
  * @author Martin
  */
 public class NewRecordVideoActivity extends BaseActivity implements View.OnTouchListener {
-
-    private static final String TAG = "NewRecordVideoActivity";
-
     // 输出宽度
     private static final int OUTPUT_WIDTH = 320;
     // 输出高度
@@ -48,15 +47,14 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
     private static final float RATIO = 1f * OUTPUT_WIDTH / OUTPUT_HEIGHT;
 
     private Camera mCamera;
-
     private WXLikeVideoRecorder mRecorder;
-
     private static final int CANCEL_RECORD_OFFSET = -100;
     private float mDownX, mDownY;
     private boolean isCancelRecord = true;
     private boolean isTimeOutOfRecord = false;
     private boolean isRecordTimeNotLong = false;
     public static final int MY_PERMISSIONS_REQUEST_CAMERA = 42;
+    private int mVideoLong;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //全屏
@@ -72,6 +70,7 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
                     new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO},
                     MY_PERMISSIONS_REQUEST_CAMERA);
         }
+        mVideoLong = Integer.parseInt(SharedPreferencesHelper.getString(Constant.VEDIOLONG, "10"));
     }
 
     @Override
@@ -367,7 +366,7 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
             @Override
             public void run() {
                 ++mTimeCount;
-                if (mTimeCount>6){
+                if (mTimeCount>mVideoLong){
                     Message messageTimeOut = new Message();
                     messageTimeOut.what = -1;
                     handlerTime.sendMessage(messageTimeOut);

@@ -184,7 +184,7 @@ public class SignDetailActivity extends BaseActivity {
             public void onDo(JSONObject responseJsonObject) {
                 APP_120003 mReturnApp = JSON.parseObject(responseJsonObject.toString(), APP_120003.class);
                     if (mReturnApp != null && "0000".equals(mReturnApp.getDetailCode())) {
-                        ToastHelper.ShowToast("签约成功");
+                        ToastHelper.ShowToast("提价成功，签约正在处理中!");
                         SignDetailActivity.this.finish();
                     } else {
                         if (mReturnApp != null) {
@@ -689,14 +689,15 @@ public class SignDetailActivity extends BaseActivity {
             case "1":
                 tv_deal_pwd_state.setText("未验证");
                 tv_id_number_state.setText("未验证");
-                tv_deal_pwd_state.setTextColor(getResources().getColor(R.color.red));
-                tv_id_number_state.setTextColor(getResources().getColor(R.color.red));
+
                 break;
             case "2":
                 tv_deal_pwd_state.setText("验证通过");
                 tv_id_number_state.setText("验证通过");
                 tv_deal_pwd_state.setEnabled(false);
                 tv_id_number_state.setEnabled(false);
+                tv_deal_pwd_state.setTextColor(getResources().getColor(R.color.red));
+                tv_id_number_state.setTextColor(getResources().getColor(R.color.red));
                 break;
             case "3":
                 tv_deal_pwd_state.setText("验证不通过");

@@ -2,6 +2,8 @@ package com.cchtw.sfy.api;
 
 import android.content.Context;
 
+import com.cchtw.sfy.uitls.Constant;
+import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.TLog;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -20,6 +22,10 @@ public class AsyncHttp {
     public static AsyncHttpClient getClient() {
         if (client == null) {
             client = new AsyncHttpClient();
+            int mTimeout = Integer.parseInt(SharedPreferencesHelper.getString(Constant.TIMEOUT, "20000"));
+            if (mTimeout>10000){//如果设置大于10秒则设置连接超时为后台设置的超时时间
+                client.setConnectTimeout(mTimeout);
+            }
         }
         return client;
     }

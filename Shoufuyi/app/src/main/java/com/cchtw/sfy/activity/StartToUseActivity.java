@@ -249,7 +249,7 @@ public class StartToUseActivity extends BaseActivity{
                             Intent intent = new Intent();
                             intent.setClass(StartToUseActivity.this, ChangePwdActivity.class);
                             startActivity(intent);
-                            finish();
+                            StartToUseActivity.this.finish();
                         }else {
                             ToastHelper.ShowToast(returnapp.getDetailInfo());
                         }

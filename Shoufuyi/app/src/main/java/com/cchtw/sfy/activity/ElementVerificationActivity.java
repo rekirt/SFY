@@ -124,7 +124,7 @@ public class ElementVerificationActivity extends BaseActivity {
         PEEditTextAttrSet attrs = new PEEditTextAttrSet();
         attrs.name = "CSII-POWERENTER";
         attrs.encryptType = 9;
-        attrs.clearWhenOpenKbd = true;
+        attrs.clearWhenOpenKbd = false;
         attrs.softkbdType = 1;
         attrs.softkbdMode = 0;
         attrs.kbdRandom = false;

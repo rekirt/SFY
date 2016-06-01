@@ -132,12 +132,12 @@ public class TDevice {
 				_pageSize = 12;
 			else
 				_pageSize = 12;
-		return _pageSize;
-	}
+//		return _pageSize;
+		return Integer.parseInt(SharedPreferencesHelper.getString(Constant.PAGESIZE, "12"));
+    }
 
 
-
-	public static boolean hasBigScreen() {
+    public static boolean hasBigScreen() {
 		boolean flag = true;
 		if (_hasBigScreen == null) {
 			boolean flag1;
