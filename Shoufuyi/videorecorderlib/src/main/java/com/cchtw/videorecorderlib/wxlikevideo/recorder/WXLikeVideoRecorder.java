@@ -77,6 +77,7 @@ public class WXLikeVideoRecorder implements Camera.PreviewCallback, CameraPrevie
     int imagesIndex, samplesIndex;
     private Frame yuvImage = null;
 
+    public String mVideoFileName;
     // 图片帧过滤器
     private FFmpegFrameFilter mFrameFilter;
     // 相机预览视图
@@ -116,6 +117,10 @@ public class WXLikeVideoRecorder implements Camera.PreviewCallback, CameraPrevie
         outputHeight = height;
     }
 
+    public void setVideoFileName(String name) {
+        mVideoFileName = name;
+    }
+
     /**
      * 获取开始时间
      * @return
@@ -152,7 +157,11 @@ public class WXLikeVideoRecorder implements Camera.PreviewCallback, CameraPrevie
         }
 
         RecorderParameters recorderParameters = RecorderParameters.getRecorderParameter(Constants.RESOLUTION_MEDIUM_VALUE);
-        strFinalPath = FileUtil.createFilePath(mFolder, null, Long.toString(System.currentTimeMillis()));
+        if (TextUtils.isEmpty(mVideoFileName)){
+            strFinalPath = FileUtil.createFilePath(mFolder, null, Long.toString(System.currentTimeMillis()));
+        }else {
+            strFinalPath = FileUtil.createFilePath(mFolder, null, mVideoFileName);
+        }
 //        recorder = new FFmpegFrameRecorder(strFinalPath, imageWidth, imageHeight, 1);
         // 初始化时设置录像机的目标视频大小
         recorder = new FFmpegFrameRecorder(strFinalPath, outputWidth, outputHeight, 1);
@@ -203,7 +212,6 @@ public class WXLikeVideoRecorder implements Camera.PreviewCallback, CameraPrevie
      * clock = 90Clockwise
      * cclock = 90CounterClockwise
      * clock_flip = 90Clockwise and Vertical Flip
-
      * @return 帧图像数据处理参数
      */
     public static String generateFilters(int w, int h, int x, int y, String transpose) {
@@ -215,7 +223,7 @@ public class WXLikeVideoRecorder implements Camera.PreviewCallback, CameraPrevie
      */
     private void initFrameFilter() {
         if (TextUtils.isEmpty(mFilters)) {
-            mFilters = generateFilters((int) (1f * outputHeight / outputWidth * imageHeight), imageHeight, 0, 0, "cclock_flip");
+            mFilters = generateFilters((int) (1f * outputHeight / outputWidth * imageHeight), imageHeight, 0, 0, "clock");
         }
         mFrameFilter = new FFmpegFrameFilter(mFilters, imageWidth, imageHeight);
         mFrameFilter.setPixelFormat(org.bytedeco.javacpp.avutil.AV_PIX_FMT_NV21); // default camera format on Android

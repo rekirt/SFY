@@ -196,6 +196,7 @@ public class QuerySignActivity extends BaseActivity implements
             startTime = date[0].replace(".","");
             endTime = date[1].replace(".","");
         }
+
         APP_120023 app = new APP_120023();
         app.setMerchantId(SharedPreferencesHelper.getString(Constant.MERCHANT, ""));
         app.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));

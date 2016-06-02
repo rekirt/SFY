@@ -72,7 +72,7 @@ import wintone.idcard.android.ResultMessage;
 public class CameraActivity extends Activity implements SurfaceHolder.Callback,
         Camera.PreviewCallback, OnClickListener {
     public String PATH = Environment.getExternalStorageDirectory().toString()
-            + "/wtimage/";
+            + "/SFY/";
     private String strCaptureFilePath;
     private int width, height, srcwidth, srcheight, WIDTH, HEIGHT;
     private Camera camera;
@@ -107,7 +107,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback,
     // end
     private int quality = 100;
     private final String IDCardPath = Environment.getExternalStorageDirectory()
-            .toString() + "/AndroidWT/IdCapture/";
+            .toString() + "/SFY/PIC/";
     private String picPathString = PATH + "WintoneIDCard.jpg";
     private String HeadJpgPath = PATH + "head.jpg";
     private String recogResultPath = PATH + "idcapture.txt",

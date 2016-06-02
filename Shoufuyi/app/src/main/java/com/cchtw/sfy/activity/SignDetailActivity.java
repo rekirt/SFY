@@ -43,7 +43,16 @@ public class SignDetailActivity extends BaseActivity {
 	private Result_120023 mResult;
     private APP_120024 mSignDetail = new APP_120024();
     private String mPhoneNumber;
-	@Override
+    private String mVideoFileId ="";
+    private String mESignFileId ="";
+    private String mFrontIdCardFileId ="";
+    private String mBackIdCardFileId = "";
+    private String mFrontBankCardFileId ="";
+    private String mBackBankCardFileId = "";
+    private String mPhotoFileId = "";
+    private ArrayList<String> mArrayListProtocolFileId = new ArrayList<String>();
+
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sign_detail);
@@ -122,7 +131,6 @@ public class SignDetailActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        DialogHelper.showProgressDialog(SignDetailActivity.this,"更新中...",true,false);
         getSignDetail();
     }
 
@@ -145,7 +153,9 @@ public class SignDetailActivity extends BaseActivity {
                 gotoTakeProtocolPhoto();
                 break;
             case R.id.tv_e_agreement_state:
-                gotoAgreement();
+                if (pregotoAgreement()){
+                    gotoAgreement();
+                }
                 break;
             case R.id.tv_deal_pwd_state:
             case R.id.tv_id_number_state:
@@ -155,16 +165,27 @@ public class SignDetailActivity extends BaseActivity {
                 gotoTakeAvatarPhoto();
                 break;
             case R.id.btn_submit:
-                submitSign();
+                if (preSubmitSign()){
+                    submitSign();
+                }
                 break;
             default:
                 break;
         }
     }
 
+    private boolean preSubmitSign(){
+        if (TextUtils.isEmpty(mVideoFileId) || TextUtils.isEmpty(mESignFileId)
+                || TextUtils.isEmpty(mFrontIdCardFileId) || TextUtils.isEmpty(mBackIdCardFileId)
+                || TextUtils.isEmpty(mFrontBankCardFileId)|| TextUtils.isEmpty(mBackBankCardFileId)
+                || TextUtils.isEmpty(mPhotoFileId) || mArrayListProtocolFileId.size()>0){
+            ToastHelper.ShowToast("请先采集全所需附件以及签订电子协议");
+            return false;
+        }
+        return true;
+    }
     private void submitSign(){
         //应该先进行签约要素验证
-
         newSign();//正式提交签约
     }
 
@@ -184,7 +205,7 @@ public class SignDetailActivity extends BaseActivity {
             public void onDo(JSONObject responseJsonObject) {
                 APP_120003 mReturnApp = JSON.parseObject(responseJsonObject.toString(), APP_120003.class);
                     if (mReturnApp != null && "0000".equals(mReturnApp.getDetailCode())) {
-                        ToastHelper.ShowToast("提价成功，签约正在处理中!");
+                        ToastHelper.ShowToast("提交成功，签约正在处理中!");
                         SignDetailActivity.this.finish();
                     } else {
                         if (mReturnApp != null) {
@@ -292,6 +313,17 @@ public class SignDetailActivity extends BaseActivity {
         strbuf = new StringBuffer();
 
     }
+
+    private boolean pregotoAgreement(){
+        if (TextUtils.isEmpty(mVideoFileId) || TextUtils.isEmpty(mFrontIdCardFileId) || TextUtils.isEmpty(mBackIdCardFileId)
+                || TextUtils.isEmpty(mFrontBankCardFileId)|| TextUtils.isEmpty(mBackBankCardFileId)
+                || TextUtils.isEmpty(mPhotoFileId) || mArrayListProtocolFileId.size()>0){
+            ToastHelper.ShowToast("请先采集全所需附件");
+            return false;
+        }
+        return true;
+    }
+
     private void gotoAgreement(){
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
@@ -375,6 +407,7 @@ public class SignDetailActivity extends BaseActivity {
      * 获取签约详情
      */
     private void getSignDetail() {
+        btn_submit.setEnabled(false);//更新详情前设置提交按钮不可交互
         final APP_120024 app = new APP_120024();
         app.setTrxCode("120024");
         app.setMerchantId(mResult.getMerchantId());
@@ -408,6 +441,7 @@ public class SignDetailActivity extends BaseActivity {
             @Override
             public void onFinish() {
                 DialogHelper.dismissProgressDialog();
+                btn_submit.setEnabled(true);//更新详情后恢复提交按钮可交互
             }
         });
     }
@@ -460,10 +494,6 @@ public class SignDetailActivity extends BaseActivity {
     /**
      * 处理人像比对验证
      */
-    private String mFrontIdCardFileId ="";
-    private String mBackIdCardFileId = "";
-    private String mPhotoFileId = "";
-
     private void handlePortraitComparison(VerifyGroup verifyGroup){
         //1：未验证 2：验证通过 3：验证不通过
         switch (verifyGroup.getVerifyState()){
@@ -521,8 +551,6 @@ public class SignDetailActivity extends BaseActivity {
     /**
      * 处理银行卡照片
      */
-    private String mFrontBankCardFileId ="";
-    private String mBackBankCardFileId = "";
 
     private void handleBankCardPhoto(VerifyGroup verifyGroup){
         //1：点击采集 2：验证通过 3：验证不通过
@@ -565,7 +593,7 @@ public class SignDetailActivity extends BaseActivity {
     /**
      * 处理纸质协议
      */
-    private ArrayList<String> mArrayListProtocolFileId = new ArrayList<String>();
+
     private void handlePaperProtocol(VerifyGroup verifyGroup){
         //1：未验证 2：验证通过 3：验证不通过
         switch (verifyGroup.getVerifyState()){
@@ -601,7 +629,6 @@ public class SignDetailActivity extends BaseActivity {
     /**
      * 处理电子签名
      */
-    private String mESignFileId ="";
 
     private void handleESign(VerifyGroup verifyGroup){
         //1：未验证 2：验证通过 3：验证不通过
@@ -634,7 +661,6 @@ public class SignDetailActivity extends BaseActivity {
         }
     }
 
-    private String mVideoFileId ="";
 
     private void handlePhotoVideo(VerifyGroup verifyGroup){
         //1：未验证 2：验证通过 3：验证不通过
@@ -681,7 +707,7 @@ public class SignDetailActivity extends BaseActivity {
 
     /**
      * 处理六要素
-     * @param verifyGroup
+     * @param verifyGroup 验证组合
      */
     private void handleSixElement(VerifyGroup verifyGroup){
         //1：未验证 2：验证通过 3：验证不通过
@@ -689,7 +715,6 @@ public class SignDetailActivity extends BaseActivity {
             case "1":
                 tv_deal_pwd_state.setText("未验证");
                 tv_id_number_state.setText("未验证");
-
                 break;
             case "2":
                 tv_deal_pwd_state.setText("验证通过");

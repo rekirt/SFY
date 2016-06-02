@@ -17,7 +17,7 @@ import java.util.Date;
 public class FileUtil {
 
     public static final String APP_SD_ROOT_DIR = "/SFY";
-    public static final String MEDIA_FILE_DIR = APP_SD_ROOT_DIR + "/Media";
+    public static final String MEDIA_FILE_DIR = APP_SD_ROOT_DIR + "/Video";
 
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;

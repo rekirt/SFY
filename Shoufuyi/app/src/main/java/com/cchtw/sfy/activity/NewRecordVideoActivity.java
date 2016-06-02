@@ -55,13 +55,15 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
     private boolean isRecordTimeNotLong = false;
     public static final int MY_PERMISSIONS_REQUEST_CAMERA = 42;
     private int mVideoLong;
+    private String VideoName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //全屏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_recorder);
-
+        VideoName = getIntent().getStringExtra("VideoName");
+        mVideoLong = Integer.parseInt(SharedPreferencesHelper.getString(Constant.VEDIOLONG, "10"));
         // check Android 6 permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             initCamera();
@@ -70,7 +72,6 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
                     new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO},
                     MY_PERMISSIONS_REQUEST_CAMERA);
         }
-        mVideoLong = Integer.parseInt(SharedPreferencesHelper.getString(Constant.VEDIOLONG, "10"));
     }
 
     @Override
@@ -105,16 +106,17 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
         // 初始化录像机
         mRecorder = new WXLikeVideoRecorder(this, FileUtil.MEDIA_FILE_DIR);
         mRecorder.setOutputSize(OUTPUT_WIDTH, OUTPUT_HEIGHT);
+        mRecorder.setVideoFileName(VideoName);
 
         preview = (CameraPreviewView) findViewById(R.id.camera_preview);
         preview.setCamera(mCamera, cameraId);
         mRecorder.setCameraPreviewView(preview);
         mTvTime = (TextView) findViewById(R.id.tv_time);
         mTvCancelTip = (TextView) findViewById(R.id.tv_cancel_tip);
-
         findViewById(R.id.button_start).setOnTouchListener(this);
         findViewById(R.id.capture_top_back).setOnClickListener(this);
         recordProgressBar = (RecordProgressBar) findViewById(R.id.record_progressbar);
+        recordProgressBar.setRunningTime(Integer.parseInt(SharedPreferencesHelper.getString(Constant.VEDIOLONG, "6")));
     }
 
     @Override

@@ -64,12 +64,13 @@ public class DatePickListener  implements OnClickListener {
                     public void onClick(DialogInterface dialog, int arg1) {
 
                         int beginDayOfMonth=beginTimePicker.getDayOfMonth();
-                        int beginMonth=beginTimePicker.getMonth();
+                        int beginMonth=beginTimePicker.getMonth()+1;
                         int beginYear=beginTimePicker.getYear();
 
                         int endDayOfMonth=endTimePicker.getDayOfMonth();
-                        int endMonth=endTimePicker.getMonth();
+                        int endMonth=endTimePicker.getMonth()+1;
                         int endYear=endTimePicker.getYear();
+
                         editText.setText(beginYear+"."+changeNumber(beginMonth)+"."+changeNumber(beginDayOfMonth) + "至" + endYear+"."+changeNumber(endMonth)+"."+changeNumber(endDayOfMonth));
                         dialog.cancel();
                         DialogHelper.showProgressDialog(context, "正在查询...", true, false);

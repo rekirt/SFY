@@ -31,7 +31,7 @@ public class RecordProgressBar extends View {
     public static final int STATE_CANCEL = 2;
 
     // 默认运行时间
-    private static final int DEFAULT_RUNNING_TIME = 6;
+    private static int DEFAULT_RUNNING_TIME = 6;
     // 默认背景颜色
     private static final int DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT;
     // 默认运行中颜色
@@ -72,9 +72,9 @@ public class RecordProgressBar extends View {
         mRunningColor = typedArray.getColor(R.styleable.RecordProgressBar_rpb_runningColor, DEFAULT_RUNNING_COLOR);
         mRunningTime = typedArray.getInteger(R.styleable.RecordProgressBar_rpb_timeLength, DEFAULT_RUNNING_TIME);
         typedArray.recycle();
-
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     }
+
 
     /**
      * 获取状态

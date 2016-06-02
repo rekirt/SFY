@@ -35,7 +35,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class CardScanCameraActivity extends Activity implements SurfaceHolder.Callback, Camera.PreviewCallback {
-    private static final String PATH = Environment.getExternalStorageDirectory().toString() + "/DCIM/Camera/";
+    private static final String PATH = Environment.getExternalStorageDirectory().toString() + "/SFY/Camera/";
     private Camera camera;
     private SurfaceView surfaceView;
     private RelativeLayout re_c;

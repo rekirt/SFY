@@ -1,10 +1,13 @@
 package com.cchtw.sfy.activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -15,7 +18,6 @@ import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.alibaba.fastjson.JSON;
-import com.cchtw.videorecorderlib.utils.FileUtil;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.api.ApiRequest;
 import com.cchtw.sfy.api.JsonHttpHandler;
@@ -28,6 +30,7 @@ import com.cchtw.sfy.uitls.ToastHelper;
 import com.cchtw.sfy.uitls.dialog.AlertDialogHelper;
 import com.cchtw.sfy.uitls.dialog.ChooseDialogDoClickHelper;
 import com.cchtw.sfy.uitls.dialog.DialogHelper;
+import com.cchtw.videorecorderlib.utils.FileUtil;
 import com.itech.message.APP_120008;
 import com.itech.message.APP_120028;
 import com.itech.message.FileMsg;
@@ -94,7 +97,14 @@ public class TakeVideoActivity extends BaseActivity {
 
     private void initData() {
         mVideoView.setMediaController(new MediaController(this));
+        mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            public void onPrepared(MediaPlayer mp) {
+                mp.start();
+                mp.setLooping(true);
+            }
+        });
         mBtnUpload.setOnClickListener(this);
+
 //        mPlayImageView.setOnClickListener(this);
 //        mThumbnailImageView.setOnClickListener(this);
         iv_video.setOnClickListener(this);
@@ -155,35 +165,76 @@ public class TakeVideoActivity extends BaseActivity {
                 break;
         }
     }
+    private void uploadVideo() {
+        UpLoadImageTask downloadTask = new UpLoadImageTask(TakeVideoActivity.this);
+        downloadTask.execute();
+    }
+
+    class UpLoadImageTask extends AsyncTask<APP_120008,Integer,APP_120008> {
+
+        public UpLoadImageTask(Context context) {
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            DialogHelper.showProgressDialog(TakeVideoActivity.this, "正在上传...", true, false);
+        }
+
+        @Override
+        protected APP_120008 doInBackground(APP_120008...APP_120008) {
+            // 先调用转换编码的方法将视频mp4文件转化为BASE64编码的字符串
+            // 这里调用接口上传视频
+            final APP_120008 app_120008 = new APP_120008();
+            app_120008.setAccountNo(mResult.getAccountNo());
+            app_120008.setIdCard(mResult.getIdCard());
+            app_120008.setMerchantId(mResult.getMerchantId());
+            app_120008.setTrxCode("120008");
+            app_120008.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
+            app_120008.setVerifyItem("VIDEO");
+            List<FileMsg> list = new ArrayList<FileMsg>();
+            FileMsg fileMsgFont = new FileMsg();
+            try {
+                if ("" == videoBase64Content) {
+                    videoBase64Content = new String(ZipDataUtils.zipForBase64(Base64Utils.fileToByte(filePath)));
+                }
+                fileMsgFont.setContent(videoBase64Content);
+                fileMsgFont.setFileName("video.mp4");
+                fileMsgFont.setIndex("0");
+                fileMsgFont.setAttachSecurCode(HashCodeUtils.hashCodeVaule(videoBase64Content.hashCode(),
+                        SharedPreferencesHelper.getString(Constant.UUID, "")));
+                list.add(fileMsgFont);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            app_120008.setFileList(list);
+            return app_120008;
+        }
+
+        @Override
+        protected void onPostExecute(APP_120008 attachPost) {
+            UpLoadAttach(attachPost);
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+        @Override
+        protected void onCancelled(APP_120008 s) {
+            super.onCancelled(s);
+        }
+    }
+
 
     private String videoBase64Content = "";
-    private void uploadVideo(){
-        // 先调用转换编码的方法将视频mp4文件转化为BASE64编码的字符串
-        // 这里调用接口上传视频
-        final APP_120008 app_120008 = new APP_120008();
-        app_120008.setAccountNo(mResult.getAccountNo());
-        app_120008.setIdCard(mResult.getIdCard());
-        app_120008.setMerchantId(mResult.getMerchantId());
-        app_120008.setTrxCode("120008");
-        app_120008.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
-        app_120008.setVerifyItem("VIDEO");
-        List<FileMsg> list = new ArrayList<FileMsg>();
-        FileMsg fileMsgFont = new FileMsg();
-        try {
-            if ("" == videoBase64Content) {
-                videoBase64Content = new String(ZipDataUtils.zipForBase64(Base64Utils.fileToByte(filePath)));
-            }
-            fileMsgFont.setContent(videoBase64Content);
-            fileMsgFont.setFileName("video.mp4");
-            fileMsgFont.setIndex("0");
-            fileMsgFont.setAttachSecurCode(HashCodeUtils.hashCodeVaule(videoBase64Content.hashCode(),
-                    SharedPreferencesHelper.getString(Constant.UUID, "")));
-            list.add(fileMsgFont);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        app_120008.setFileList(list);
-        DialogHelper.showProgressDialog(TakeVideoActivity.this, "正在上传...", true, false);
+    private void UpLoadAttach(APP_120008 app_120008){
         ApiRequest.requestData(app_120008, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
             @Override
             public void onDo(JSONObject responseJsonObject) {
@@ -195,7 +246,6 @@ public class TakeVideoActivity extends BaseActivity {
                     CacheManager.setCache(FileUtils.getCacheKey(mResult.getIdCard(), mResult.getAccountNo()+"_VIDEO"),videoBase64Content.getBytes(),
                             Constant.CACHE_EXPIRE_OND_DAY, CacheManager.TYPE_INTERNAL);
                     ToastHelper.ShowToast(result.getDetailInfo());
-
                 }
             }
 
@@ -226,6 +276,7 @@ public class TakeVideoActivity extends BaseActivity {
     private static int TAKEVEDIOREQUESTCODE = 80;
     private void takeVideo(){
         Intent intentTack = new Intent(TakeVideoActivity.this, NewRecordVideoActivity.class);
+        intentTack.putExtra("VideoName",mResult.getMerchantId()+mResult.getCreateTime());
         startActivityForResult(intentTack, TAKEVEDIOREQUESTCODE);
     }
 
