@@ -187,7 +187,7 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
         <activity
-            android:name="com.cchtw.sfy.uitls.view.CardScanCameraActivity"
+            android:name=".activity.CardScanCameraActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|touchscreen|uiMode"
             android:label="@string/title_activity_scan_camera"
             android:screenOrientation="landscape"/>

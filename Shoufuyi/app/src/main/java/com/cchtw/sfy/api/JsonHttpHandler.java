@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.cchtw.sfy.BaseApplication;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
+import com.cchtw.sfy.uitls.ToastHelper;
 import com.itech.message.APPMsgPack;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -130,7 +131,7 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
     public void onFail(String msg) {
         if (!TextUtils.isEmpty(msg)&& mContext != null) {
             if (isShowErrorMessage) {
-//                ToastHelper.ShowToast(msg, mContext);
+                ToastHelper.ShowToast(msg, mContext);
             }
         }
     }

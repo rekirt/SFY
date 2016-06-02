@@ -118,9 +118,6 @@ public class NewSignActivity extends BaseActivity{
             if (!TextUtils.isEmpty(nameResult)){
                 mEdtNewSignName.setText(nameResult);
             }
-        }else if (requestCode == 1){
-            String exception = data.getStringExtra("exception");
-            ToastHelper.ShowToast(exception);
         }
     }
 

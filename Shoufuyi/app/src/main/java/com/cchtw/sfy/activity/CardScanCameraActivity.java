@@ -1,4 +1,4 @@
-package com.cchtw.sfy.uitls.view;
+package com.cchtw.sfy.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -409,14 +409,17 @@ public class CardScanCameraActivity extends Activity implements SurfaceHolder.Ca
                     this.camera.release();
                     this.camera = null;
                 }
-            } catch (Exception var4) {
-                var4.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
             this.finish();
         }
-
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        CardScanCameraActivity.this.finish();
     }
 
     private void initCamera() {
@@ -716,6 +719,6 @@ public class CardScanCameraActivity extends Activity implements SurfaceHolder.Ca
                 }
             });
         }
-
     }
+
 }

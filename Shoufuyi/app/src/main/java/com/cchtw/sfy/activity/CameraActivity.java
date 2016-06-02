@@ -509,13 +509,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback,
 
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             closeCamera();
-            Intent intent = new Intent();
-
-            intent.setClass(CameraActivity.this, MainActivity.class);
-            // 设置切换动画，从右边进入，左边退出
-
             CameraActivity.this.finish();
-            startActivity(intent);
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -1127,4 +1121,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback,
         return str;
     }
 
+    @Override
+    public void onBackPressed() {
+        closeCamera();
+        CameraActivity.this.finish();
+    }
 }
