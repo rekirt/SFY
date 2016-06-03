@@ -944,14 +944,14 @@ public class FileUtils {
         }
     }
 
-	private static final String CACHE_KEY_PREFIX = "unfinishedSign_";
+	private static final String CACHE_KEY_PREFIX = "cache_";
 
 	protected static String getCacheKeyPrefix() {
 		return CACHE_KEY_PREFIX;
 	}
-	public static String getCacheKey(String mIdCardNumber,String mCardNumber) {
-		return new StringBuffer(getCacheKeyPrefix()).append(mIdCardNumber)
-				.append("_").append(mCardNumber).toString();
+	public static String getCacheKey(String mAttachCreateTime,String Category) {
+		return new StringBuffer(getCacheKeyPrefix()).append(mAttachCreateTime)
+				.append("_").append(Category).toString();
 	}
 
 }
