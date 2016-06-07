@@ -67,4 +67,7 @@ public class Constant {
 	public static String BANKCRADNUMBER = "BANKCRADNUMBER";//识别后银行卡号码
 	public static String IDCRADNUMBER = "IDCRADNUMBER";//识别后ID卡号码
 
+	public static boolean ISTEST = true;//是否是测试
+
+
 }

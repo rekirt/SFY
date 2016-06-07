@@ -66,31 +66,51 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void redirectTo(){
-        String number = sharedPreferencesHelper.getString(Constant.NUMBER, "");
-        // 如果退出字段是1就跳转到登录界面
-        boolean haveChangePwd = sharedPreferencesHelper.getBoolean(Constant.GAIMIMA, false);
-        // 激活状态
-        boolean is_login = sharedPreferencesHelper.getBoolean(Constant.ISLOGIN, false);
-        // 是否修改密码状态
-        boolean isActive  = sharedPreferencesHelper.getBoolean(Constant.ACTIVATION, false);
-        //如果帐号存在，表示已登录
-       if (is_login) {
+
+        //-----为了测试先模拟已启用---------------
+        if (Constant.ISTEST){
+            SharedPreferencesHelper.setBoolean(Constant.ACTIVATION, true);// 记录登录成功状态
+            SharedPreferencesHelper.setString(Constant.PHONE, "13430990001");// 保存字符串
+            SharedPreferencesHelper.setString(Constant.DESKEY, "AN9WB25JUNAOYBABG9ROPRXM");
+            SharedPreferencesHelper.setString(Constant.DESK3KEY, "OVESGD8LE8WT7V8RXZAPII4E");
+            SharedPreferencesHelper.setString(Constant.MERCHANT, "001053110000001");
+            SharedPreferencesHelper.setString(Constant.TOKEN, "6330130f48d840bdb0bd18b2dedf141b");
+            SharedPreferencesHelper.setBoolean(Constant.ISLOGIN, true);// 保存字符串
+
+            SharedPreferencesHelper.setString("LoginSerect","123456");// 保存字符串
+            SharedPreferencesHelper.setBoolean(Constant.GAIMIMA, true);
+            SharedPreferencesHelper.setString("Is_exit", "1");
+            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            startActivity(intent);
+            SplashActivity.this.finish();
+            //-----为了测试先模拟已启用---------------
+        }else{
+            String number = sharedPreferencesHelper.getString(Constant.NUMBER, "");
+            // 如果退出字段是1就跳转到登录界面
+            boolean haveChangePwd = sharedPreferencesHelper.getBoolean(Constant.GAIMIMA, false);
+            // 激活状态
+            boolean is_login = sharedPreferencesHelper.getBoolean(Constant.ISLOGIN, false);
+            // 是否修改密码状态
+            boolean isActive  = sharedPreferencesHelper.getBoolean(Constant.ACTIVATION, false);
+            //如果帐号存在，表示已登录
+            if (is_login) {
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
-       } else if (isActive && haveChangePwd) {
+            } else if (isActive && haveChangePwd) {
                 Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
-       }else if (isActive && !haveChangePwd) {
-           Intent intent = new Intent(SplashActivity.this, ChangePwdActivity.class);
-           startActivity(intent);
-           finish();
-       }else {
-           Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-           startActivity(intent);
-           SplashActivity.this.finish();
-       }
+            }else if (isActive && !haveChangePwd) {
+                Intent intent = new Intent(SplashActivity.this, ChangePwdActivity.class);
+                startActivity(intent);
+                finish();
+            }else {
+                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                startActivity(intent);
+                SplashActivity.this.finish();
+            }
+        }
     }
 
     /**
