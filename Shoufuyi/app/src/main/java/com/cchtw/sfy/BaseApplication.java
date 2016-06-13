@@ -5,6 +5,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
 
+import com.cchtw.sfy.cache.DBHelper;
+import com.cchtw.sfy.cache.v2.CacheManager;
+import com.cchtw.sfy.uitls.Constant;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
@@ -55,11 +58,15 @@ public class BaseApplication extends Application {
 //                .displayer(new RoundedBitmapDisplayer(20)) //设置显示风格这里是圆角矩
                 .handler(new Handler()) // default
                 .build();
+        initCache();//初始化缓存
 
         initImageLoader();//初始化ImageLoader
         CrashReport.initCrashReport(getApplicationContext(), "900029836", false);
-    }
 
+    }
+    private void initCache(){
+        CacheManager.initCacheDir(Constant.CACHE_DIR, getApplicationContext(), new DBHelper(getApplicationContext(), 1, "migo_cache", null, null));
+    }
     private void initImageLoader(){
         File cacheDir = StorageUtils.getOwnCacheDirectory(this, "imageloader/Cache");
         //创建默认的ImageLoader配置参数

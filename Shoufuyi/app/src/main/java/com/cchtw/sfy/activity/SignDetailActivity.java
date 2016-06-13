@@ -178,7 +178,7 @@ public class SignDetailActivity extends BaseActivity {
         if (TextUtils.isEmpty(mVideoFileId) || TextUtils.isEmpty(mESignFileId)
                 || TextUtils.isEmpty(mFrontIdCardFileId) || TextUtils.isEmpty(mBackIdCardFileId)
                 || TextUtils.isEmpty(mFrontBankCardFileId)|| TextUtils.isEmpty(mBackBankCardFileId)
-                || TextUtils.isEmpty(mPhotoFileId) || mArrayListProtocolFileId.size()>0){
+                || TextUtils.isEmpty(mPhotoFileId) || mArrayListProtocolFileId.size() <1){
             ToastHelper.ShowToast("请先采集全所需附件以及签订电子协议");
             return false;
         }
@@ -316,8 +316,8 @@ public class SignDetailActivity extends BaseActivity {
 
     private boolean pregotoAgreement(){
         if (TextUtils.isEmpty(mVideoFileId) || TextUtils.isEmpty(mFrontIdCardFileId) || TextUtils.isEmpty(mBackIdCardFileId)
-                || TextUtils.isEmpty(mFrontBankCardFileId)|| TextUtils.isEmpty(mBackBankCardFileId)
-                || TextUtils.isEmpty(mPhotoFileId) || mArrayListProtocolFileId.size()>0){
+                || TextUtils.isEmpty(mFrontBankCardFileId) || TextUtils.isEmpty(mBackBankCardFileId)
+                || TextUtils.isEmpty(mPhotoFileId) || mArrayListProtocolFileId.size() < 1){
             ToastHelper.ShowToast("请先采集全所需附件");
             return false;
         }

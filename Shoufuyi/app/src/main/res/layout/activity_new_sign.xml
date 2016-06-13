@@ -23,6 +23,7 @@
             android:hint="请输入身份证号码"
             android:background="@null"
             android:layout_weight="1"
+            android:maxLength="18"
             android:text="440825100902039876"
             />
         <ImageView

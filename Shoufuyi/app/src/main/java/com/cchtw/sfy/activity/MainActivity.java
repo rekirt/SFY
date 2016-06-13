@@ -276,7 +276,7 @@ public class MainActivity extends BaseActivity {
                             Toast.LENGTH_SHORT).show();
                     mExitTime = System.currentTimeMillis();
                 } else {
-                    finish();
+                    MainActivity.this.finish();
                 }
             return true;
         }

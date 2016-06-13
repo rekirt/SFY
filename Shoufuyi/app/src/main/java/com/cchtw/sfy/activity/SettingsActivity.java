@@ -216,8 +216,10 @@ public class SettingsActivity extends BaseActivity {
                     returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120033.class);
                     if (returnapp.getDetailCode().equals("0000")) {
                         SharedPreferencesHelper.setBoolean(Constant.ISLOGIN, false);
+                        SharedPreferencesHelper.setString(Constant.MIMA, "");
+                        SharedPreferencesHelper.setBoolean(Constant.HAVESETFINGERPWD, false);
                         startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
-                        finish();
+                        SettingsActivity.this.finish();
                     } else {
                         ToastHelper.ShowToast(returnapp.getDetailInfo());
                     }

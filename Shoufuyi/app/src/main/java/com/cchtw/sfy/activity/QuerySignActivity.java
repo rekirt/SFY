@@ -63,7 +63,7 @@ public class QuerySignActivity extends BaseActivity implements
     private EditText edt_date;
 
     // 采集状态默认待采集
-    private int collstate = 1;
+    private int collstate = 0;
 
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
 
@@ -205,7 +205,9 @@ public class QuerySignActivity extends BaseActivity implements
         page.setPageNo(String.valueOf(mCurrentPage));
         page.setPageSize(String.valueOf(TDevice.getPageSize()));
         app.setPage(page);
-        app.setState(String.valueOf(collstate));
+        if (collstate != 0){
+            app.setState(String.valueOf(collstate));
+        }
         app.setCreateDateStart(startTime);
         app.setCreateDateEnd(endTime);
         ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {

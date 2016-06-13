@@ -1,5 +1,7 @@
 package com.cchtw.sfy.uitls;
 
+import android.os.Environment;
+
 import com.itech.utils.SequenceUtil;
 
 public class Constant {
@@ -67,7 +69,11 @@ public class Constant {
 	public static String BANKCRADNUMBER = "BANKCRADNUMBER";//识别后银行卡号码
 	public static String IDCRADNUMBER = "IDCRADNUMBER";//识别后ID卡号码
 
-	public static boolean ISTEST = true;//是否是测试
+	public static boolean ISTEST = false;//是否是测试
 
-
+	//基本路径
+	public final static String BASE_DIR = Environment
+			.getExternalStorageDirectory().getAbsolutePath() + "/SFY/";
+	//缓存路径
+	public final static String CACHE_DIR = BASE_DIR + ".cache/";
 }

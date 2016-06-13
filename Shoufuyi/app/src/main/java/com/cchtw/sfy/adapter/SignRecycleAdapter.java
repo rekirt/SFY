@@ -124,7 +124,7 @@ public class SignRecycleAdapter extends RecycleBaseAdapter {
         app.setMerchantId(signBean.getMerchantId());
         app.setIdCard(signBean.getIdCard());
         app.setAccountNo(signBean.getAccountNo());
-        app.setUserName(signBean.getAccountName());
+        app.setUserName(SharedPreferencesHelper.getString(Constant.PHONE,""));
         ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
             @Override
             public void onDo(JSONObject responseJsonObject) {

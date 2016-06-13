@@ -60,7 +60,6 @@ public class ContentView extends ViewGroup {
 		
 		this.setLayoutParams(layoutParams);
 		drawlRoute.setLayoutParams(layoutParams);
-
 		parent.addView(drawlRoute);
 		parent.addView(this);
 		

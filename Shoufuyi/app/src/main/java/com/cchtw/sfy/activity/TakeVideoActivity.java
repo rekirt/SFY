@@ -21,8 +21,6 @@ import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.api.ApiRequest;
 import com.cchtw.sfy.api.JsonHttpHandler;
-import com.cchtw.sfy.cache.FileUtils;
-import com.cchtw.sfy.cache.v2.CacheManager;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.FileHelper;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
@@ -30,7 +28,6 @@ import com.cchtw.sfy.uitls.ToastHelper;
 import com.cchtw.sfy.uitls.dialog.AlertDialogHelper;
 import com.cchtw.sfy.uitls.dialog.ChooseDialogDoClickHelper;
 import com.cchtw.sfy.uitls.dialog.DialogHelper;
-import com.cchtw.videorecorderlib.utils.FileUtil;
 import com.itech.message.APP_120008;
 import com.itech.message.APP_120028;
 import com.itech.message.FileMsg;
@@ -243,8 +240,8 @@ public class TakeVideoActivity extends BaseActivity {
                     ToastHelper.ShowToast("附件上传成功");
                     TakeVideoActivity.this.finish();
                 }else {
-                    CacheManager.setCache(FileUtils.getCacheKey(mResult.getIdCard(), mResult.getAccountNo()+"_VIDEO"),videoBase64Content.getBytes(),
-                            Constant.CACHE_EXPIRE_OND_DAY, CacheManager.TYPE_INTERNAL);
+//                    CacheManager.setCache(FileUtils.getCacheKey(mResult.getIdCard(), mResult.getAccountNo()+"_VIDEO"),videoBase64Content.getBytes(),
+//                            Constant.CACHE_EXPIRE_OND_DAY, CacheManager.TYPE_INTERNAL);
                     ToastHelper.ShowToast(result.getDetailInfo());
                 }
             }
@@ -261,9 +258,9 @@ public class TakeVideoActivity extends BaseActivity {
 
             @Override
             public void onFail(String msg) {
-                CacheManager.setCache(FileUtils.getCacheKey(mResult.getIdCard(), mResult.getAccountNo()+"_VIDEO"),videoBase64Content.getBytes(),
-                        Constant.CACHE_EXPIRE_OND_DAY, CacheManager.TYPE_INTERNAL);
-                ToastHelper.ShowToast("已自动保存视频到本地数据库");
+//                CacheManager.setCache(FileUtils.getCacheKey(mResult.getIdCard(), mResult.getAccountNo()+"_VIDEO"),videoBase64Content.getBytes(),
+//                        Constant.CACHE_EXPIRE_OND_DAY, CacheManager.TYPE_INTERNAL);
+                ToastHelper.ShowToast(msg);
             }
 
             @Override
@@ -332,9 +329,9 @@ public class TakeVideoActivity extends BaseActivity {
 //                    ToastHelper.ShowToast("播放视频异常~");
 //                }
             }
-            if (!TextUtils.isEmpty(mLastfilePath)){
-                FileUtil.deleteFile(mLastfilePath);
-            }
+//            if (!TextUtils.isEmpty(mLastfilePath)){
+//                FileUtil.deleteFile(mLastfilePath);
+//            }
         }
     }
 

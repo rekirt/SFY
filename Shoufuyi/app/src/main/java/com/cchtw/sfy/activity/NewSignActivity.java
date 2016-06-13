@@ -16,7 +16,7 @@ import com.cchtw.sfy.api.JsonHttpHandler;
 import com.cchtw.sfy.cache.FileUtils;
 import com.cchtw.sfy.cache.v2.CacheManager;
 import com.cchtw.sfy.uitls.Constant;
-import com.cchtw.sfy.uitls.PhoneUtils;
+import com.cchtw.sfy.uitls.RegexUtils;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.TDevice;
 import com.cchtw.sfy.uitls.ToastHelper;
@@ -25,8 +25,6 @@ import com.itech.message.APP_120001;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.regex.Pattern;
 
 /**
  * Shoufuyi
@@ -198,7 +196,7 @@ public class NewSignActivity extends BaseActivity{
                 if(TDevice.hasInternet()){
                     ToastHelper.ShowToast("失败提示："+msg);
                 }else {
-                    CacheManager.setCache(FileUtils.getCacheKey(app.getIdCard(), app.getAccountNo()), app.toString().getBytes(),
+                    CacheManager.setCache(getCacheKey(), app.toString().getBytes(),
                             Constant.CACHE_EXPIRE_OND_DAY, CacheManager.TYPE_INTERNAL);
                     ToastHelper.ShowToast("已保存在本地数据库.");
                     NewSignActivity.this.finish();
@@ -207,6 +205,9 @@ public class NewSignActivity extends BaseActivity{
         });
     }
 
+    private String getCacheKey(){
+        return FileUtils.getCacheKey(mCardNumber, mIdCardNumber);
+    }
     private String mIdCardNumber;// 身份证号
     private String mCardNumber;// 卡号
     private String mNewSignName;// 户名
@@ -217,20 +218,21 @@ public class NewSignActivity extends BaseActivity{
         mNewSignName = mEdtNewSignName.getText().toString().replace(" ", "");
         mCardNumber = mEdtNewSignCardNumber.getText().toString().replace(" ", "");
         mNewSignPhoneNumber = mEdtNewSignPhoneNumber.getText().toString().replace(" ", "");
+
         if (TextUtils.isEmpty(mIdCardNumber)|| TextUtils.isEmpty(mNewSignName) || TextUtils.isEmpty(mCardNumber)
                 || TextUtils.isEmpty(mNewSignPhoneNumber)){
             return false;
         }else {
-            boolean isMatch = Pattern.matches("(\\d{14}[0-9a-zA-Z])|(\\d{17}[0-9a-zA-Z])", mIdCardNumber);// 这里对身份证号码进行验证
+            boolean isMatch = RegexUtils.checkIdCard(mIdCardNumber);
             if (!isMatch) {
                 ToastHelper.ShowToast("请填写有效的身份证号码");
                 return false;
             }
-            if (!PhoneUtils.isPhoneNumberValid(mNewSignPhoneNumber)) {
+            if (!RegexUtils.checkMobile(mNewSignPhoneNumber)) {
                 ToastHelper.ShowToast("请填写有效的手机号码");
                 return false;
             }
-            if (mCardNumber.length() < 16 || mCardNumber.length() > 19) {
+            if (RegexUtils.checkBankCard(mCardNumber)) {
                 ToastHelper.ShowToast("请填写有效的银行卡卡号");
                 return false;
             }

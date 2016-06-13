@@ -91,8 +91,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 				// 在第一次登录激活的时候在发一次登录报文获取所属商户号
 				APP_120033 returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120033.class);
 				message = returnapp.getDetailInfo();
-				String detailCode = returnapp.getDetailCode();
-				if (detailCode.equals("0000")) {
+				if ("0000".equals(returnapp.getDetailCode())) {
                     SharedPreferencesHelper.setString(Constant.MERCHANT, returnapp.getMerchantId());
                     SharedPreferencesHelper.setString(Constant.TOKEN, returnapp.getToken());
                     SharedPreferencesHelper.setString(Constant.DESKEY, returnapp.getDesKey());
@@ -101,7 +100,9 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 					Intent intent = new Intent();
 					intent.setClass(LoginActivity.this,SetGestureActivity.class);
 					startActivity(intent);
-					finish();
+					LoginActivity.this.finish();
+				}else {
+					ToastHelper.ShowToast(returnapp.getDetailInfo());
 				}
 			}
 

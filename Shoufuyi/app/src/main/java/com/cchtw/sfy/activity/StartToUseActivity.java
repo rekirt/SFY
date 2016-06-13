@@ -182,7 +182,11 @@ public class StartToUseActivity extends BaseActivity{
                 //ToastHelper.ShowToast("发送成功！");
 //                Countdown();
                 // 发送报文获取验证码
-                 DialogHelper.showProgressDialog(StartToUseActivity.this, "正在请求验证码...", true, true);
+                SharedPreferencesHelper.setString("token", "");
+                SharedPreferencesHelper.setString("deskey", "");
+                SharedPreferencesHelper.setBoolean(Constant.ACTIVATION, false);
+
+                DialogHelper.showProgressDialog(StartToUseActivity.this, "正在请求验证码...", true, true);
                 APP_120031 app = new APP_120031();
                 mPhoneNumber = editphone.getText().toString().replaceAll(" ", "");
                 app.setMobile(mPhoneNumber);
@@ -196,6 +200,7 @@ public class StartToUseActivity extends BaseActivity{
                                 APP_120031.class);
                         if (returnapp.getDetailCode().equals("0000")) {
                             ToastHelper.ShowToast("短信发送成功");
+                            editcode.setEnabled(true);
                             Countdown();
                         } else {
                             ToastHelper.ShowToast(returnapp.getDetailInfo());

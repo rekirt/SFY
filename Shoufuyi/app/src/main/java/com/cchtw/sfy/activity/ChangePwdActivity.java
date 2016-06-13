@@ -72,11 +72,16 @@ public class ChangePwdActivity extends BaseActivity {
                 @Override
                 public void onDo(JSONObject responseJsonObject) {
                     returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120034.class);
-                    SharedPreferencesHelper.setString("LoginSerect",newPwd);// 保存字符串
-                    SharedPreferencesHelper.setBoolean(Constant.GAIMIMA, true);
-                    SharedPreferencesHelper.setString("Is_exit", "1");
-                    Intent intent = new Intent(ChangePwdActivity.this, LoginActivity.class);
-                    startActivity(intent);
+                    if ("0000".equals(returnapp.getDetailCode())){
+                        SharedPreferencesHelper.setString("LoginSerect",newPwd);// 保存字符串
+                        SharedPreferencesHelper.setBoolean(Constant.GAIMIMA, true);
+                        SharedPreferencesHelper.setString("Is_exit", "1");
+                        Intent intent = new Intent(ChangePwdActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        ChangePwdActivity.this.finish();
+                    }else {
+                        ToastHelper.ShowToast(returnapp.getDetailInfo());
+                    }
                 }
 
                 @Override
@@ -112,6 +117,11 @@ public class ChangePwdActivity extends BaseActivity {
             ToastHelper.ShowToast("两次输入密码不相同");
             return false;
 		}
+
+        if (mEditOld.getText().toString().equals(mEditSure.getText().toString())){
+            ToastHelper.ShowToast("新密码与原密码不可以相同哦~");
+            return false;
+        }
 		return true;
 	}
 

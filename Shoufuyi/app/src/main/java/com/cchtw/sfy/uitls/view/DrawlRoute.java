@@ -54,13 +54,13 @@ public class DrawlRoute extends View {
 		// 解决内存溢出的
 		bitmap=null;
 		try {
-			bitmap = Bitmap.createBitmap(954, 980, Bitmap.Config.ARGB_8888); // 设置位图的宽高
+			bitmap = Bitmap.createBitmap(954, 980, Bitmap.Config.ARGB_4444); // 设置位图的宽高
 		} catch (OutOfMemoryError e) {
-			while (bitmap == null) {
+			while (bitmap != null) {
 				bitmap.recycle();  
 				System.gc();
 				System.runFinalization();
-				bitmap = Bitmap.createBitmap(954, 980, Bitmap.Config.ARGB_8888); // 设置位图的宽高
+				bitmap = Bitmap.createBitmap(954, 980, Bitmap.Config.ARGB_4444); // 设置位图的宽高
 			}
 		}
 
@@ -204,6 +204,23 @@ public class DrawlRoute extends View {
 					// 重新绘制界面
 					clearScreenAndDrawList(true);
 					invalidate();
+					new Handler().postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							// 重置passWordSb
+							passWordSb = new StringBuilder();
+							// 清空保存点的集合
+							lineList.clear();
+							// 重新绘制界面
+							clearScreenAndDrawList(true);
+							for (Point p : pointlist) {
+								p.setHighLighted(false);
+							}
+							pointlist.clear();
+
+							invalidate();
+						}
+					}, 1 * 10);
 					callBack.checkedSuccess();
 				} else {
 					// 重新绘制界面
