@@ -79,6 +79,8 @@
             android:hint="卡号"
             android:background="@null"
             android:layout_weight="1"
+            android:maxLength="19"
+            android:inputType="number"
             android:text="12345678912345678"/>
         <ImageView
             android:id="@+id/iv_card_camera"
