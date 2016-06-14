@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.cchtw.sfy.BaseApplication;
-import com.cchtw.sfy.R;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
 import com.itech.message.APPMsgPack;
@@ -106,15 +105,16 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
         if (mContext != null) {
             try {
-                if (statusCode == 0) {
-                    onFail(mContext.getString(R.string.error_http_fail_connet_server));
-                } else if (statusCode >= 400) {
-                    onFail(mContext.getString(R.string.error_http_request));
-                } else if (statusCode >= 500) {
-                    onFail(mContext.getString(R.string.error_http_server_error));
-                } else {
-                    onFail(mContext.getString(R.string.error_http_server_busy));
-                }
+                onFail(responseBody.toString());
+//                if (statusCode == 0) {
+////                    onFail(mContext.getString(R.string.error_http_fail_connet_server));
+//                } else if (statusCode >= 400) {
+//                    onFail(mContext.getString(R.string.error_http_request));
+//                } else if (statusCode >= 500) {
+//                    onFail(mContext.getString(R.string.error_http_server_error));
+//                } else {
+//                    onFail(mContext.getString(R.string.error_http_server_busy));
+//                }
             } catch (Exception exception) {
                 exception.printStackTrace();
                 onFail(responseBody.toString());
@@ -140,7 +140,6 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
     public void onStart() {
         super.onStart();
         if (isShowProgressDialog) {
-//            DialogHelper.getWaitDialog()
         }
     }
 

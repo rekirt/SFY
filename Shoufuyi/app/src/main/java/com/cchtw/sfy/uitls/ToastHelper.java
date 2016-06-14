@@ -47,7 +47,15 @@ public class ToastHelper {
         }
         mToast.show();
     }
-
+    public static void ShowToast(String text,int type) {
+        if (mToast == null) {
+            mToast = Toast.makeText(BaseApplication.getInstance(), text, Toast.LENGTH_LONG);
+        } else {
+            mToast.setText(text);
+            mToast.setDuration(Toast.LENGTH_SHORT);
+        }
+        mToast.show();
+    }
     public static void ShowToast(int resId) {
         String text = BaseApplication.getInstance().getString(resId);
         if (mToast == null) {

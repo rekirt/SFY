@@ -237,12 +237,12 @@ public class TakeVideoActivity extends BaseActivity {
             public void onDo(JSONObject responseJsonObject) {
                 APP_120008 result = JSON.parseObject(responseJsonObject.toString(), APP_120008.class);
                 if ("0000".equals(result.getDetailCode())) {
-                    ToastHelper.ShowToast("附件上传成功");
+                    ToastHelper.ShowToast("附件上传成功",1);
                     TakeVideoActivity.this.finish();
                 }else {
 //                    CacheManager.setCache(FileUtils.getCacheKey(mResult.getIdCard(), mResult.getAccountNo()+"_VIDEO"),videoBase64Content.getBytes(),
 //                            Constant.CACHE_EXPIRE_OND_DAY, CacheManager.TYPE_INTERNAL);
-                    ToastHelper.ShowToast(result.getDetailInfo());
+                    ToastHelper.ShowToast(result.getDetailInfo(),1);
                 }
             }
 
@@ -260,7 +260,7 @@ public class TakeVideoActivity extends BaseActivity {
             public void onFail(String msg) {
 //                CacheManager.setCache(FileUtils.getCacheKey(mResult.getIdCard(), mResult.getAccountNo()+"_VIDEO"),videoBase64Content.getBytes(),
 //                        Constant.CACHE_EXPIRE_OND_DAY, CacheManager.TYPE_INTERNAL);
-                ToastHelper.ShowToast(msg);
+                ToastHelper.ShowToast("提示"+msg,1);
             }
 
             @Override

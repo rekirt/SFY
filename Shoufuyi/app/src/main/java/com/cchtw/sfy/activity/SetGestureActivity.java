@@ -31,11 +31,12 @@ public class SetGestureActivity extends BaseActivity {
 	private String is_regserect = "";
 	private TextView mTvShowMsg;
     private int errorTime;
+    private boolean isChangeFingerPwd;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_gesture);
-
+        isChangeFingerPwd = getIntent().getBooleanExtra("isChangeFingerPwd",false);
 		body_layout = (FrameLayout) findViewById(R.id.body_layout);
         mTvShowMsg = (TextView) findViewById(R.id.tv_show_msg);
         errorTime = SharedPreferencesHelper.getInt(Constant.FINGERPASSWORDTIMES, 5)-1;
@@ -50,6 +51,7 @@ public class SetGestureActivity extends BaseActivity {
 		// 初始化一个显示各个点的viewGroup
 		is_regserect = SharedPreferencesHelper.getString(Constant.MIMA, "");
         haveSetFingerPwd = SharedPreferencesHelper.getBoolean(Constant.HAVESETFINGERPWD, false);
+
 		if (haveSetFingerPwd) {//如果已经设置了手势密码
             mTvShowMsg.setText("忘记手势密码");
 			mTvShowMsg.setOnClickListener(this);
@@ -64,12 +66,12 @@ public class SetGestureActivity extends BaseActivity {
 
             @Override
             public void checkedSuccess() {
-                if (haveSetFingerPwd){
+                if (haveSetFingerPwd && isChangeFingerPwd){
                     SharedPreferencesHelper.setString(Constant.MIMA, "");
                     SharedPreferencesHelper.setBoolean(Constant.HAVESETFINGERPWD, false);
                     initView();
                     ToastHelper.ShowToast("请输入新的手势密码!");
-                }else{
+                }else {
                     SharedPreferencesHelper.setBoolean(Constant.HAVESETFINGERPWD, true);
                     SharedPreferencesHelper.setString(Constant.MIMA, is_regserect);
                     Intent intent = new Intent(SetGestureActivity.this, MainActivity.class);

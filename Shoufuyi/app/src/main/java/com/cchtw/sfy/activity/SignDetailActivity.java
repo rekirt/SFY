@@ -20,6 +20,7 @@ import com.cchtw.sfy.uitls.ToastHelper;
 import com.cchtw.sfy.uitls.dialog.DialogHelper;
 import com.cchtw.sfy.uitls.view.EmptyLayout;
 import com.itech.message.APP_120001;
+import com.itech.message.APP_120002;
 import com.itech.message.APP_120003;
 import com.itech.message.APP_120024;
 import com.itech.message.FileMsg;
@@ -39,7 +40,7 @@ import java.util.List;
  * 2015年 Fu.H.L All rights reserved.
  */
 public class SignDetailActivity extends BaseActivity {
-
+    private String mELEMENTS = "";
 	private Result_120023 mResult;
     private APP_120024 mSignDetail = new APP_120024();
     private String mPhoneNumber;
@@ -184,14 +185,294 @@ public class SignDetailActivity extends BaseActivity {
         }
         return true;
     }
+
     private void submitSign(){
         //应该先进行签约要素验证
-        newSign();//正式提交签约
+        validatePre();
+    }
+
+    /**
+     * 签约前需要先进行验证
+     */
+    private APP_120002 appBankCard;
+    private APP_120002 appEsign;
+    private APP_120002 appPortraitComarison;
+    private APP_120002 appPAPERPROTOCOL;
+    private APP_120002 appPHOTOVIDEO;
+    private APP_120002 appELEMENT;
+
+    private void validatePre() {
+        // 要素验证
+        appELEMENT = new APP_120002();
+        appELEMENT.setTrxCode("120002");
+        appELEMENT.setMerchantId(mResult.getMerchantId());
+        appELEMENT.setIdCard(mResult.getIdCard());
+        appELEMENT.setAccountNo(mResult.getAccountNo());
+        appELEMENT.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
+        if (TextUtils.isEmpty(mELEMENTS)){
+            appELEMENT.setVerifyGroupCode("FOUR_ELEMENT");
+        }else {
+            appELEMENT.setVerifyGroupCode(mELEMENTS);
+        }
+        List<VerifyItem> verifyItemListELEMENT = new ArrayList<VerifyItem>();
+        switch (mELEMENTS){
+            case "SIX_ELEMENT"://六要素(卡号\户名\身份证号\手机号\手机验证码\支付密码)
+                VerifyItem[] item = new VerifyItem[6];
+                item[0] = new VerifyItem();
+                item[0].setVerifyItemCode("ACCOUNT_NO");
+                item[0].setVerifyItemValue(mResult.getAccountNo());
+                item[1] = new VerifyItem();
+                item[1].setVerifyItemCode("ACCOUNT_NAME");
+                item[1].setVerifyItemValue(mResult.getAccountName());
+                item[2] = new VerifyItem();
+                item[2].setVerifyItemCode("IDCARD");
+                item[2].setVerifyItemValue(mResult.getIdCard());
+                item[3] = new VerifyItem();
+                item[3].setVerifyItemCode("MOBILE");
+                item[3].setVerifyItemValue(mResult.getMobile());
+                item[4] = new VerifyItem();
+                item[4].setVerifyItemCode("VAL_CODE");
+                item[4].setVerifyItemValue("");
+                item[5] = new VerifyItem();
+                item[5].setVerifyItemCode("PASS");
+                item[5].setVerifyItemValue("");
+                for (VerifyItem it : item) {
+                    verifyItemListELEMENT.add(it);
+                }
+                break;
+            case "TWO_ELEMENT"://二要素(卡号\户名)
+                VerifyItem[] mTwoItems = new VerifyItem[2];
+                mTwoItems[0] = new VerifyItem();
+                mTwoItems[0].setVerifyItemCode("ACCOUNT_NO");
+                mTwoItems[0].setVerifyItemValue(mResult.getAccountNo());
+                mTwoItems[1] = new VerifyItem();
+                mTwoItems[1].setVerifyItemCode("ACCOUNT_NAME");
+                mTwoItems[1].setVerifyItemValue(mResult.getAccountName());
+                for (VerifyItem it : mTwoItems) {
+                    verifyItemListELEMENT.add(it);
+                }
+                break;
+            case "THREE_ELEMENT"://三要素(卡号\户名\身份证号)
+                VerifyItem[] mThreeItems = new VerifyItem[3];
+                mThreeItems[0] = new VerifyItem();
+                mThreeItems[0].setVerifyItemCode("ACCOUNT_NO");
+                mThreeItems[0].setVerifyItemValue(mResult.getAccountNo());
+                mThreeItems[1] = new VerifyItem();
+                mThreeItems[1].setVerifyItemCode("ACCOUNT_NAME");
+                mThreeItems[1].setVerifyItemValue(mResult.getAccountName());
+                mThreeItems[2] = new VerifyItem();
+                mThreeItems[2].setVerifyItemCode("IDCARD");
+                mThreeItems[2].setVerifyItemValue(mResult.getIdCard());
+                for (VerifyItem it : mThreeItems) {
+                    verifyItemListELEMENT.add(it);
+                }
+                break;
+            case "FOUR_ELEMENT"://四要素(卡号\户名\身份证号\手机号)
+                VerifyItem[] verifyItems = new VerifyItem[4];
+                verifyItems[0] = new VerifyItem();
+                verifyItems[0].setVerifyItemCode("ACCOUNT_NO");
+                verifyItems[0].setVerifyItemValue(mResult.getAccountNo());
+                verifyItems[1] = new VerifyItem();
+                verifyItems[1].setVerifyItemCode("ACCOUNT_NAME");
+                verifyItems[1].setVerifyItemValue(mResult.getAccountName());
+                verifyItems[2] = new VerifyItem();
+                verifyItems[2].setVerifyItemCode("IDCARD");
+                verifyItems[2].setVerifyItemValue(mResult.getIdCard());
+                verifyItems[3] = new VerifyItem();
+                verifyItems[3].setVerifyItemCode("MOBILE");
+                verifyItems[3].setVerifyItemValue(mResult.getMobile());
+                for (VerifyItem it : verifyItems) {
+                    verifyItemListELEMENT.add(it);
+                }
+                break;
+
+            default:
+                break;
+        }
+        appELEMENT.setVerifyItemList(verifyItemListELEMENT);
+        VerifyElements(appELEMENT,"要素");
+        // 银行卡验证
+        appBankCard = new APP_120002();
+        appBankCard.setTrxCode("120002");
+        appBankCard.setMerchantId(mResult.getMerchantId());
+        appBankCard.setIdCard(mResult.getIdCard());
+        appBankCard.setAccountNo(mResult.getAccountNo());
+        appBankCard.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
+        appBankCard.setVerifyGroupCode("BANK_CARD_PHOTO");
+
+        List<VerifyItem> verifyItemList = new ArrayList<VerifyItem>();
+
+        // VerifyItem[] item = new VerifyItem[2];
+        // item[0] = new VerifyItem();
+        // item[0].setVerifyItemCode("PHOTO1");
+        // try {
+        // item[0].setVerifyItemValue(Base64Utils.encodeFile(mBankCardPathfront));
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
+        // //添加值
+        // item[1] = new VerifyItem();
+        // item[1].setVerifyItemCode("PHOTO2");
+        // try {
+        // item[1].setVerifyItemValue(Base64Utils.encodeFile(mBankCardPathback));
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
+        // 添加值
+        // for (VerifyItem it : item) {
+        // verifyItemList.add(it);
+        // }
+        appBankCard.setVerifyItemList(verifyItemList);
+        VerifyElements(appBankCard, "银行卡");
+
+        // 协议验证
+        appPAPERPROTOCOL = new APP_120002();
+        appPAPERPROTOCOL.setTrxCode("120002");
+        appPAPERPROTOCOL.setMerchantId(mResult.getMerchantId());
+        appPAPERPROTOCOL.setIdCard(mResult.getIdCard());
+        appPAPERPROTOCOL.setAccountNo(mResult.getAccountNo());
+        appPAPERPROTOCOL.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
+        appPAPERPROTOCOL.setVerifyGroupCode("PAPER_PROTOCOL");
+
+        List<VerifyItem> verifyItemListPAPERPROTOCOL = new ArrayList<VerifyItem>();
+        appPAPERPROTOCOL.setVerifyItemList(verifyItemListPAPERPROTOCOL);
+        VerifyElements(appPAPERPROTOCOL, "协议");
+
+        // 电子签名验证
+        appEsign = new APP_120002();
+        appEsign.setTrxCode("120002");
+        appEsign.setMerchantId(mResult.getMerchantId());
+        appEsign.setIdCard(mResult.getIdCard());
+        appEsign.setAccountNo(mResult.getAccountNo());
+        appEsign.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
+        appEsign.setVerifyGroupCode("E_SIGN");
+        List<VerifyItem> verifyItemListEsign = new ArrayList<VerifyItem>();
+
+        // VerifyItem[] itemEsign = new VerifyItem[2];
+        // itemEsign[0] = new VerifyItem();
+        // itemEsign[0].setVerifyItemCode("E_SIGN");
+        // 添加值
+        // try {
+        // itemEsign[0].setVerifyItemValue(Base64Utils.encodeFile(handWritingPath));
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
+        // verifyItemListEsign.add(itemEsign[0]);
+        appEsign.setVerifyItemList(verifyItemListEsign);
+        VerifyElements(appEsign, "电子签名");
+
+
+        // 人像对比验证
+        appPortraitComarison = new APP_120002();
+        appPortraitComarison.setTrxCode("120002");
+        appPortraitComarison.setMerchantId(mResult.getMerchantId());
+        appPortraitComarison.setIdCard(mResult.getIdCard());
+        appPortraitComarison.setAccountNo(mResult.getAccountNo());
+        appPortraitComarison.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
+        appPortraitComarison.setVerifyGroupCode("PORTRAIT_COMPARISON");
+        List<VerifyItem> verifyItemListPortraitComarisons = new ArrayList<VerifyItem>();
+
+        // VerifyItem[] items = new VerifyItem[2];
+        // items[0] = new VerifyItem();
+        // items[0].setVerifyItemCode("IDCARD_PHOTO");
+        // try {
+        // items[0].setVerifyItemValue(Base64Utils.encodeFile(mIDCardPathfront));
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
+        // 添加值
+        // items[1] = new VerifyItem();
+        // items[1].setVerifyItemCode("LIFE_PHOTO");
+        // try {
+        // items[1].setVerifyItemValue(Base64Utils.encodeFile(mIconViewPath));
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
+        // for (VerifyItem it : items) {
+        // verifyItemListPortraitComarisons.add(it);
+        // }
+        appPortraitComarison.setVerifyItemList(verifyItemListPortraitComarisons);
+        VerifyElements(appPortraitComarison, "人像对比");
+
+
+        // 照片视频验证
+        appPHOTOVIDEO = new APP_120002();
+        appPHOTOVIDEO.setTrxCode("120002");
+        appPHOTOVIDEO.setMerchantId(mResult.getMerchantId());
+        appPHOTOVIDEO.setIdCard(mResult.getIdCard());
+        appPHOTOVIDEO.setAccountNo(mResult.getAccountNo());
+        appPHOTOVIDEO.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
+        appPHOTOVIDEO.setVerifyGroupCode("PHOTO_VIDEO");
+        List<VerifyItem> verifyItemListPhotoVideo = new ArrayList<VerifyItem>();
+        VerifyItem[] items = new VerifyItem[2];
+        items[0] = new VerifyItem();
+        items[0].setVerifyItemCode("PHOTO");
+        // try {
+        // items[0].setVerifyItemValue(Base64Utils.encodeFile(mIconViewPath));
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
+        // 添加值
+        items[1] = new VerifyItem();
+        items[1].setVerifyItemCode("VIDEO");
+        // try {
+        // items[1].setVerifyItemValue(Base64Utils.encodeFile(videoPath));
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
+        for (VerifyItem it : items) {
+            verifyItemListPortraitComarisons.add(it);
+        }
+        appPHOTOVIDEO.setVerifyItemList(verifyItemListPhotoVideo);
+        VerifyElements(appPHOTOVIDEO, "照片视频");
+    }
+
+    private int account=0;
+
+    private void VerifyElements(APP_120002 app_120002, final String Msg){
+
+        DialogHelper.upDateProgressDialog(SignDetailActivity.this, Msg+"验证中...", true, false);
+        ApiRequest.requestData(app_120002,mPhoneNumber,new JsonHttpHandler() {
+            @Override
+            public void onDo(JSONObject responseJsonObject) {
+                APP_120003 mReturnApp = JSON.parseObject(responseJsonObject.toString(), APP_120003.class);
+                if (mReturnApp != null && "0000".equals(mReturnApp.getDetailCode())) {
+                    ToastHelper.ShowToast(Msg+"验证成功!");
+                } else {
+                    ToastHelper.ShowToast(Msg+"验证失败!"+mReturnApp.getDetailInfo());
+                }
+            }
+
+            @Override
+            public void onDo(JSONArray responseJsonArray) {
+
+            }
+
+            @Override
+            public void onDo(String responseString) {
+
+            }
+
+            @Override
+            public void onFail(String msg) {
+                super.onFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                ++account;
+                if (account>5){
+                    DialogHelper.dismissProgressDialog();
+                    newSign();//正式提交签约
+                }
+            }
+        });
     }
 
     // 提交签约
 
     private StringBuffer strbuf = new StringBuffer();
+
     private void newSign() {
         final APP_120003 app = new APP_120003();
         app.setTrxCode("120003");
@@ -212,68 +493,24 @@ public class SignDetailActivity extends BaseActivity {
                             List<VerifyGroup> list = mReturnApp.getVerifyGroupList();
                             for (VerifyGroup v : list) {
                                 if (!v.getDetailCode().equals("0000")) {
-                                    if (v.getVerifyGroupCode().equals(
-                                            "PORTRAIT_COMPARISON")) {
-                                        strbuf.append(
-                                                "人像对比"
-                                                        + v.getDetailInfo())
-                                                .append("\n");
-                                    }
-
-                                    else if (v.getVerifyGroupCode()
-                                            .equals("BANK_CARD_PHOTO")) {
-                                        strbuf.append(
-                                                "银行卡"
-                                                        + v.getDetailInfo())
-                                                .append("\n");
-
-                                    } else if (v.getVerifyGroupCode()
-                                            .equals("PAPER_PROTOCOL")) {
-                                        strbuf.append(
-                                                "纸质协议"
-                                                        + v.getDetailInfo())
-                                                .append("\n");
-
-                                    } else if (v.getVerifyGroupCode()
-                                            .equals("E_SIGN")) {
-                                        strbuf.append(
-
-                                                "电子签名" + v.getDetailInfo())
-                                                .append("\n");
-
-                                    } else if (v.getVerifyGroupCode()
-                                            .equals("PHOTO_VIDEO")) {
-                                        strbuf.append(
-                                                "视频"
-                                                        + v.getDetailInfo())
-                                                .append("\n");
-
-                                    } else if (v.getVerifyGroupCode()
-                                            .equals(Constant.six)) {
-                                        strbuf.append(
-                                                "六要素"
-                                                        + v.getDetailInfo())
-                                                .append("\n");
-                                    } else if (v.getVerifyGroupCode()
-                                            .equals("PHOTO")) {
-                                        strbuf.append(
-                                                "头像照片"
-                                                        + v.getDetailInfo())
-                                                .append("\n");
-
-                                    } else if (v.getVerifyGroupCode()
-                                            .equals(Constant.five)) {
-                                        strbuf.append(
-                                                "五要素"
-                                                        + v.getDetailInfo())
-                                                .append("\n");
-                                    } else if (v.getVerifyGroupCode()
-                                            .equals(Constant.four)) {
-                                        strbuf.append(
-                                                "四要素"
-                                                        + v.getDetailInfo())
-                                                .append("\n");
-
+                                    if (v.getVerifyGroupCode().equals("PORTRAIT_COMPARISON")) {
+                                        strbuf.append("人像对比"+ v.getDetailInfo()).append("\n");
+                                    } else if (v.getVerifyGroupCode().equals("BANK_CARD_PHOTO")) {
+                                        strbuf.append("银行卡" + v.getDetailInfo()).append("\n");
+                                    } else if (v.getVerifyGroupCode().equals("PAPER_PROTOCOL")) {
+                                        strbuf.append("纸质协议" + v.getDetailInfo()).append("\n");
+                                    } else if (v.getVerifyGroupCode().equals("E_SIGN")) {
+                                        strbuf.append("电子签名" + v.getDetailInfo()).append("\n");
+                                    } else if (v.getVerifyGroupCode().equals("PHOTO_VIDEO")) {
+                                        strbuf.append("视频"  + v.getDetailInfo()).append("\n");
+                                    } else if (v.getVerifyGroupCode().equals(Constant.six)) {
+                                        strbuf.append("六要素"  + v.getDetailInfo()).append("\n");
+                                    } else if (v.getVerifyGroupCode().equals("PHOTO")) {
+                                        strbuf.append("头像照片" + v.getDetailInfo()).append("\n");
+                                    } else if (v.getVerifyGroupCode().equals(Constant.five)) {
+                                        strbuf.append("五要素" + v.getDetailInfo()).append("\n");
+                                    } else if (v.getVerifyGroupCode().equals(Constant.four)) {
+                                        strbuf.append("四要素" + v.getDetailInfo()).append("\n");
                                     }
                                 }
                             }
@@ -298,6 +535,7 @@ public class SignDetailActivity extends BaseActivity {
             }
         });
     }
+
     private void showfail() {
         Dialog dialog = new AlertDialog.Builder(SignDetailActivity.this)
                 .setTitle("签约失败") // 创建标题
@@ -474,17 +712,20 @@ public class SignDetailActivity extends BaseActivity {
                     break;
                 case "SIX_ELEMENT"://六要素(卡号\户名\身份证号\手机号\手机验证码\支付密码)
                     handleSixElement(verifyGroup);
+                    mELEMENTS = verifyGroup.getVerifyGroupCode();
                     break;
                 case "TWO_ELEMENT"://二要素(卡号\户名)
                     handleTwoThreeFourElement(verifyGroup);
+                    mELEMENTS = verifyGroup.getVerifyGroupCode();
                     break;
                 case "THREE_ELEMENT"://三要素(卡号\户名\身份证号)
                     handleTwoThreeFourElement(verifyGroup);
+                    mELEMENTS = verifyGroup.getVerifyGroupCode();
                     break;
                 case "FOUR_ELEMENT"://四要素(卡号\户名\身份证号\手机号)
                     handleTwoThreeFourElement(verifyGroup);
+                    mELEMENTS = verifyGroup.getVerifyGroupCode();
                     break;
-
                 default:
                     break;
             }
@@ -520,6 +761,7 @@ public class SignDetailActivity extends BaseActivity {
 
     /**
      * 获取身份证照片对于的文件id
+     *
      * @param mVerifyGroup 验证组
      */
     private void getPortraitComparisonFileId(VerifyGroup mVerifyGroup){
@@ -786,4 +1028,5 @@ public class SignDetailActivity extends BaseActivity {
 	protected void onStop() {
 		super.onStop();
 	}
+
 }

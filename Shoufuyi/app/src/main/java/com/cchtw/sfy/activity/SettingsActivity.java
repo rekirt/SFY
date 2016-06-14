@@ -216,8 +216,8 @@ public class SettingsActivity extends BaseActivity {
                     returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120033.class);
                     if (returnapp.getDetailCode().equals("0000")) {
                         SharedPreferencesHelper.setBoolean(Constant.ISLOGIN, false);
-                        SharedPreferencesHelper.setString(Constant.MIMA, "");
-                        SharedPreferencesHelper.setBoolean(Constant.HAVESETFINGERPWD, false);
+//                        SharedPreferencesHelper.setString(Constant.MIMA, "");
+//                        SharedPreferencesHelper.setBoolean(Constant.HAVESETFINGERPWD, false);
                         startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
                         SettingsActivity.this.finish();
                     } else {
@@ -307,6 +307,7 @@ public class SettingsActivity extends BaseActivity {
 				switch (which) {
                     case AlertDialog.BUTTON_POSITIVE:
                         Intent intent = new Intent();
+                        intent.putExtra("isChangeFingerPwd",true);
                         intent.setClass(SettingsActivity.this, SetGestureActivity.class);
                         startActivity(intent);
                         break;

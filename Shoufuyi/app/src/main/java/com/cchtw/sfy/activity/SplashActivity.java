@@ -88,9 +88,9 @@ public class SplashActivity extends BaseActivity {
             String number = sharedPreferencesHelper.getString(Constant.NUMBER, "");
             // 如果退出字段是1就跳转到登录界面
             boolean haveChangePwd = sharedPreferencesHelper.getBoolean(Constant.GAIMIMA, false);
-            // 激活状态
+            //
             boolean is_login = sharedPreferencesHelper.getBoolean(Constant.ISLOGIN, false);
-            // 是否修改密码状态
+            // 激活状态
             boolean isActive  = sharedPreferencesHelper.getBoolean(Constant.ACTIVATION, false);
             //如果帐号存在，表示已登录
             if (is_login) {
