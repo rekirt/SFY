@@ -97,7 +97,7 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            onFail("数据请求成功，数据出错了");
+            onFail("返回错误数据格式");
         }
     }
 
@@ -117,7 +117,7 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
 //                }
             } catch (Exception exception) {
                 exception.printStackTrace();
-                onFail(responseBody.toString());
+                onFail("接口超时！");
             }
         }
     }

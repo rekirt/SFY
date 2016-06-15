@@ -2,6 +2,7 @@ package com.cchtw.sfy.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -303,7 +304,13 @@ public class ElementVerificationActivity extends BaseActivity {
                 mSixVerifyItems[3].setVerifyItemValue(mReturn.getMobile());
                 mSixVerifyItems[4] = new VerifyItem();
                 mSixVerifyItems[4].setVerifyItemCode("VAL_CODE");
-                mSixVerifyItems[4].setVerifyItemValue(edt_verif_code.getText().toString().trim());
+                String verif_code = edt_verif_code.getText().toString().trim();
+                if (TextUtils.isEmpty(verif_code)){
+                    ToastHelper.ShowToast("验证码不能为空");
+                    return;
+                }else {
+                    mSixVerifyItems[4].setVerifyItemValue(verif_code);
+                }
                 mSixVerifyItems[5] = new VerifyItem();
                 mSixVerifyItems[5].setVerifyItemCode("PASS");
 
@@ -323,6 +330,8 @@ public class ElementVerificationActivity extends BaseActivity {
                     ToastHelper.ShowToast("密码内容不合法");
                     return;
                 }
+
+
                 CSIIPinConvertor convertor = new CSIIPinConvertor();
                 convertor.setTimeout(600);
                 try {

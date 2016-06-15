@@ -1,6 +1,6 @@
 package com.cchtw.sfy.bean;
 
-import com.cchtw.sfy.uitls.GsonUtils;
+import com.alibaba.fastjson.JSON;
 import com.itech.message.APP_120023;
 
 import java.io.IOException;
@@ -57,7 +57,8 @@ public class SignList extends Entity implements ListEntity {
         SignList businessList = new SignList();
         try {
             ArrayList<APP_120023> mBusinessList = new ArrayList<APP_120023>();
-            mBusinessList = GsonUtils.fromJsonArrayToArrayList(new String(inputStream, "UTF-8"), APP_120023.class);
+//            mBusinessList = GsonUtils.fromJsonArrayToArrayList(new String(inputStream, "UTF-8"), APP_120023.class);
+            mBusinessList = (ArrayList<APP_120023>) JSON.parseArray(new String(inputStream, "UTF-8"), APP_120023.class);
             businessList.setCatalog(catalog);
             businessList.setPageSize(pageSize);
             businessList.setBusinessCount(businessCount);

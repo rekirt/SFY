@@ -52,7 +52,7 @@ public class ToastHelper {
             mToast = Toast.makeText(BaseApplication.getInstance(), text, Toast.LENGTH_LONG);
         } else {
             mToast.setText(text);
-            mToast.setDuration(Toast.LENGTH_SHORT);
+            mToast.setDuration(Toast.LENGTH_LONG);
         }
         mToast.show();
     }
