@@ -538,18 +538,33 @@ public class SignDetailActivity extends BaseActivity {
     }
 
     private void showfail() {
-        Dialog dialog = new AlertDialog.Builder(SignDetailActivity.this)
-                .setTitle("签约失败") // 创建标题
-                .setMessage(strbuf.toString()) // 表示对话框中的内容
+        if (TextUtils.isEmpty(strbuf.toString())){
+            Dialog dialog = new AlertDialog.Builder(SignDetailActivity.this)
+                    .setTitle("签约异常") // 创建标题
+                    .setMessage("签约异常，请联系管理员") // 表示对话框中的内容
 //                .setIcon(R.drawable.fail) // 设置LOGO
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).create(); // 创建了一个对话框
-        dialog.show(); // 显示对话框
-        strbuf = new StringBuffer();
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).create(); // 创建了一个对话框
+            dialog.show(); // 显示对话框
+            strbuf = new StringBuffer();
+        }else {
+            Dialog dialog = new AlertDialog.Builder(SignDetailActivity.this)
+                    .setTitle("签约失败") // 创建标题
+                    .setMessage(strbuf.toString()) // 表示对话框中的内容
+//                .setIcon(R.drawable.fail) // 设置LOGO
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).create(); // 创建了一个对话框
+            dialog.show(); // 显示对话框
+            strbuf = new StringBuffer();
+        }
 
     }
 

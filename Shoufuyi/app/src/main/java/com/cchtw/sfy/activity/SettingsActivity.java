@@ -222,6 +222,9 @@ public class SettingsActivity extends BaseActivity {
                         SettingsActivity.this.finish();
                     } else {
                         ToastHelper.ShowToast(returnapp.getDetailInfo());
+                        SharedPreferencesHelper.setBoolean(Constant.ISLOGIN, false);
+                        startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
+                        SettingsActivity.this.finish();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

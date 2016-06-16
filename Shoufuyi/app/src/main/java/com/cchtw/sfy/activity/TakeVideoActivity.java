@@ -244,6 +244,7 @@ public class TakeVideoActivity extends BaseActivity {
 //                            Constant.CACHE_EXPIRE_OND_DAY, CacheManager.TYPE_INTERNAL);
                     ToastHelper.ShowToast(result.getDetailInfo(),1);
                 }
+
             }
 
             @Override
@@ -260,7 +261,7 @@ public class TakeVideoActivity extends BaseActivity {
             public void onFail(String msg) {
 //                CacheManager.setCache(FileUtils.getCacheKey(mResult.getIdCard(), mResult.getAccountNo()+"_VIDEO"),videoBase64Content.getBytes(),
 //                        Constant.CACHE_EXPIRE_OND_DAY, CacheManager.TYPE_INTERNAL);
-                ToastHelper.ShowToast("提示"+msg,1);
+//                ToastHelper.ShowToast(msg,1);
             }
 
             @Override
