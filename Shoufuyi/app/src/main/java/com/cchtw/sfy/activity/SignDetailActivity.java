@@ -202,6 +202,7 @@ public class SignDetailActivity extends BaseActivity {
     private APP_120002 appELEMENT;
 
     private void validatePre() {
+        account = 0;
         // 要素验证
         appELEMENT = new APP_120002();
         appELEMENT.setTrxCode("120002");
