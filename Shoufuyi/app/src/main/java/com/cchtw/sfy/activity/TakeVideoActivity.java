@@ -21,10 +21,13 @@ import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.api.ApiRequest;
 import com.cchtw.sfy.api.JsonHttpHandler;
+import com.cchtw.sfy.cache.FileUtils;
+import com.cchtw.sfy.cache.v2.CacheManager;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.FileHelper;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
+import com.cchtw.sfy.uitls.WeakAsyncTask;
 import com.cchtw.sfy.uitls.dialog.AlertDialogHelper;
 import com.cchtw.sfy.uitls.dialog.ChooseDialogDoClickHelper;
 import com.cchtw.sfy.uitls.dialog.DialogHelper;
@@ -40,6 +43,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -69,10 +73,73 @@ public class TakeVideoActivity extends BaseActivity {
         initData();
         setCanBack(true);
         if (!TextUtils.isEmpty(mVideoFileId)){
-            downLoadFile(mVideoFileId);
             mBtnUpload.setVisibility(View.GONE);
             iv_video.setVisibility(View.GONE);
+            //先读取缓存
+            new ReadCacheTask(TakeVideoActivity.this).execute();
         }
+    }
+
+    /**
+     * 读取缓存
+     *
+     */
+    static class ReadCacheTask extends WeakAsyncTask<Integer, Void, byte[], TakeVideoActivity> {
+
+        public ReadCacheTask(TakeVideoActivity target) {
+            super(target);
+        }
+
+        @Override
+        protected byte[] doInBackground(TakeVideoActivity target,
+                                        Integer... params) {
+            if (target == null) {
+                return null;
+            }
+            if (TextUtils.isEmpty(target.getCacheKey())) {
+                return null;
+            }
+            byte[] data = CacheManager.getCache(target.getCacheKey());
+
+            if (data == null) {
+                return null;
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(TakeVideoActivity target,
+                                     byte[] result) {
+            super.onPostExecute(target, result);
+            if (target == null)
+                return;
+            if (result != null) {
+                try {
+                    target.executeParserTask(result);
+                    return;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }else{
+                target.downLoadFile();
+            }
+        }
+    }
+
+    private void executeParserTask( byte[] result){
+        String strRead = new String(result);
+        strRead = String.copyValueOf(strRead.toCharArray(), 0, result.length);
+        if (FileHelper.fileIsExists(strRead)){
+                Uri videoUri = Uri.parse(strRead);
+                mVideoView.setVideoURI(videoUri);
+                mVideoView.start();
+        }else {//如果没有对应的文件，通过接口获取
+            downLoadFile();
+        }
+    }
+
+    private String getCacheKey(){
+        return FileUtils.getCacheKey(mResult.getCreateTime(), "Video");
     }
 
 
@@ -337,12 +404,12 @@ public class TakeVideoActivity extends BaseActivity {
     }
 
 
-    private void downLoadFile(String fileId){
+    private void downLoadFile(){
         APP_120028 app120028 = new APP_120028();
         app120028.setTrxCode("120028");
         app120028.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
         FileMsg file = new FileMsg();
-        file.setFileId(fileId);
+        file.setFileId(mVideoFileId);
         app120028.setFileMsg(file);
         DialogHelper.showProgressDialog(TakeVideoActivity.this, "正在下载附件...", true, false);
         ApiRequest.requestData(app120028, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
@@ -371,10 +438,17 @@ public class TakeVideoActivity extends BaseActivity {
                     if (TextUtils.isEmpty(filePath)) {
                         ToastHelper.ShowToast("视频路径错误");
                     }else {
-//                        iv_video.setVisibility(View.GONE);
                         Uri videoUri = Uri.parse(filePath);
                         mVideoView.setVideoURI(videoUri);
                         mVideoView.start();
+                        if (!TextUtils.isEmpty(filePath)){
+                            try {
+                                CacheManager.setCache(getCacheKey(), filePath.getBytes("gb2312"),
+                                        Constant.CACHE_EXPIRE_OND_DAY, CacheManager.TYPE_INTERNAL);
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+                        }
 //                        mThumbnailImageView.setImageBitmap(getVideoThumbnail(filePath));
 //                        iv_video.setVisibility(View.GONE);
 //                        mVideoView.setVideoPath(filePath);

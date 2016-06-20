@@ -24,6 +24,9 @@ public class AsyncHttp {
 //            if (mTimeout>10000){//如果设置大于10秒则设置连接超时为后台设置的超时时间
 //                client.setConnectTimeout(mTimeout);
 //            }
+            client.setConnectTimeout(120000);
+            client.setMaxRetriesAndTimeout(1,120000);
+            client.setResponseTimeout(120000);
         }
         return client;
     }
@@ -74,8 +77,7 @@ public class AsyncHttp {
             //字节转成字节输入流
             ByteArrayInputStream bis = new ByteArrayInputStream(zipSendDateService);
             //将流写到Entity中
-            InputStreamEntity entity = new InputStreamEntity(bis,
-                    zipSendDateService.length);
+            InputStreamEntity entity = new InputStreamEntity(bis, zipSendDateService.length);
             //请求服务器
             return getClient().post(context, ApiUrl.ONLINE_URL, entity, contentType,
                     responseHandler);

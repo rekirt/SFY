@@ -71,4 +71,12 @@ public class FileHelper {
 
         }
     }
+
+    public static boolean fileIsExists(String path){
+        File f=new File(path);
+        if(!f.exists()){
+            return false;
+        }
+        return true;
+    }
 }

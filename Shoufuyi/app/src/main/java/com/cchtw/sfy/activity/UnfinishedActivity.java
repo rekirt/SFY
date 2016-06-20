@@ -157,7 +157,7 @@ public class UnfinishedActivity extends BaseActivity implements
         app.setCreateUser(SharedPreferencesHelper.getString(Constant.PHONE, ""));
         Page page = new Page();
         page.setPageNo(String.valueOf(mCurrentPage));
-        page.setPageSize(String.valueOf(200));
+        page.setPageSize(TDevice.getPageSize()+"");
         app.setPage(page);
         app.setState(String.valueOf(1));
         app.setCreateDateStart("20151121");
@@ -194,7 +194,7 @@ public class UnfinishedActivity extends BaseActivity implements
                     public void onFail(String msg) {
                         executeOnLoadDataError(msg);
                         executeOnLoadFinish();
-                        new ReadCacheTask(UnfinishedActivity.this).execute();
+//                        new ReadCacheTask(UnfinishedActivity.this).execute();
                     }
                 }
         );
@@ -257,7 +257,6 @@ public class UnfinishedActivity extends BaseActivity implements
                 return null;
             }
 
-//            byte[] data = CacheManager.getCache(target.getCacheKey());
             byte[] data = CacheManager.getCacheByte(CacheManager.TYPE_INTERNAL);
 
             if (data == null) {
