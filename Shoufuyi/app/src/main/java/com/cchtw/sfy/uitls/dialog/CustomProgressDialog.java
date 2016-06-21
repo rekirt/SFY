@@ -33,6 +33,7 @@ public class CustomProgressDialog extends Dialog {
         customProgressDialog.getWindow().getAttributes().gravity = Gravity.CENTER;
         customProgressDialog.setCancelable(cancelable);
         customProgressDialog.setCanceledOnTouchOutside(canceledOnTouchOutside);
+        customProgressDialog.setOnCancelListener(new ProgressDialogCancelListener());
         return customProgressDialog;
     }
 

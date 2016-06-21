@@ -19,9 +19,12 @@ import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.RegexUtils;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.TDevice;
+import com.cchtw.sfy.uitls.TLog;
 import com.cchtw.sfy.uitls.ToastHelper;
 import com.cchtw.sfy.uitls.dialog.DialogHelper;
+import com.cchtw.sfy.uitls.dialog.ProgressDialogDoClickHelper;
 import com.itech.message.APP_120001;
+import com.loopj.android.http.RequestHandle;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -135,6 +138,7 @@ public class NewSignActivity extends BaseActivity{
         }
     }
 
+    private RequestHandle requestHandle;
     private void handlePost(){
         final APP_120001 app = new APP_120001();
         app.setTrxCode("120001");
@@ -152,9 +156,17 @@ public class NewSignActivity extends BaseActivity{
         app.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
         app.setMerchantId(SharedPreferencesHelper.getString(Constant.MERCHANT, ""));
 
-        DialogHelper.showProgressDialog(NewSignActivity.this, "正在操作，请稍候...", true, false);
-
-        ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
+        DialogHelper.showProgressDialog(NewSignActivity.this, "正在操作，请稍候...", new ProgressDialogDoClickHelper() {
+                    @Override
+                    public void doClick() {
+                        if(requestHandle != null){
+                            requestHandle.cancel(true);
+                            TLog.analytics("NewSignActivity--doClick-----");
+                        }
+                    }
+                },
+                true, false);
+        requestHandle = ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 try {
@@ -244,4 +256,5 @@ public class NewSignActivity extends BaseActivity{
     protected void onDestroy() {
         super.onDestroy();
     }
+
 }

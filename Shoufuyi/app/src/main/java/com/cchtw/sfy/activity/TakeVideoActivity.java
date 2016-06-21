@@ -31,6 +31,7 @@ import com.cchtw.sfy.uitls.WeakAsyncTask;
 import com.cchtw.sfy.uitls.dialog.AlertDialogHelper;
 import com.cchtw.sfy.uitls.dialog.ChooseDialogDoClickHelper;
 import com.cchtw.sfy.uitls.dialog.DialogHelper;
+import com.cchtw.sfy.uitls.dialog.ProgressDialogDoClickHelper;
 import com.itech.message.APP_120008;
 import com.itech.message.APP_120028;
 import com.itech.message.FileMsg;
@@ -38,6 +39,7 @@ import com.itech.message.Result_120023;
 import com.itech.utils.HashCodeUtils;
 import com.itech.utils.ZipDataUtils;
 import com.itech.utils.encoder.Base64Utils;
+import com.loopj.android.http.RequestHandle;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -79,6 +81,8 @@ public class TakeVideoActivity extends BaseActivity {
             new ReadCacheTask(TakeVideoActivity.this).execute();
         }
     }
+
+
 
     /**
      * 读取缓存
@@ -229,10 +233,13 @@ public class TakeVideoActivity extends BaseActivity {
                 break;
         }
     }
+
     private void uploadVideo() {
         UpLoadImageTask downloadTask = new UpLoadImageTask(TakeVideoActivity.this);
         downloadTask.execute();
     }
+
+
 
     class UpLoadImageTask extends AsyncTask<APP_120008,Integer,APP_120008> {
 
@@ -242,7 +249,15 @@ public class TakeVideoActivity extends BaseActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            DialogHelper.showProgressDialog(TakeVideoActivity.this, "正在上传...", true, false);
+            DialogHelper.showProgressDialog(TakeVideoActivity.this, "正在上传...", new ProgressDialogDoClickHelper() {
+                @Override
+                public void doClick() {
+                    if(requestHandle != null){
+                        requestHandle.cancel(true);
+                    }
+                }
+            },
+            true, false);
         }
 
         @Override
@@ -298,8 +313,9 @@ public class TakeVideoActivity extends BaseActivity {
 
 
     private String videoBase64Content = "";
+    RequestHandle requestHandle;
     private void UpLoadAttach(APP_120008 app_120008){
-        ApiRequest.requestData(app_120008, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
+        requestHandle =  ApiRequest.requestData(app_120008, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 APP_120008 result = JSON.parseObject(responseJsonObject.toString(), APP_120008.class);
@@ -403,7 +419,7 @@ public class TakeVideoActivity extends BaseActivity {
         }
     }
 
-
+    private RequestHandle mRequestHandleDownload;
     private void downLoadFile(){
         APP_120028 app120028 = new APP_120028();
         app120028.setTrxCode("120028");
@@ -411,8 +427,16 @@ public class TakeVideoActivity extends BaseActivity {
         FileMsg file = new FileMsg();
         file.setFileId(mVideoFileId);
         app120028.setFileMsg(file);
-        DialogHelper.showProgressDialog(TakeVideoActivity.this, "正在下载附件...", true, false);
-        ApiRequest.requestData(app120028, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
+        DialogHelper.showProgressDialog(TakeVideoActivity.this, "正在下载附件，请稍候...", new ProgressDialogDoClickHelper() {
+                    @Override
+                    public void doClick() {
+                        if (requestHandle != null) {
+                            requestHandle.cancel(true);
+                        }
+                    }
+                },
+                true, false);
+        mRequestHandleDownload = ApiRequest.requestData(app120028, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 APP_120028 result = JSON.parseObject(responseJsonObject.toString(), APP_120028.class);

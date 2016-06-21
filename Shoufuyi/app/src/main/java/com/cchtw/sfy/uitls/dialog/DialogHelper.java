@@ -21,9 +21,28 @@ public class DialogHelper {
 		}
 		progressDialog.show();
 	}
+    static ProgressDialogDoClickHelper mProgressDialogDoClickHelper;
+    public static void showProgressDialog(Context context,
+                                          String paramMsg,
+                                          ProgressDialogDoClickHelper progressDialogDoClickHelper,
+                                          boolean cancelable,
+                                          boolean canceledOnTouchOutside) {
 
+        if (progressDialog == null) {
+            progressDialog = CustomProgressDialog.createDialog(context, paramMsg, cancelable,canceledOnTouchOutside);
+        }else {
+            progressDialog.dismiss();
+            progressDialog = null;
+            progressDialog = CustomProgressDialog.createDialog(context, paramMsg, cancelable,canceledOnTouchOutside);
+        }
+        mProgressDialogDoClickHelper = progressDialogDoClickHelper;
+        progressDialog.show();
+    }
 	public static void dismissProgressDialog() {
 		if (progressDialog != null && progressDialog.isShowing()) {
+//			if (mProgressDialogDoClickHelper != null){
+//				mProgressDialogDoClickHelper.doClick();
+//			}
 			progressDialog.dismiss();
 			progressDialog = null;
 		}
@@ -40,4 +59,5 @@ public class DialogHelper {
 		}
 		progressDialog.show();
 	}
+
 }

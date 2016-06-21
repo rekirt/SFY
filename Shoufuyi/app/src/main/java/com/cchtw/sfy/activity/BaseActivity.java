@@ -5,13 +5,16 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cchtw.sfy.R;
+import com.cchtw.sfy.api.AsyncHttp;
 import com.cchtw.sfy.uitls.ActivityCollector;
+import com.cchtw.sfy.uitls.TLog;
 import com.cchtw.sfy.uitls.dialog.WaitDialog;
 
 
@@ -24,7 +27,7 @@ import com.cchtw.sfy.uitls.dialog.WaitDialog;
  * Copyright © 2016年 FuHL. All rights reserved.
  * blog:http://fuhongliang.com/
  */
-public class BaseActivity extends AppCompatActivity implements View.OnClickListener {
+public class BaseActivity extends AppCompatActivity implements View.OnClickListener{
 
     public Context mContext;
     public TextView toolbarTitle;
@@ -175,4 +178,24 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            AsyncHttp.getClient().cancelAllRequests(true);
+            TLog.analytics("onKeyDown-----");
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+//    @Override
+//    public void onDismiss(DialogInterface dialogInterface) {
+//        AsyncHttp.getClient().cancelAllRequests(true);
+//        TLog.analytics("onDismiss-----");
+//    }
+//
+//    @Override
+//    public void onCancel(DialogInterface dialogInterface) {
+//        AsyncHttp.getClient().cancelAllRequests(true);
+//        TLog.analytics("onCancel-----");
+//    }
 }

@@ -39,7 +39,8 @@ public class SetGestureActivity extends BaseActivity {
         isChangeFingerPwd = getIntent().getBooleanExtra("isChangeFingerPwd",false);
 		body_layout = (FrameLayout) findViewById(R.id.body_layout);
         mTvShowMsg = (TextView) findViewById(R.id.tv_show_msg);
-        errorTime = SharedPreferencesHelper.getInt(Constant.FINGERPASSWORDTIMES, 5)-1;
+        String temp = SharedPreferencesHelper.getString(Constant.FINGERPASSWORDTIMES, "5");
+        errorTime =  Integer.parseInt(temp)-1;
         oldFingerPwd = SharedPreferencesHelper.getString(Constant.MIMA, "");
         initView();
         setCanBack(true);

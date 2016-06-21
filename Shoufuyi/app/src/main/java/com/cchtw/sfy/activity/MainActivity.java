@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cchtw.sfy.R;
+import com.cchtw.sfy.uitls.ActivityCollector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -269,7 +270,6 @@ public class MainActivity extends BaseActivity {
     private long mExitTime;
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // TODO Auto-generated method stub
         if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if ((System.currentTimeMillis() - mExitTime) > 2000) {
                     Toast.makeText(this, "在按一次退出",
@@ -277,6 +277,7 @@ public class MainActivity extends BaseActivity {
                     mExitTime = System.currentTimeMillis();
                 } else {
                     MainActivity.this.finish();
+                    ActivityCollector.finishAll();
                 }
             return true;
         }

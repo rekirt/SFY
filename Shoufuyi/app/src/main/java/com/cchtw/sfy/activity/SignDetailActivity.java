@@ -202,7 +202,6 @@ public class SignDetailActivity extends BaseActivity {
     private APP_120002 appELEMENT;
 
     private void validatePre() {
-        account = 0;
         // 要素验证
         appELEMENT = new APP_120002();
         appELEMENT.setTrxCode("120002");
@@ -291,7 +290,7 @@ public class SignDetailActivity extends BaseActivity {
                 break;
         }
         appELEMENT.setVerifyItemList(verifyItemListELEMENT);
-        VerifyElements(appELEMENT,"要素");
+
         // 银行卡验证
         appBankCard = new APP_120002();
         appBankCard.setTrxCode("120002");
@@ -324,7 +323,7 @@ public class SignDetailActivity extends BaseActivity {
         // verifyItemList.add(it);
         // }
         appBankCard.setVerifyItemList(verifyItemList);
-        VerifyElements(appBankCard, "银行卡");
+
 
         // 协议验证
         appPAPERPROTOCOL = new APP_120002();
@@ -337,7 +336,7 @@ public class SignDetailActivity extends BaseActivity {
 
         List<VerifyItem> verifyItemListPAPERPROTOCOL = new ArrayList<VerifyItem>();
         appPAPERPROTOCOL.setVerifyItemList(verifyItemListPAPERPROTOCOL);
-        VerifyElements(appPAPERPROTOCOL, "协议");
+
 
         // 电子签名验证
         appEsign = new APP_120002();
@@ -360,7 +359,7 @@ public class SignDetailActivity extends BaseActivity {
         // }
         // verifyItemListEsign.add(itemEsign[0]);
         appEsign.setVerifyItemList(verifyItemListEsign);
-        VerifyElements(appEsign, "电子签名");
+
 
 
         // 人像对比验证
@@ -393,7 +392,7 @@ public class SignDetailActivity extends BaseActivity {
         // verifyItemListPortraitComarisons.add(it);
         // }
         appPortraitComarison.setVerifyItemList(verifyItemListPortraitComarisons);
-        VerifyElements(appPortraitComarison, "人像对比");
+
 
 
         // 照片视频验证
@@ -425,10 +424,8 @@ public class SignDetailActivity extends BaseActivity {
             verifyItemListPortraitComarisons.add(it);
         }
         appPHOTOVIDEO.setVerifyItemList(verifyItemListPhotoVideo);
-        VerifyElements(appPHOTOVIDEO, "照片视频");
+        VerifyElements(appELEMENT, "要素");
     }
-
-    private int account=0;
 
     private void VerifyElements(APP_120002 app_120002, final String Msg){
 
@@ -441,6 +438,30 @@ public class SignDetailActivity extends BaseActivity {
                     ToastHelper.ShowToast(Msg+"验证成功!");
                 } else {
                     ToastHelper.ShowToast(Msg+"验证失败!"+mReturnApp.getDetailInfo());
+                }
+
+                switch (Msg){
+                    case "要素":
+                        VerifyElements(appBankCard, "银行卡");
+                        break;
+                    case "银行卡":
+                        VerifyElements(appPAPERPROTOCOL, "协议");
+                        break;
+                    case "协议":
+                        VerifyElements(appEsign, "电子签名");
+                        break;
+                    case "电子签名":
+                        VerifyElements(appPortraitComarison, "人像对比");
+                        break;
+                    case "人像对比":
+                        VerifyElements(appPHOTOVIDEO, "照片视频");
+                        break;
+                    case "照片视频":
+                        DialogHelper.dismissProgressDialog();
+                        newSign();//正式提交签约
+                        break;
+                    default:
+                        break;
                 }
             }
 
@@ -461,11 +482,6 @@ public class SignDetailActivity extends BaseActivity {
 
             @Override
             public void onFinish() {
-                ++account;
-                if (account>5){
-                    DialogHelper.dismissProgressDialog();
-                    newSign();//正式提交签约
-                }
             }
         });
     }
@@ -487,7 +503,8 @@ public class SignDetailActivity extends BaseActivity {
             public void onDo(JSONObject responseJsonObject) {
                 APP_120003 mReturnApp = JSON.parseObject(responseJsonObject.toString(), APP_120003.class);
                     if (mReturnApp != null && "0000".equals(mReturnApp.getDetailCode())) {
-                        ToastHelper.ShowToast("提交成功，签约正在处理中!");
+                        btn_submit.setEnabled(false);
+                        ToastHelper.ShowToast("提交成功，"+mReturnApp.getDetailInfo());
                         SignDetailActivity.this.finish();
                     } else {
                         if (mReturnApp != null) {
@@ -515,8 +532,10 @@ public class SignDetailActivity extends BaseActivity {
                                     }
                                 }
                             }
+                            showfail(mReturnApp.getDetailInfo());
+                        }else {
+                            showfail("签约异常，请联系管理员");
                         }
-                        showfail();
                     }
             }
 
@@ -537,12 +556,11 @@ public class SignDetailActivity extends BaseActivity {
         });
     }
 
-    private void showfail() {
+    private void showfail(String msg) {
         if (TextUtils.isEmpty(strbuf.toString())){
             Dialog dialog = new AlertDialog.Builder(SignDetailActivity.this)
                     .setTitle("签约异常") // 创建标题
-                    .setMessage("签约异常，请联系管理员") // 表示对话框中的内容
-//                .setIcon(R.drawable.fail) // 设置LOGO
+                    .setMessage(msg) // 表示对话框中的内容
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -565,7 +583,6 @@ public class SignDetailActivity extends BaseActivity {
             dialog.show(); // 显示对话框
             strbuf = new StringBuffer();
         }
-
     }
 
     private boolean pregotoAgreement(){
@@ -602,7 +619,7 @@ public class SignDetailActivity extends BaseActivity {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putSerializable("info", mResult);
-        bundle.putString("mPhotoFileId",mPhotoFileId);
+        bundle.putString("mPhotoFileId", mPhotoFileId);
         intent.putExtras(bundle);
         intent.setClass(SignDetailActivity.this, TakeAvatarPhotoActivity.class);
         startActivity(intent);
@@ -695,7 +712,6 @@ public class SignDetailActivity extends BaseActivity {
             @Override
             public void onFinish() {
                 DialogHelper.dismissProgressDialog();
-                btn_submit.setEnabled(true);//更新详情后恢复提交按钮可交互
             }
         });
     }
@@ -745,6 +761,14 @@ public class SignDetailActivity extends BaseActivity {
                 default:
                     break;
             }
+        }
+        //已签约则不可提交再次签约
+        if ("2".equals(app_120024.getState())){
+            btn_submit.setEnabled(false);
+            btn_submit.setClickable(false);
+        }else {
+            btn_submit.setEnabled(true);//更新详情后恢复提交按钮可交互
+            btn_submit.setClickable(true);
         }
     }
 

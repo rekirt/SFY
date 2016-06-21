@@ -16,6 +16,7 @@ import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.api.ApiRequest;
 import com.cchtw.sfy.api.JsonHttpHandler;
+import com.cchtw.sfy.uitls.ActivityCollector;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
@@ -218,13 +219,16 @@ public class SettingsActivity extends BaseActivity {
                         SharedPreferencesHelper.setBoolean(Constant.ISLOGIN, false);
 //                        SharedPreferencesHelper.setString(Constant.MIMA, "");
 //                        SharedPreferencesHelper.setBoolean(Constant.HAVESETFINGERPWD, false);
+//                        SharedPreferencesHelper.setBoolean(Constant.ACTIVATION, false);
                         startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
                         SettingsActivity.this.finish();
+                        ActivityCollector.finishAll();
                     } else {
                         ToastHelper.ShowToast(returnapp.getDetailInfo());
                         SharedPreferencesHelper.setBoolean(Constant.ISLOGIN, false);
                         startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
                         SettingsActivity.this.finish();
+                        ActivityCollector.finishAll();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

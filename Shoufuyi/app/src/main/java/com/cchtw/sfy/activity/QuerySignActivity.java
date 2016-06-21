@@ -27,11 +27,13 @@ import com.cchtw.sfy.uitls.TDevice;
 import com.cchtw.sfy.uitls.ToastHelper;
 import com.cchtw.sfy.uitls.WeakAsyncTask;
 import com.cchtw.sfy.uitls.dialog.DialogHelper;
+import com.cchtw.sfy.uitls.dialog.ProgressDialogDoClickHelper;
 import com.cchtw.sfy.uitls.view.DividerItemDecoration;
 import com.cchtw.sfy.uitls.view.EmptyLayout;
 import com.itech.message.APP_120023;
 import com.itech.message.Page;
 import com.itech.message.Result_120023;
+import com.loopj.android.http.RequestHandle;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -107,7 +109,15 @@ public class QuerySignActivity extends BaseActivity implements
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 if (arg2 > 0) {
                     collstate = arg2;
-                    DialogHelper.showProgressDialog(QuerySignActivity.this, "正在查询...", true, false);
+                    DialogHelper.showProgressDialog(QuerySignActivity.this, "正在查询，请稍候...", new ProgressDialogDoClickHelper() {
+                                @Override
+                                public void doClick() {
+                                    if (requestHandle != null) {
+                                        requestHandle.cancel(true);
+                                    }
+                                }
+                            },
+                            true, false);
                     refresh();
                 }
             }
@@ -181,7 +191,7 @@ public class QuerySignActivity extends BaseActivity implements
 
     APP_120023 mReturnApp = new APP_120023();
     private ArrayList<Result_120023> mSignList = new ArrayList<Result_120023>();
-
+    private RequestHandle requestHandle;
     protected void sendRequestData() {
         String endTime ="";
         String startTime = "";
@@ -210,7 +220,7 @@ public class QuerySignActivity extends BaseActivity implements
         }
         app.setCreateDateStart(startTime);
         app.setCreateDateEnd(endTime);
-        ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
+        requestHandle = ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
                     @Override
                     public void onDo(JSONObject responseJsonObject) {
                         try {

@@ -107,7 +107,8 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
         if (mContext != null) {
             try {
                 if (statusCode == 0) {
-//                    onFail("java.net.SocketTimeoutException");
+//                  nFail("java.net.SocketTimeoutException");
+                    onFail("连接超时，请重试!");
                 } else if (statusCode >= 400) {
                     onFail(mContext.getString(R.string.error_http_request));
                 } else if (statusCode >= 500) {
