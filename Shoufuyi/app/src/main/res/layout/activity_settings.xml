@@ -19,12 +19,14 @@
                 android:background="@drawable/settings_bg"
                 android:gravity="center_vertical">
                 <ImageView
+                    android:visibility="invisible"
                     android:id="@+id/iv_avatar"
                     android:layout_width="@dimen/space_100"
                     android:layout_height="@dimen/space_100"
                     android:layout_centerInParent="true"
                     android:src="@drawable/default_avatar" />
                 <TextView
+                    android:visibility="invisible"
                     android:id="@+id/tv_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -36,6 +38,7 @@
                     android:gravity="center"
                     />
                 <TextView
+                    android:visibility="invisible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_name"

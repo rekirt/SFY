@@ -88,8 +88,6 @@ public class StartToUseActivity extends BaseActivity{
                 }
             }
         });
-        //为了方便测试，暂时将号码写入输入框
-        editphone.setText("134 3099 0001");
         editphone.setSelection(editphone.getText().toString().length());
         if (PhoneUtils.isPhoneNumberValid(editphone.getText().toString().replaceAll(" ",""))) {
             btn_getcode.setClickable(true);

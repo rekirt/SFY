@@ -40,7 +40,7 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     android:layout_marginRight="@dimen/space_15"
-                    android:text="中国太平洋保险有限公司 \n 张大三"
+                    android:text=""
                     android:textSize="@dimen/second_title_size" />
             </LinearLayout>
             <ImageView
@@ -68,7 +68,7 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     android:layout_marginRight="@dimen/space_15"
-                    android:text="622220293420348"
+                    android:text=""
                     android:textSize="@dimen/second_title_size" />
 
             </LinearLayout>
@@ -202,7 +202,7 @@
                     android:layout_weight="1"
                     android:textColor="@color/blue"
                     android:gravity="right"
-                    android:text="18989883838"
+                    android:text=""
                     android:layout_marginRight="@dimen/space_15"
                     android:textSize="@dimen/second_title_size" />
 
@@ -232,7 +232,7 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     android:layout_marginRight="@dimen/space_15"
-                    android:text="张大三"
+                    android:text=""
                     android:textSize="@dimen/second_title_size" />
             </LinearLayout>
             <ImageView
@@ -301,7 +301,7 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     android:layout_marginRight="@dimen/space_5"
-                    android:text="622220293420348"
+                    android:text=""
                     android:textSize="@dimen/second_title_size" />
                 <TextView
                     android:id="@+id/tv_id_number_state"

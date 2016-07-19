@@ -60,14 +60,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		if (!TextUtils.isEmpty(strphone)){
 			mEditPhone.setText(strphone);
 		}
-		//------为了测试方便-----
-		if (Constant.ISTEST){
-			mEditPhone.setText("134 3099 0001");
-			mEditPwd.setText("123456");
-            login();
-		}
-		//------为了测试方便-----
-
 		butlogin.setOnClickListener(this);
         tv_start_to_use.setOnClickListener(this);
 	}
