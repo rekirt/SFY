@@ -15,27 +15,33 @@
         android:layout_marginTop="@dimen/space_15"
         android:layout_height="300dp">
 
-        <com.yqritc.scalablevideoview.ScalableVideoView
+        <!--<com.yqritc.scalablevideoview.ScalableVideoView-->
+            <!--android:id="@+id/video_view"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:onClick="onClick"-->
+            <!--app:scalableType="fitCenter"-->
+            <!--android:background="@color/black"/>-->
+        <VideoView
             android:id="@+id/video_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:onClick="onClick"
-            app:scalableType="fitCenter"/>
-        <ImageView
-            android:id="@+id/thumbnailImageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitCenter"
-            android:onClick="onClick"
             />
-
-        <ImageView
-            android:id="@+id/playImageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerInside"
-            android:src="@drawable/video_play"
-            />
+        <!--<ImageView-->
+            <!--android:id="@+id/thumbnailImageView"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:scaleType="fitCenter"-->
+            <!--android:onClick="onClick"-->
+            <!--/>-->
+        <!--<ImageView-->
+            <!--android:id="@+id/playImageView"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:scaleType="centerInside"-->
+            <!--android:src="@drawable/video_play"-->
+            <!--/>-->
         <ImageView
             android:id="@+id/iv_video"
             android:layout_width="match_parent"

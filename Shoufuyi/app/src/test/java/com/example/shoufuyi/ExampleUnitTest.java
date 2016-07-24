@@ -1,4 +1,4 @@
-package com.example.shoufuyi;
+package com.cchtw.sfy;
 
 import org.junit.Test;
 

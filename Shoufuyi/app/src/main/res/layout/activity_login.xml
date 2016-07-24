@@ -105,10 +105,10 @@
             android:layout_marginLeft="@dimen/space_18"
             >
             <TextView
-                android:id="@+id/tv_register"
+                android:id="@+id/tv_start_to_use"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="快速注册"
+                android:text="操作员启用"
                 android:layout_weight="1"
                 />
             <TextView

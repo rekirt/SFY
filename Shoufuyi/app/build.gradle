@@ -5,11 +5,11 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.example.shoufuyi"
+        applicationId "com.cchtw.sfy"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 107
+        versionName "1.0.7"
         ndk {
             //设置支持的SO库架构
             abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
@@ -82,4 +82,5 @@ dependencies {
     compile files('libs/bcprov-ext-jdk15-146.jar')
     compile files('libs/android_auth.jar')
     compile files('libs/pe-enterx-guard-1.0.jar')
+    compile files('libs/android_auth_id.jar')
 }
