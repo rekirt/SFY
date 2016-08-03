@@ -586,12 +586,15 @@ public class SignDetailActivity extends BaseActivity {
     }
 
     private boolean pregotoAgreement(){
-        if (TextUtils.isEmpty(mVideoFileId) || TextUtils.isEmpty(mFrontIdCardFileId) || TextUtils.isEmpty(mBackIdCardFileId)
+        if (signedState){
+            return true;
+        } else if (TextUtils.isEmpty(mVideoFileId) || TextUtils.isEmpty(mFrontIdCardFileId) || TextUtils.isEmpty(mBackIdCardFileId)
                 || TextUtils.isEmpty(mFrontBankCardFileId) || TextUtils.isEmpty(mBackBankCardFileId)
                 || TextUtils.isEmpty(mPhotoFileId) || mArrayListProtocolFileId.size() < 1){
             ToastHelper.ShowToast("请先采集全所需附件");
             return false;
         }
+
         return true;
     }
 
@@ -719,6 +722,7 @@ public class SignDetailActivity extends BaseActivity {
     /**
      * 根据后台返回的验证组合来动态显示页面
      */
+    private boolean signedState = false;
     private void updateViewState(APP_120024 app_120024){
        //要素验证
         tv_phone_number.setText(mResult.getMobile());
@@ -766,7 +770,10 @@ public class SignDetailActivity extends BaseActivity {
         if ("2".equals(app_120024.getState())){
             btn_submit.setEnabled(false);
             btn_submit.setClickable(false);
+            signedState = true;
+            btn_submit.setVisibility(View.GONE);
         }else {
+            signedState = false;
             btn_submit.setEnabled(true);//更新详情后恢复提交按钮可交互
             btn_submit.setClickable(true);
         }
