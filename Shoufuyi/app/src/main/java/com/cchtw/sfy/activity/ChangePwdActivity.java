@@ -1,6 +1,5 @@
 package com.cchtw.sfy.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -73,11 +72,13 @@ public class ChangePwdActivity extends BaseActivity {
                 public void onDo(JSONObject responseJsonObject) {
                     returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120034.class);
                     if ("0000".equals(returnapp.getDetailCode())){
+                        ToastHelper.ShowToast(returnapp.getDetailInfo());
                         SharedPreferencesHelper.setString("LoginSerect",newPwd);// 保存字符串
-                        SharedPreferencesHelper.setBoolean(Constant.GAIMIMA, true);
-                        SharedPreferencesHelper.setString("Is_exit", "1");
-                        Intent intent = new Intent(ChangePwdActivity.this, LoginActivity.class);
-                        startActivity(intent);
+                        //针对银联测试反馈，去掉修改密码后重新登录
+//                        SharedPreferencesHelper.setBoolean(Constant.GAIMIMA, true);
+//                        SharedPreferencesHelper.setString("Is_exit", "1");
+//                        Intent intent = new Intent(ChangePwdActivity.this, LoginActivity.class);
+//                        startActivity(intent);
                         ChangePwdActivity.this.finish();
                     }else {
                         ToastHelper.ShowToast(returnapp.getDetailInfo());

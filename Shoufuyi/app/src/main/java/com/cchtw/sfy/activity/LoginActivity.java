@@ -29,6 +29,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 	private EditText mEditPhone;
     private EditText mEditPwd;
 	private TextView tv_start_to_use;
+	private TextView tv_forget_pwd;
+
 	private String strcode, strphone, strserect;
 	private SharedPreferences.Editor edit;
 
@@ -49,7 +51,9 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
         mEditPhone = (EditText) findViewById(R.id.edt_phone);
         mEditPwd = (EditText) findViewById(R.id.edt_pwd);
 		butlogin = (Button) findViewById(R.id.btn_login);
-        tv_start_to_use = (TextView) findViewById(R.id.tv_start_to_use);
+		tv_start_to_use = (TextView) findViewById(R.id.tv_start_to_use);
+		tv_forget_pwd = (TextView) findViewById(R.id.tv_forget_pwd);
+
 	}
 
 	private void initData(){
@@ -62,6 +66,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		}
 		butlogin.setOnClickListener(this);
         tv_start_to_use.setOnClickListener(this);
+		tv_forget_pwd.setOnClickListener(this);
 	}
 
 	// 登录
@@ -120,6 +125,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 	public void onClick(View view) {
 		super.onClick(view);
 		switch (view.getId()){
+			case R.id.tv_forget_pwd:
 			case R.id.tv_start_to_use:
 				startActivity(new Intent(LoginActivity.this,StartToUseActivity.class));
 				break;

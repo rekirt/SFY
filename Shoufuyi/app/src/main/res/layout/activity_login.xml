@@ -63,6 +63,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:maxLength="6"
+                android:inputType="textPassword"
                 />
         </LinearLayout>
         <LinearLayout

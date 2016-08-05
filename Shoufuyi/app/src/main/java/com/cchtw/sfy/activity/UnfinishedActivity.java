@@ -122,16 +122,9 @@ public class UnfinishedActivity extends BaseActivity implements
             mAdapter.setOnItemClickListener(this);
             mAdapter.setOnItemLongClickListener(this);
             mRecycleView.setAdapter(mAdapter);
-
-            if (requestDataIfViewCreated()) {
-                mCurrentPage = 1;
-                mState = STATE_REFRESH;
-                mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-                sendRequestData();
-//                new ReadCacheTask(this).execute();
-            } else {
-                mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-            }
+            mCurrentPage = 1;
+            mState = STATE_REFRESH;
+            mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
         }
 
         if (mStoreEmptyState != -1) {
@@ -199,6 +192,25 @@ public class UnfinishedActivity extends BaseActivity implements
                 }
         );
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refresh();
+    }
+
+//    private static final int    REQUESTCODE    = 10;
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+//    {
+//        switch (requestCode)
+//        {
+//            case REQUESTCODE:
+//
+//                break;
+//
+//        }
+//    }
 
 
     public void refresh() {

@@ -53,6 +53,7 @@ public class SettingsActivity extends BaseActivity {
 		setContentView(R.layout.activity_settings);
 		initView();
         initData();
+        checkUpdate();
 	}
 
 	private void initView() {
@@ -291,6 +292,43 @@ public class SettingsActivity extends BaseActivity {
             }
         });
 	}
+    // 更新操作；
+    private void checkUpdate() {
+        APP_Version app = new APP_Version();
+        app.setTerminalType("1");
+        PackageManager pm = getPackageManager();
+        PackageInfo pi;
+        try {
+            pi = pm.getPackageInfo(getPackageName(), 0);
+            String oldCode = pi.versionName;
+            app.setVersion(oldCode);
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        ApiRequest.requestData(app, phone, new JsonHttpHandler() {
+            @Override
+            public void onDo(JSONObject responseJsonObject) {
+                final APP_Version returnapp = JSON.parseObject(responseJsonObject.toString(), APP_Version.class);
+                if ("0000".equals(returnapp.getDetailCode())) {
+                    update.checkUpdateInfo(returnapp);
+                }
+            }
+
+            @Override
+            public void onDo(JSONArray responseJsonArray) {
+
+            }
+
+            @Override
+            public void onDo(String responseString) {
+
+            }
+
+            @Override
+            public void onFinish() {
+            }
+        });
+    }
 
 	@SuppressWarnings("deprecation")
 	private void DiologToJump(String diostr) {

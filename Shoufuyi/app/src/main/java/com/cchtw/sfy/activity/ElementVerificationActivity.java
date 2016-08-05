@@ -9,9 +9,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSON;
-import com.csii.pe.enter.CSIIPinConvertor;
-import com.csii.powerenter.PEEditText;
-import com.csii.powerenter.PEEditTextAttrSet;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.api.ApiRequest;
 import com.cchtw.sfy.api.JsonHttpHandler;
@@ -20,10 +17,12 @@ import com.cchtw.sfy.uitls.PhoneUtils;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
 import com.cchtw.sfy.uitls.dialog.DialogHelper;
+import com.csii.pe.enter.CSIIPinConvertor;
+import com.csii.powerenter.PEEditText;
+import com.csii.powerenter.PEEditTextAttrSet;
 import com.itech.message.APP_120001;
 import com.itech.message.APP_120002;
 import com.itech.message.APP_120031;
-import com.itech.message.Result_120023;
 import com.itech.message.VerifyGroup;
 import com.itech.message.VerifyItem;
 
@@ -361,19 +360,20 @@ public class ElementVerificationActivity extends BaseActivity {
                 APP_120031 returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120031.class);
                     if ("0000".equals(returnapp.getDetailCode())) {
                         ToastHelper.ShowToast("验证成功");
-                        Result_120023 mResult = new Result_120023();
-                        mResult.setAccountName(mReturn.getAccountName());
-                        mResult.setMobile(mReturn.getMobile());
-                        mResult.setAccountNo(mReturn.getAccountNo());
-                        mResult.setCreateTime("20150803151200");
-                        mResult.setIdCard(mReturn.getIdCard());
-                        mResult.setMerchantId(SharedPreferencesHelper.getString(Constant.MERCHANT,""));
-                        mResult.setState("0");
-                        Intent intent = new Intent(ElementVerificationActivity.this, SignDetailActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("info", mResult);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
+//                        Result_120023 mResult = new Result_120023();
+//                        mResult.setAccountName(mReturn.getAccountName());
+//                        mResult.setMobile(mReturn.getMobile());
+//                        mResult.setAccountNo(mReturn.getAccountNo());
+//                        mResult.setCreateTime("20150803151200");
+//                        mResult.setIdCard(mReturn.getIdCard());
+//                        mResult.setMerchantId(SharedPreferencesHelper.getString(Constant.MERCHANT,""));
+//                        mResult.setState("0");
+//                        Intent intent = new Intent(ElementVerificationActivity.this, SignDetailActivity.class);
+//                        Bundle bundle = new Bundle();
+//                        bundle.putSerializable("info", mResult);
+//                        intent.putExtras(bundle);
+//                        startActivity(intent);
+//
                         ElementVerificationActivity.this.finish();
                     }else {
                         ToastHelper.ShowToast(returnapp.getDetailInfo());
