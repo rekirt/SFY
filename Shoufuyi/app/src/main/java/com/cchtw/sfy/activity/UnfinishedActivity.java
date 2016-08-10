@@ -17,6 +17,7 @@ import com.cchtw.sfy.api.JsonHttpHandler;
 import com.cchtw.sfy.bean.ListEntity;
 import com.cchtw.sfy.bean.SignList;
 import com.cchtw.sfy.cache.v2.CacheManager;
+import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.TDevice;
@@ -145,7 +146,7 @@ public class UnfinishedActivity extends BaseActivity implements
         Date date = new Date(time);
         String endtime = format.format(date);
         APP_120023 app = new APP_120023();
-        app.setMerchantId(SharedPreferencesHelper.getString(Constant.MERCHANT, ""));
+        app.setMerchantId(AccountHelper.getMerchantId());
         app.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
         app.setCreateUser(SharedPreferencesHelper.getString(Constant.PHONE, ""));
         Page page = new Page();

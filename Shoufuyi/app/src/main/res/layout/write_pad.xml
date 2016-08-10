@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:greendroid="http://schemas.android.com/apk/res/com.cyrilmottier.android.gdcatalog"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
@@ -23,8 +22,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="5dp"
             android:text="确定"
-            android:textColor="#ffffff" />
+            android:background="@drawable/btn_blue_selector"
+            android:textColor="@color/white"
+            android:textSize="@dimen/title_size"
+            />
 
         <Button
             android:id="@+id/tablet_clear"
@@ -32,15 +35,23 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="清除"
-            android:textColor="#ffffff" />
+            android:layout_margin="5dp"
+            android:background="@drawable/btn_blue_selector"
+            android:textColor="@color/white"
+            android:textSize="@dimen/title_size"
+            />
 
         <Button
             android:id="@+id/tablet_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="5dp"
             android:text="取消"
-            android:textColor="#ffffff" />
+            android:background="@drawable/btn_blue_selector"
+            android:textColor="@color/white"
+            android:textSize="@dimen/title_size"
+            />
     </LinearLayout>
 
 </LinearLayout>

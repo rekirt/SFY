@@ -73,7 +73,7 @@
             android:layout_marginLeft="@dimen/space_18"
             >
             <CheckBox
-                android:id="@+id/cb_privacy"
+                android:id="@+id/cb_remember"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"

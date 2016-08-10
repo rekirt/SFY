@@ -1,13 +1,13 @@
 package com.cchtw.sfy.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.api.ApiRequest;
 import com.cchtw.sfy.api.JsonHttpHandler;
+import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
@@ -28,15 +29,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 	private Button butlogin;
 	private EditText mEditPhone;
     private EditText mEditPwd;
+	private CheckBox cb_remember;
 	private TextView tv_start_to_use;
 	private TextView tv_forget_pwd;
-
-	private String strcode, strphone, strserect;
-	private SharedPreferences.Editor edit;
-
-	private String message;
-	private String deskey;
-	private String des3key;
+	private String strphone;
 
 	protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -46,21 +42,18 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		initData();
 	}
 
-
 	private void initView() {
         mEditPhone = (EditText) findViewById(R.id.edt_phone);
         mEditPwd = (EditText) findViewById(R.id.edt_pwd);
 		butlogin = (Button) findViewById(R.id.btn_login);
+		cb_remember = (CheckBox) findViewById(R.id.cb_remember);
 		tv_start_to_use = (TextView) findViewById(R.id.tv_start_to_use);
 		tv_forget_pwd = (TextView) findViewById(R.id.tv_forget_pwd);
 
 	}
 
 	private void initData(){
-		deskey = SharedPreferencesHelper.getString(Constant.DESKEY, "");
-		des3key = SharedPreferencesHelper.getString(Constant.DESK3KEY, "");
 		strphone = SharedPreferencesHelper.getString(Constant.PHONE, "");
-		strserect = SharedPreferencesHelper.getString(Constant.LOGINSERECT, "");
 		if (!TextUtils.isEmpty(strphone)){
 			mEditPhone.setText(strphone);
 		}
@@ -69,11 +62,18 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		tv_forget_pwd.setOnClickListener(this);
 	}
 
-	// 登录
 	private void login() {
 		APP_120033 app = new APP_120033();
 		app.setUserName(mEditPhone.getText().toString());
 		app.setLoginState("0000");
+        String des3key = SharedPreferencesHelper.getString(mEditPhone.getText().toString()+Constant.DESK3KEY, "");
+        if (TextUtils.isEmpty(des3key)){
+            ToastHelper.ShowToast("第一次在该设备登录，请先启用！");
+            Intent intent = new Intent();
+            intent.setClass(LoginActivity.this, StartToUseActivity.class);
+            startActivity(intent);
+            return;
+        }
 		try {
 			app.setUserPass(des3key, mEditPwd.getText().toString());
 		} catch (Exception e) {
@@ -82,23 +82,30 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 
 		DialogHelper.showProgressDialog(LoginActivity.this, "正在登录...", true, false);
 
-		ApiRequest.login(app, strphone, new JsonHttpHandler() {
+		ApiRequest.login(app, mEditPhone.getText().toString(), new JsonHttpHandler() {
 			@Override
 			public void onDo(JSONObject responseJsonObject) {
-				// 在第一次登录激活的时候在发一次登录报文获取所属商户号
 				APP_120033 returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120033.class);
-				message = returnapp.getDetailInfo();
 				if ("0000".equals(returnapp.getDetailCode())) {
-                    SharedPreferencesHelper.setString(Constant.MERCHANT, returnapp.getMerchantId());
-                    SharedPreferencesHelper.setString(Constant.TOKEN, returnapp.getToken());
-                    SharedPreferencesHelper.setString(Constant.DESKEY, returnapp.getDesKey());
-                    SharedPreferencesHelper.setString(Constant.DESK3KEY, returnapp.getDes3Key());
-					SharedPreferencesHelper.setBoolean(Constant.ISLOGIN, true);// 保存字符串
+                    AccountHelper.setUser(returnapp);
+                    if (cb_remember.isChecked()){
+						SharedPreferencesHelper.setString(Constant.PHONE, mEditPhone.getText().toString());
+					}
 					Intent intent = new Intent();
 					intent.setClass(LoginActivity.this,SetGestureActivity.class);
 					startActivity(intent);
 					LoginActivity.this.finish();
-				}else {
+				}else if ("3998".equals(returnapp.getDetailCode())){
+					ToastHelper.ShowToast(returnapp.getDetailInfo());
+					Intent intent = new Intent();
+					intent.setClass(LoginActivity.this,StartToUseActivity.class);
+					startActivity(intent);
+				}else if ("1017".equals(returnapp.getDetailCode())){
+                    ToastHelper.ShowToast(returnapp.getDetailInfo());
+                    Intent intent = new Intent();
+                    intent.setClass(LoginActivity.this,StartToUseActivity.class);
+                    startActivity(intent);
+                }else{
 					ToastHelper.ShowToast(returnapp.getDetailInfo());
 				}
 			}
@@ -110,7 +117,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 
 			@Override
 			public void onDo(String responseString) {
-
 			}
 
 			@Override

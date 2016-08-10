@@ -15,6 +15,7 @@ import com.cchtw.sfy.api.ApiRequest;
 import com.cchtw.sfy.api.JsonHttpHandler;
 import com.cchtw.sfy.cache.FileUtils;
 import com.cchtw.sfy.cache.v2.CacheManager;
+import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.RegexUtils;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
@@ -153,8 +154,8 @@ public class NewSignActivity extends BaseActivity{
         }
         // 新增类型
         app.setReqType("1");
-        app.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
-        app.setMerchantId(SharedPreferencesHelper.getString(Constant.MERCHANT, ""));
+        app.setUserName(AccountHelper.getUserName());
+        app.setMerchantId(AccountHelper.getMerchantId());
 
         DialogHelper.showProgressDialog(NewSignActivity.this, "正在操作，请稍候...", new ProgressDialogDoClickHelper() {
                     @Override
@@ -244,7 +245,7 @@ public class NewSignActivity extends BaseActivity{
                 ToastHelper.ShowToast("请填写有效的手机号码");
                 return false;
             }
-            if (RegexUtils.checkBankCard(mCardNumber)) {
+            if (!RegexUtils.checkBankCard(mCardNumber)) {
                 ToastHelper.ShowToast("请填写有效的银行卡卡号");
                 return false;
             }

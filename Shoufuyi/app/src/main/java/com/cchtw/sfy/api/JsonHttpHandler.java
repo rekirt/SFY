@@ -5,6 +5,8 @@ import android.text.TextUtils;
 
 import com.cchtw.sfy.BaseApplication;
 import com.cchtw.sfy.R;
+import com.cchtw.sfy.uitls.AccountHelper;
+import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
 import com.itech.message.APPMsgPack;
@@ -55,11 +57,23 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
 
     @Override
     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-        APPMsgPack response = new APPMsgPack();
-        response.setToken(SharedPreferencesHelper.getString("token", ""));
+        String MOBILE="";
+        String token ="";
+        String deskey = "";
+        if (AccountHelper.isLogin()){
+            token = AccountHelper.getToken();
+            deskey = AccountHelper.getDesKey();
+        }else {
+            MOBILE = SharedPreferencesHelper.getString(Constant.PHONE, "");
+            token = SharedPreferencesHelper.getString(MOBILE+Constant.TOKEN, "");
+            deskey = SharedPreferencesHelper.getString(MOBILE+Constant.DESKEY, "");
+        }
 
-        if (!SharedPreferencesHelper.getString("deskey", "").equals("")) {
-            response.setDesKey(SharedPreferencesHelper.getString("deskey", ""));
+        APPMsgPack response = new APPMsgPack();
+        response.setToken(token);
+
+        if (!TextUtils.isEmpty(deskey)) {
+            response.setDesKey(deskey);
         }
 
         try {

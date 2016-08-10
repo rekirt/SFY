@@ -46,12 +46,12 @@ public class StartToUseActivity extends BaseActivity{
 	private void initView() {
 		butregister = (Button) findViewById(R.id.zhucejihuo);
         btn_getcode = (Button) findViewById(R.id.btn_get_code);
-
         editcode = (EditText) findViewById(R.id.edt_code);
         editphone = (EditText) findViewById(R.id.edt_phone);
 	}
 
 	private void initData(){
+        editphone.setText(SharedPreferencesHelper.getString(Constant.PHONE, ""));
         btn_getcode.setOnClickListener(this);
         butregister.setOnClickListener(this);
         editphone.addTextChangedListener(new SimpleTextWatcher() {
@@ -177,21 +177,16 @@ public class StartToUseActivity extends BaseActivity{
 
     // 获得验证码
     private void getCode(){
-                //ToastHelper.ShowToast("发送成功！");
-//                Countdown();
                 // 发送报文获取验证码
-                SharedPreferencesHelper.setString("token", "");
-                SharedPreferencesHelper.setString("deskey", "");
-                SharedPreferencesHelper.setBoolean(Constant.ACTIVATION, false);
-
-                DialogHelper.showProgressDialog(StartToUseActivity.this, "正在请求验证码...", true, true);
-                APP_120031 app = new APP_120031();
-                mPhoneNumber = editphone.getText().toString().replaceAll(" ", "");
-                app.setMobile(mPhoneNumber);
-                app.setUserName(mPhoneNumber);
-                app.setTrxCode("120031");
-                app.setType("2");
-                ApiRequest.getMsgCode(app, mPhoneNumber, new JsonHttpHandler() {
+        DialogHelper.showProgressDialog(StartToUseActivity.this, "正在请求验证码...", true, true);
+        APP_120031 app = new APP_120031();
+        mPhoneNumber = editphone.getText().toString().replaceAll(" ", "");
+        app.setMobile(mPhoneNumber);
+        app.setUserName(mPhoneNumber);
+        app.setTrxCode("120031");
+        app.setType("2");
+        SharedPreferencesHelper.setBoolean(mPhoneNumber+Constant.ACTIVATION, false);
+        ApiRequest.getMsgCode(app, mPhoneNumber, new JsonHttpHandler() {
                     @Override
                     public void onDo(JSONObject responseJsonObject) {
                         APP_120031 returnapp = JSON.parseObject(responseJsonObject.toString(),
@@ -244,11 +239,11 @@ public class StartToUseActivity extends BaseActivity{
                     public void onDo(JSONObject responseJsonObject) {
                         returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120032.class);
                         if ("0000".equals(returnapp.getDetailCode())){
-                            SharedPreferencesHelper.setBoolean(Constant.ACTIVATION, true);// 记录登录成功状态
+                            SharedPreferencesHelper.setBoolean(mPhoneNumber+Constant.ACTIVATION, true);// 记录登录成功状态
                             SharedPreferencesHelper.setString(Constant.PHONE, mPhoneNumber);// 保存字符串
-                            SharedPreferencesHelper.setString(Constant.DESKEY, returnapp.getDesKey());
-                            SharedPreferencesHelper.setString(Constant.DESK3KEY, returnapp.getDes3Key());
-                            SharedPreferencesHelper.setString(Constant.TOKEN, returnapp.getToken());
+                            SharedPreferencesHelper.setString(mPhoneNumber+Constant.DESKEY, returnapp.getDesKey());
+                            SharedPreferencesHelper.setString(mPhoneNumber+Constant.DESK3KEY, returnapp.getDes3Key());
+                            SharedPreferencesHelper.setString(mPhoneNumber+Constant.TOKEN, returnapp.getToken());
                             Intent intent = new Intent();
                             intent.setClass(StartToUseActivity.this, ChangePwdActivity.class);
                             startActivity(intent);

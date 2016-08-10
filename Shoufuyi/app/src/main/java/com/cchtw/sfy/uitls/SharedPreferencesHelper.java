@@ -8,7 +8,6 @@ import com.cchtw.sfy.BaseApplication;
 
 
 /**
- * MiGo
  * Description:使用方法：直接new一个SharedPreferencesHelper对象，然后调用对应的方法。
  * Created by FuHL on
  * Date:2016-01-14

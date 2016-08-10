@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.api.ApiRequest;
 import com.cchtw.sfy.api.JsonHttpHandler;
+import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.PhoneUtils;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
@@ -53,7 +54,6 @@ public class ElementVerificationActivity extends BaseActivity {
     private APP_120001 mReturn = new APP_120001();
     private String mElementVerifyGroupCode;
     int mElementMember = 0;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -235,8 +235,8 @@ public class ElementVerificationActivity extends BaseActivity {
     private void submitForCheck(){
         boolean isNotIn = false;
         APP_120002 app = new APP_120002();
-        app.setMerchantId(SharedPreferencesHelper.getString(Constant.MERCHANT, ""));
-        app.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
+        app.setMerchantId(AccountHelper.getMerchantId());
+        app.setUserName(AccountHelper.getUserName());
         app.setIdCard(mReturn.getIdCard());
         app.setAccountNo(mReturn.getAccountNo());
         app.setVerifyGroupCode(mElementVerifyGroupCode);

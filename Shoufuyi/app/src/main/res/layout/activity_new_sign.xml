@@ -25,6 +25,7 @@
             android:layout_weight="1"
             android:maxLength="18"
             android:text=""
+            android:inputType="numberDecimal"
             />
         <ImageView
             android:id="@+id/iv_id_camera"
@@ -126,11 +127,10 @@
             android:id="@+id/cb_auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             />
         <TextView
             android:id="@+id/tv_agree"
-            android:text="是否自动续签"
+            android:text="自动签约"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/normal_text_color"
