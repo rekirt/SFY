@@ -16,15 +16,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dip"
             android:layout_weight="1"
-            />
+            android:layout_marginRight="5dp"/>
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:src="@color/gray"/>
         <DatePicker
             android:id="@+id/time_picker"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dip"
             android:layout_weight="1"
-            android:layout_marginLeft="-10dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="1dp"
             />
     </LinearLayout>
 </LinearLayout>

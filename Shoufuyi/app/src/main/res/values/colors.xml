@@ -52,6 +52,9 @@
     <color name="dark_green">#3b8616</color>
     <color name="normal_red_color">#f0ff3220</color>
     <color name="dark_red_color">#f0ff0000</color>
+    <color name="normal_blue_color">#50aeff</color>
+    <color name="dark_blue_color">#2194f8</color>
+
 
     <color name="main_gray">#9A9A9A</color>
     <color name="main_purple">#576B95</color>

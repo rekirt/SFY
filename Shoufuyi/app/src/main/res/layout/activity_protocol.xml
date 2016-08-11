@@ -11,8 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
+        android:layout_above="@+id/bottom_layout"
         android:layout_centerHorizontal="true"
-        android:unselectedAlpha="1" />
+        android:padding="5dp"
+        android:unselectedAlpha="1"
+        />
 
     <RelativeLayout
         android:id="@+id/bottom_layout"

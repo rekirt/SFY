@@ -17,6 +17,7 @@ import com.cchtw.sfy.api.JsonHttpHandler;
 import com.cchtw.sfy.bean.ListEntity;
 import com.cchtw.sfy.bean.SignList;
 import com.cchtw.sfy.cache.v2.CacheManager;
+import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.TDevice;
@@ -122,16 +123,9 @@ public class UnfinishedActivity extends BaseActivity implements
             mAdapter.setOnItemClickListener(this);
             mAdapter.setOnItemLongClickListener(this);
             mRecycleView.setAdapter(mAdapter);
-
-            if (requestDataIfViewCreated()) {
-                mCurrentPage = 1;
-                mState = STATE_REFRESH;
-                mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-                sendRequestData();
-//                new ReadCacheTask(this).execute();
-            } else {
-                mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-            }
+            mCurrentPage = 1;
+            mState = STATE_REFRESH;
+            mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
         }
 
         if (mStoreEmptyState != -1) {
@@ -152,7 +146,7 @@ public class UnfinishedActivity extends BaseActivity implements
         Date date = new Date(time);
         String endtime = format.format(date);
         APP_120023 app = new APP_120023();
-        app.setMerchantId(SharedPreferencesHelper.getString(Constant.MERCHANT, ""));
+        app.setMerchantId(AccountHelper.getMerchantId());
         app.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
         app.setCreateUser(SharedPreferencesHelper.getString(Constant.PHONE, ""));
         Page page = new Page();
@@ -199,6 +193,25 @@ public class UnfinishedActivity extends BaseActivity implements
                 }
         );
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refresh();
+    }
+
+//    private static final int    REQUESTCODE    = 10;
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+//    {
+//        switch (requestCode)
+//        {
+//            case REQUESTCODE:
+//
+//                break;
+//
+//        }
+//    }
 
 
     public void refresh() {

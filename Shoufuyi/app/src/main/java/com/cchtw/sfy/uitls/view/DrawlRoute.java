@@ -12,8 +12,7 @@ import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.cchtw.sfy.uitls.Constant;
-import com.cchtw.sfy.uitls.SharedPreferencesHelper;
+import com.cchtw.sfy.uitls.AccountHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,7 +175,7 @@ public class DrawlRoute extends View {
 			// 用户手势绘制的密码为空不检验
 			setFocusableInTouchMode(true);
 			if (passWord == "") {
-				SharedPreferencesHelper.setString(Constant.MIMA, passWordSb.toString());// 保存字符串
+				AccountHelper.setUserFingerPwd(passWordSb.toString());
 				// clearScreenAndDrawList(false);
 				// invalidate();
 				new Handler().postDelayed(new Runnable() {

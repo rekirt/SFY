@@ -1,6 +1,5 @@
 package com.cchtw.sfy.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -52,15 +51,15 @@ public class ChangePwdActivity extends BaseActivity {
 
 	private void initData(){
 		sharedPreferencesHelper = SharedPreferencesHelper.getInstance();// 指定操作的文件名称
-		deskey = sharedPreferencesHelper.getString(Constant.DESKEY, "");
-		des3key = sharedPreferencesHelper.getString(Constant.DESK3KEY, "");
         userPhone = sharedPreferencesHelper.getString(Constant.PHONE, "");
+        deskey = sharedPreferencesHelper.getString(userPhone+Constant.DESKEY, "");
+		des3key = sharedPreferencesHelper.getString(userPhone+Constant.DESK3KEY, "");
 		butsubmit.setOnClickListener(this);
 		setCanBack(true);
 	}
 
 	private void modifyPwd(){
-// 修改登录密码
+    // 修改登录密码
         APP_120034 app = new APP_120034();
         try {
             DialogHelper.showProgressDialog(ChangePwdActivity.this, "正在请求...", true, false);
@@ -73,11 +72,9 @@ public class ChangePwdActivity extends BaseActivity {
                 public void onDo(JSONObject responseJsonObject) {
                     returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120034.class);
                     if ("0000".equals(returnapp.getDetailCode())){
-                        SharedPreferencesHelper.setString("LoginSerect",newPwd);// 保存字符串
-                        SharedPreferencesHelper.setBoolean(Constant.GAIMIMA, true);
-                        SharedPreferencesHelper.setString("Is_exit", "1");
-                        Intent intent = new Intent(ChangePwdActivity.this, LoginActivity.class);
-                        startActivity(intent);
+                        ToastHelper.ShowToast(returnapp.getDetailInfo());
+                        SharedPreferencesHelper.setString(returnapp.getUserName()+"LoginSerect",newPwd);// 保存字符串
+                        SharedPreferencesHelper.setBoolean(returnapp.getUserName()+Constant.GAIMIMA, true);
                         ChangePwdActivity.this.finish();
                     }else {
                         ToastHelper.ShowToast(returnapp.getDetailInfo());

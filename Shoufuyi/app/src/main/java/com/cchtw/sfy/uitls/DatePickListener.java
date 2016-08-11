@@ -71,10 +71,25 @@ public class DatePickListener  implements OnClickListener {
                         int endMonth=endTimePicker.getMonth()+1;
                         int endYear=endTimePicker.getYear();
 
-                        editText.setText(beginYear+"."+changeNumber(beginMonth)+"."+changeNumber(beginDayOfMonth) + "至" + endYear+"."+changeNumber(endMonth)+"."+changeNumber(endDayOfMonth));
-                        dialog.cancel();
-                        DialogHelper.showProgressDialog(context, "正在查询...", true, false);
-                        ((QuerySignActivity)context).refresh();
+                        if (beginYear>endYear){
+                            ToastHelper.ShowToast("开始时间不能大于结束时间");
+                            return;
+                        }else {
+                            if (beginMonth>endMonth){
+                                ToastHelper.ShowToast("开始时间不能大于结束时间");
+                                return;
+                            }else {
+                                if (beginDayOfMonth>endDayOfMonth){
+                                    ToastHelper.ShowToast("开始时间不能大于结束时间");
+                                    return;
+                                }else {
+                                    editText.setText(beginYear+"."+changeNumber(beginMonth)+"."+changeNumber(beginDayOfMonth) + "至" + endYear+"."+changeNumber(endMonth)+"."+changeNumber(endDayOfMonth));
+                                    dialog.cancel();
+                                    DialogHelper.showProgressDialog(context, "正在查询...", true, false);
+                                    ((QuerySignActivity)context).refresh();
+                                }
+                            }
+                        }
                     }
                 }).show();
     }

@@ -949,6 +949,7 @@ public class FileUtils {
 	protected static String getCacheKeyPrefix() {
 		return CACHE_KEY_PREFIX;
 	}
+
 	public static String getCacheKey(String mAttachCreateTime,String Category) {
 		return new StringBuffer(getCacheKeyPrefix()).append(mAttachCreateTime)
 				.append("_").append(Category).toString();

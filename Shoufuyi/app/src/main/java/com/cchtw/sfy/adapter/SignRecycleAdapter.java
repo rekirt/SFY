@@ -87,6 +87,9 @@ public class SignRecycleAdapter extends RecycleBaseAdapter {
             case "2":
 //                ImageHelper.displayImage("drawable://" + R.drawable.ic_sign_finish, new_holder.iv_sign_stye);
                 new_holder.iv_sign_stye.setImageResource(R.drawable.ic_sign_finish);
+                new_holder.tv_give_up.setEnabled(false);
+                new_holder.tv_give_up.setClickable(false);
+
                 break;
             case "3":
 //                ImageHelper.displayImage("drawable://" + R.drawable.ic_unfinish, new_holder.iv_sign_stye);

@@ -10,12 +10,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.api.ApiRequest;
 import com.cchtw.sfy.api.JsonHttpHandler;
+import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.ActivityCollector;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
@@ -46,13 +49,17 @@ public class SettingsActivity extends BaseActivity {
 	private String phone;
     private String strtoclass;
     private UpdateManager update;
-
+    private TextView tv_name;
+    private TextView tv_introduce;
+    private ImageView iv_avatar;
+    private APP_120033 user;
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_settings);
 		initView();
         initData();
+        checkUpdate();
 	}
 
 	private void initView() {
@@ -62,6 +69,9 @@ public class SettingsActivity extends BaseActivity {
         mRlChangePwd = (RelativeLayout) findViewById(R.id.rl_change_pwd);
         mRlAppUpdate = (RelativeLayout) findViewById(R.id.rl_app_update);
         mRlSetting = (RelativeLayout) findViewById(R.id.rl_setting);
+        tv_name = (TextView) findViewById(R.id.tv_name);
+        tv_introduce = (TextView) findViewById(R.id.tv_introduce);
+        iv_avatar = (ImageView) findViewById(R.id.iv_avatar);
 		update = new UpdateManager(SettingsActivity.this);
 		phone = SharedPreferencesHelper.getString("phone", "");
 	}
@@ -74,6 +84,8 @@ public class SettingsActivity extends BaseActivity {
         mRlAppUpdate.setOnClickListener(this);
         mRlSetting.setOnClickListener(this);
         setCanBack(true);
+        user = AccountHelper.getUser();
+        tv_name.setText(user.getUserName());
     }
 
     @Override
@@ -216,19 +228,15 @@ public class SettingsActivity extends BaseActivity {
                 try {
                     returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120033.class);
                     if (returnapp.getDetailCode().equals("0000")) {
-                        SharedPreferencesHelper.setBoolean(Constant.ISLOGIN, false);
-//                        SharedPreferencesHelper.setString(Constant.MIMA, "");
-//                        SharedPreferencesHelper.setBoolean(Constant.HAVESETFINGERPWD, false);
-//                        SharedPreferencesHelper.setBoolean(Constant.ACTIVATION, false);
+                        AccountHelper.haveFingerPwdChange(false);
+                        AccountHelper.setUserFingerPwd("");
+                        AccountHelper.setUser(null);
+
                         startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
                         SettingsActivity.this.finish();
                         ActivityCollector.finishAll();
                     } else {
                         ToastHelper.ShowToast(returnapp.getDetailInfo());
-                        SharedPreferencesHelper.setBoolean(Constant.ISLOGIN, false);
-                        startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
-                        SettingsActivity.this.finish();
-                        ActivityCollector.finishAll();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -291,6 +299,43 @@ public class SettingsActivity extends BaseActivity {
             }
         });
 	}
+    // 更新操作；
+    private void checkUpdate() {
+        APP_Version app = new APP_Version();
+        app.setTerminalType("1");
+        PackageManager pm = getPackageManager();
+        PackageInfo pi;
+        try {
+            pi = pm.getPackageInfo(getPackageName(), 0);
+            String oldCode = pi.versionName;
+            app.setVersion(oldCode);
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        ApiRequest.requestData(app, phone, new JsonHttpHandler() {
+            @Override
+            public void onDo(JSONObject responseJsonObject) {
+                final APP_Version returnapp = JSON.parseObject(responseJsonObject.toString(), APP_Version.class);
+                if ("0000".equals(returnapp.getDetailCode())) {
+                    update.checkUpdateInfo(returnapp);
+                }
+            }
+
+            @Override
+            public void onDo(JSONArray responseJsonArray) {
+
+            }
+
+            @Override
+            public void onDo(String responseString) {
+
+            }
+
+            @Override
+            public void onFinish() {
+            }
+        });
+    }
 
 	@SuppressWarnings("deprecation")
 	private void DiologToJump(String diostr) {

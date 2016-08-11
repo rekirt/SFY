@@ -5,6 +5,7 @@ import android.os.Environment;
 import com.itech.utils.SequenceUtil;
 
 public class Constant {
+	public static String USER = "USER";
 	public static String url = "http://www.itisfs.com/SfyRelayServices_v1/appRevServer";
 	//密码控件publickey
 	public static String publickey = "30818902818100e772a7ba31dc574f7adb3a0b8a05bc7780146fed534b72e2c921ab5e11791608d44212f323a3c233f8721cf8546ade8c4dc8162b79005489ee821b4d3875eb048f762359c077094cc013e1f85fb45068500d1e4b31a060eed42aede6f2872f3f4110adc443be174410618bf4b75e5122ea7e17ed3c1dd5929d3ae84c1c1c12950203010001";
@@ -37,9 +38,10 @@ public class Constant {
 
 	public static String banknumber="";
 
-	public static String SHARED_PREFERENCE_NAME = "SFY_SHARED_PREFERENCE_NAME";
+	public static String SHARED_PREFERENCE_NAME = TDevice.getVersionName()+"SFY_SHARED_PREFERENCE_NAME";
     public static String ACTIVATION = "jihuo";
     public static String PHONE = "phone";
+
     public static String DESKEY = "deskey";
     public static String DESK3KEY = "des3key";
     public static String TOKEN = "token";
@@ -47,12 +49,13 @@ public class Constant {
     public static String NUMBER = "number";
     public static String ISEXIT = "Is_exit";
     public static String GAIMIMA = "gaimima";
-	public static String MIMA = "mima";
-	public static String MERCHANT = "merchant";
+//	public static String MIMA = "mima";
+//	public static String MERCHANT = "merchant";
 	public static String LOGIN = "login";
-	public static String ISLOGIN = "Is_Login";
+//	public static String ISLOGIN = "Is_Login";
 	public static String LOGINSERECT = "LoginSerect";
-	public static String GESNUMBER = "gesnumber";
+
+	public static String FINGERPASSWORD = "FINGERPASSWORD";//手势密码
 	public static String HAVESETFINGERPWD = "HAVESETFINGERPWD";
 
 	public static final long CACHE_EXPIRE_DAY = 3600000*200;//两百天

@@ -586,12 +586,15 @@ public class SignDetailActivity extends BaseActivity {
     }
 
     private boolean pregotoAgreement(){
-        if (TextUtils.isEmpty(mVideoFileId) || TextUtils.isEmpty(mFrontIdCardFileId) || TextUtils.isEmpty(mBackIdCardFileId)
+        if (signedState){
+            return true;
+        } else if (TextUtils.isEmpty(mVideoFileId) || TextUtils.isEmpty(mFrontIdCardFileId) || TextUtils.isEmpty(mBackIdCardFileId)
                 || TextUtils.isEmpty(mFrontBankCardFileId) || TextUtils.isEmpty(mBackBankCardFileId)
                 || TextUtils.isEmpty(mPhotoFileId) || mArrayListProtocolFileId.size() < 1){
             ToastHelper.ShowToast("请先采集全所需附件");
             return false;
         }
+
         return true;
     }
 
@@ -719,12 +722,13 @@ public class SignDetailActivity extends BaseActivity {
     /**
      * 根据后台返回的验证组合来动态显示页面
      */
+    private boolean signedState = false;
     private void updateViewState(APP_120024 app_120024){
        //要素验证
         tv_phone_number.setText(mResult.getMobile());
         tv_card_number.setText(app_120024.getAccountNo());
         tv_id_number.setText(app_120024.getIdCard());
-
+        tv_card_holder.setText(app_120024.getUserName());
         for (VerifyGroup verifyGroup : app_120024.getVerifyGroupList()){
             switch (verifyGroup.getVerifyGroupCode()){
                 case "PORTRAIT_COMPARISON"://人像比对验证（身份证照片、客户正面头像）
@@ -766,7 +770,10 @@ public class SignDetailActivity extends BaseActivity {
         if ("2".equals(app_120024.getState())){
             btn_submit.setEnabled(false);
             btn_submit.setClickable(false);
+            signedState = true;
+            btn_submit.setVisibility(View.GONE);
         }else {
+            signedState = false;
             btn_submit.setEnabled(true);//更新详情后恢复提交按钮可交互
             btn_submit.setClickable(true);
         }
@@ -782,16 +789,27 @@ public class SignDetailActivity extends BaseActivity {
                 tv_id_card_front_state.setText("点击采集");
                 tv_id_card_back_state.setText("点击采集");
                 tv_avatar_state.setText("点击采集");
+                tv_id_card_front_state.setTextColor(getResources().getColor(R.color.red));
+                tv_id_card_back_state.setTextColor(getResources().getColor(R.color.red));
+                tv_avatar_state.setTextColor(getResources().getColor(R.color.red));
+
                 break;
             case "2":
                 tv_id_card_front_state.setText("验证通过");
                 tv_id_card_back_state.setText("验证通过");
                 tv_avatar_state.setText("验证通过");
+                tv_id_card_front_state.setTextColor(getResources().getColor(R.color.blue));
+                tv_id_card_back_state.setTextColor(getResources().getColor(R.color.blue));
+                tv_avatar_state.setTextColor(getResources().getColor(R.color.blue));
+
                 break;
             case "3":
                 tv_id_card_front_state.setText("验证不通过");
                 tv_id_card_back_state.setText("验证不通过");
                 tv_avatar_state.setText("验证不通过");
+                tv_id_card_front_state.setTextColor(getResources().getColor(R.color.red));
+                tv_id_card_back_state.setTextColor(getResources().getColor(R.color.red));
+                tv_avatar_state.setTextColor(getResources().getColor(R.color.red));
                 break;
             default:
                 break;
@@ -840,18 +858,30 @@ public class SignDetailActivity extends BaseActivity {
             case "1":
                 tv_bank_card_front_state.setText("点击采集");
                 tv_bank_card_back_state.setText("点击采集");
+                tv_bank_card_front_state.setTextColor(getResources().getColor(R.color.red));
+                tv_bank_card_back_state.setTextColor(getResources().getColor(R.color.red));
+
                 break;
             case "2":
                 tv_bank_card_front_state.setText("验证通过");
                 tv_bank_card_back_state.setText("验证通过");
+                tv_bank_card_front_state.setTextColor(getResources().getColor(R.color.blue));
+                tv_bank_card_back_state.setTextColor(getResources().getColor(R.color.blue));
+
                 break;
             case "3":
                 tv_bank_card_front_state.setText("验证不通过");
                 tv_bank_card_back_state.setText("验证不通过");
+                tv_bank_card_front_state.setTextColor(getResources().getColor(R.color.red));
+                tv_bank_card_back_state.setTextColor(getResources().getColor(R.color.red));
+
                 break;
             default:
                 tv_bank_card_front_state.setText("点击采集");
                 tv_bank_card_back_state.setText("点击采集");
+                tv_bank_card_front_state.setTextColor(getResources().getColor(R.color.red));
+                tv_bank_card_back_state.setTextColor(getResources().getColor(R.color.red));
+
                 break;
         }
         for (VerifyItem verifyItem : verifyGroup.getVerifyItemList()){
@@ -864,6 +894,9 @@ public class SignDetailActivity extends BaseActivity {
                     if (!TextUtils.isEmpty(mFrontBankCardFileId) && !TextUtils.isEmpty(mBackBankCardFileId)){
                         tv_bank_card_front_state.setText("点击查看");
                         tv_bank_card_back_state.setText("点击查看");
+                        tv_bank_card_front_state.setTextColor(getResources().getColor(R.color.blue));
+                        tv_bank_card_back_state.setTextColor(getResources().getColor(R.color.blue));
+
                     }
                     break;
                 default:
@@ -881,20 +914,29 @@ public class SignDetailActivity extends BaseActivity {
         switch (verifyGroup.getVerifyState()){
             case "1":
                 tv_agreement_pic_state.setText("点击采集");
+                tv_agreement_pic_state.setTextColor(getResources().getColor(R.color.red));
+
                 break;
             case "2":
                 tv_agreement_pic_state.setText("验证通过");
+                tv_agreement_pic_state.setTextColor(getResources().getColor(R.color.blue));
+
                 break;
             case "3":
                 tv_agreement_pic_state.setText("验证不通过");
+                tv_agreement_pic_state.setTextColor(getResources().getColor(R.color.red));
+
                 break;
             default:
                 tv_agreement_pic_state.setText("点击采集");
+                tv_agreement_pic_state.setTextColor(getResources().getColor(R.color.red));
+
                 break;
         }
         for (VerifyItem verifyItem : verifyGroup.getVerifyItemList()){
             switch (verifyItem.getVerifyItemCode()){
                 case "PAPER_PROTOCOL":
+                    mArrayListProtocolFileId.clear();
                     for (FileMsg fileMsg : verifyItem.getFileList()){
                         mArrayListProtocolFileId.add(fileMsg.getFileId());
                     }
@@ -905,6 +947,7 @@ public class SignDetailActivity extends BaseActivity {
         }
         if (mArrayListProtocolFileId.size()>0){
             tv_agreement_pic_state.setText("点击查看");
+            tv_agreement_pic_state.setTextColor(getResources().getColor(R.color.blue));
         }
     }
 
@@ -917,15 +960,23 @@ public class SignDetailActivity extends BaseActivity {
         switch (verifyGroup.getVerifyState()){
             case "1":
                 tv_e_agreement_state.setText("签订");
+                tv_e_agreement_state.setTextColor(getResources().getColor(R.color.red));
+
                 break;
             case "2":
                 tv_e_agreement_state.setText("已签订");
+                tv_e_agreement_state.setTextColor(getResources().getColor(R.color.blue));
+
                 break;
             case "3":
                 tv_e_agreement_state.setText("验证不通过");
+                tv_e_agreement_state.setTextColor(getResources().getColor(R.color.red));
+
                 break;
             default:
                 tv_e_agreement_state.setText("签订");
+                tv_e_agreement_state.setTextColor(getResources().getColor(R.color.red));
+
                 break;
         }
         for (VerifyItem verifyItem : verifyGroup.getVerifyItemList()){
@@ -940,6 +991,7 @@ public class SignDetailActivity extends BaseActivity {
         }
         if (!TextUtils.isEmpty(mESignFileId)){
             tv_e_agreement_state.setText("点击查看");
+            tv_e_agreement_state.setTextColor(getResources().getColor(R.color.blue));
         }
     }
 
@@ -950,18 +1002,30 @@ public class SignDetailActivity extends BaseActivity {
             case "1":
                 tv_id_card_holder_video_state.setText("点击采集");
                 tv_avatar_state.setText("点击采集");
+                tv_id_card_holder_video_state.setTextColor(getResources().getColor(R.color.red));
+                tv_avatar_state.setTextColor(getResources().getColor(R.color.red));
+
                 break;
             case "2":
                 tv_id_card_holder_video_state.setText("验证通过");
                 tv_avatar_state.setText("验证通过");
+                tv_id_card_holder_video_state.setTextColor(getResources().getColor(R.color.blue));
+                tv_avatar_state.setTextColor(getResources().getColor(R.color.blue));
+
                 break;
             case "3":
                 tv_id_card_holder_video_state.setText("验证不通过");
                 tv_avatar_state.setText("验证不通过");
+                tv_id_card_holder_video_state.setTextColor(getResources().getColor(R.color.red));
+                tv_avatar_state.setTextColor(getResources().getColor(R.color.red));
+
                 break;
             default:
                 tv_id_card_holder_video_state.setText("点击采集");
                 tv_avatar_state.setText("点击采集");
+                tv_id_card_holder_video_state.setTextColor(getResources().getColor(R.color.red));
+                tv_avatar_state.setTextColor(getResources().getColor(R.color.red));
+
                 break;
         }
         for (VerifyItem verifyItem : verifyGroup.getVerifyItemList()){
@@ -971,6 +1035,8 @@ public class SignDetailActivity extends BaseActivity {
                         mVideoFileId = verifyItem.getFileList().get(0).getFileId();
                     if(!TextUtils.isEmpty(mVideoFileId)){
                         tv_id_card_holder_video_state.setText("点击查看");
+                        tv_id_card_holder_video_state.setTextColor(getResources().getColor(R.color.blue));
+
                     }
                     break;
                 case "PHOTO":
@@ -978,6 +1044,8 @@ public class SignDetailActivity extends BaseActivity {
                         mPhotoFileId = verifyItem.getFileList().get(0).getFileId();
                     if (!TextUtils.isEmpty(mPhotoFileId)){
                         tv_avatar_state.setText("点击查看");
+                        tv_avatar_state.setTextColor(getResources().getColor(R.color.blue));
+
                     }
                     break;
                 default:
@@ -997,22 +1065,30 @@ public class SignDetailActivity extends BaseActivity {
             case "1":
                 tv_deal_pwd_state.setText("未验证");
                 tv_id_number_state.setText("未验证");
+                tv_deal_pwd_state.setTextColor(getResources().getColor(R.color.red));
+                tv_id_number_state.setTextColor(getResources().getColor(R.color.red));
+
                 break;
             case "2":
                 tv_deal_pwd_state.setText("验证通过");
                 tv_id_number_state.setText("验证通过");
                 tv_deal_pwd_state.setEnabled(false);
                 tv_id_number_state.setEnabled(false);
-                tv_deal_pwd_state.setTextColor(getResources().getColor(R.color.red));
-                tv_id_number_state.setTextColor(getResources().getColor(R.color.red));
+                tv_deal_pwd_state.setTextColor(getResources().getColor(R.color.blue));
+                tv_id_number_state.setTextColor(getResources().getColor(R.color.blue));
                 break;
             case "3":
                 tv_deal_pwd_state.setText("验证不通过");
                 tv_id_number_state.setText("验证不通过");
+                tv_deal_pwd_state.setTextColor(getResources().getColor(R.color.red));
+                tv_id_number_state.setTextColor(getResources().getColor(R.color.red));
                 break;
             default:
                 tv_deal_pwd_state.setText("未验证");
                 tv_id_number_state.setText("未验证");
+                tv_deal_pwd_state.setTextColor(getResources().getColor(R.color.red));
+                tv_id_number_state.setTextColor(getResources().getColor(R.color.red));
+
                 break;
         }
         for (VerifyItem verifyItem : verifyGroup.getVerifyItemList()){

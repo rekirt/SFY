@@ -1,20 +1,24 @@
 package com.cchtw.sfy.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.api.ApiRequest;
 import com.cchtw.sfy.api.JsonHttpHandler;
+import com.cchtw.sfy.uitls.AccountHelper;
+import com.cchtw.sfy.uitls.ActivityCollector;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
@@ -28,13 +32,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 	private Button butlogin;
 	private EditText mEditPhone;
     private EditText mEditPwd;
+	private CheckBox cb_remember;
 	private TextView tv_start_to_use;
-	private String strcode, strphone, strserect;
-	private SharedPreferences.Editor edit;
-
-	private String message;
-	private String deskey;
-	private String des3key;
+	private TextView tv_forget_pwd;
+	private String strphone;
 
 	protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -44,31 +45,38 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		initData();
 	}
 
-
 	private void initView() {
         mEditPhone = (EditText) findViewById(R.id.edt_phone);
         mEditPwd = (EditText) findViewById(R.id.edt_pwd);
 		butlogin = (Button) findViewById(R.id.btn_login);
-        tv_start_to_use = (TextView) findViewById(R.id.tv_start_to_use);
+		cb_remember = (CheckBox) findViewById(R.id.cb_remember);
+		tv_start_to_use = (TextView) findViewById(R.id.tv_start_to_use);
+		tv_forget_pwd = (TextView) findViewById(R.id.tv_forget_pwd);
+
 	}
 
 	private void initData(){
-		deskey = SharedPreferencesHelper.getString(Constant.DESKEY, "");
-		des3key = SharedPreferencesHelper.getString(Constant.DESK3KEY, "");
 		strphone = SharedPreferencesHelper.getString(Constant.PHONE, "");
-		strserect = SharedPreferencesHelper.getString(Constant.LOGINSERECT, "");
 		if (!TextUtils.isEmpty(strphone)){
 			mEditPhone.setText(strphone);
 		}
 		butlogin.setOnClickListener(this);
         tv_start_to_use.setOnClickListener(this);
+		tv_forget_pwd.setOnClickListener(this);
 	}
 
-	// 登录
 	private void login() {
 		APP_120033 app = new APP_120033();
 		app.setUserName(mEditPhone.getText().toString());
 		app.setLoginState("0000");
+        String des3key = SharedPreferencesHelper.getString(mEditPhone.getText().toString()+Constant.DESK3KEY, "");
+        if (TextUtils.isEmpty(des3key)){
+            ToastHelper.ShowToast("第一次在该设备登录，请先启用！");
+            Intent intent = new Intent();
+            intent.setClass(LoginActivity.this, StartToUseActivity.class);
+            startActivity(intent);
+            return;
+        }
 		try {
 			app.setUserPass(des3key, mEditPwd.getText().toString());
 		} catch (Exception e) {
@@ -77,23 +85,34 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 
 		DialogHelper.showProgressDialog(LoginActivity.this, "正在登录...", true, false);
 
-		ApiRequest.login(app, strphone, new JsonHttpHandler() {
+		ApiRequest.login(app, mEditPhone.getText().toString(), new JsonHttpHandler() {
 			@Override
 			public void onDo(JSONObject responseJsonObject) {
-				// 在第一次登录激活的时候在发一次登录报文获取所属商户号
 				APP_120033 returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120033.class);
-				message = returnapp.getDetailInfo();
 				if ("0000".equals(returnapp.getDetailCode())) {
-                    SharedPreferencesHelper.setString(Constant.MERCHANT, returnapp.getMerchantId());
-                    SharedPreferencesHelper.setString(Constant.TOKEN, returnapp.getToken());
-                    SharedPreferencesHelper.setString(Constant.DESKEY, returnapp.getDesKey());
-                    SharedPreferencesHelper.setString(Constant.DESK3KEY, returnapp.getDes3Key());
-					SharedPreferencesHelper.setBoolean(Constant.ISLOGIN, true);// 保存字符串
-					Intent intent = new Intent();
-					intent.setClass(LoginActivity.this,SetGestureActivity.class);
+					AccountHelper.setUser(returnapp);
+					if (cb_remember.isChecked()) {
+						SharedPreferencesHelper.setString(Constant.PHONE, mEditPhone.getText().toString());
+					}
+                    SharedPreferencesHelper.setString(mEditPhone.getText().toString() + Constant.DESK3KEY, AccountHelper.getDes3Key());
+                    SharedPreferencesHelper.setString(mEditPhone.getText().toString() + Constant.DESKEY, AccountHelper.getDesKey());
+                    SharedPreferencesHelper.setString(mEditPhone.getText().toString()+Constant.TOKEN, AccountHelper.getToken());
+
+                    Intent intent = new Intent();
+					intent.setClass(LoginActivity.this, SetGestureActivity.class);
 					startActivity(intent);
 					LoginActivity.this.finish();
-				}else {
+				} else if ("3998".equals(returnapp.getDetailCode())) {
+					ToastHelper.ShowToast(returnapp.getDetailInfo());
+					Intent intent = new Intent();
+					intent.setClass(LoginActivity.this, StartToUseActivity.class);
+					startActivity(intent);
+				} else if ("1017".equals(returnapp.getDetailCode())) {
+					ToastHelper.ShowToast(returnapp.getDetailInfo());
+					Intent intent = new Intent();
+					intent.setClass(LoginActivity.this, StartToUseActivity.class);
+					startActivity(intent);
+				} else {
 					ToastHelper.ShowToast(returnapp.getDetailInfo());
 				}
 			}
@@ -105,7 +124,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 
 			@Override
 			public void onDo(String responseString) {
-
 			}
 
 			@Override
@@ -120,6 +138,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 	public void onClick(View view) {
 		super.onClick(view);
 		switch (view.getId()){
+			case R.id.tv_forget_pwd:
 			case R.id.tv_start_to_use:
 				startActivity(new Intent(LoginActivity.this,StartToUseActivity.class));
 				break;
@@ -134,5 +153,26 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 			default:
 				break;
 		}
+	}
+
+	private long mExitTime;
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			if ((System.currentTimeMillis() - mExitTime) > 2000) {
+				Toast.makeText(this, "在按一次退出",
+						Toast.LENGTH_SHORT).show();
+				mExitTime = System.currentTimeMillis();
+			} else {
+				LoginActivity.this.finish();
+				ActivityCollector.finishAll();
+			}
+			return true;
+		}
+		//拦截MENU按钮点击事件，让他无任何操作
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }

@@ -9,8 +9,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.cchtw.sfy.R;
-import com.cchtw.sfy.uitls.Constant;
-import com.cchtw.sfy.uitls.SharedPreferencesHelper;
+import com.cchtw.sfy.uitls.AccountHelper;
+import com.cchtw.sfy.uitls.ActivityCollector;
 import com.cchtw.sfy.uitls.ToastHelper;
 import com.cchtw.sfy.uitls.dialog.AlertDialogHelper;
 import com.cchtw.sfy.uitls.dialog.ChooseDialogDoClickHelper;
@@ -39,9 +39,9 @@ public class SetGestureActivity extends BaseActivity {
         isChangeFingerPwd = getIntent().getBooleanExtra("isChangeFingerPwd",false);
 		body_layout = (FrameLayout) findViewById(R.id.body_layout);
         mTvShowMsg = (TextView) findViewById(R.id.tv_show_msg);
-        String temp = SharedPreferencesHelper.getString(Constant.FINGERPASSWORDTIMES, "5");
+        String temp = AccountHelper.getUserFingerPwdTimes();
         errorTime =  Integer.parseInt(temp)-1;
-        oldFingerPwd = SharedPreferencesHelper.getString(Constant.MIMA, "");
+        oldFingerPwd = AccountHelper.getUserFingerPwd();
         initView();
         setCanBack(true);
 	}
@@ -50,8 +50,8 @@ public class SetGestureActivity extends BaseActivity {
     private boolean haveSetFingerPwd;
 	private void initView() {
 		// 初始化一个显示各个点的viewGroup
-		is_regserect = SharedPreferencesHelper.getString(Constant.MIMA, "");
-        haveSetFingerPwd = SharedPreferencesHelper.getBoolean(Constant.HAVESETFINGERPWD, false);
+		is_regserect = AccountHelper.getUserFingerPwd();
+        haveSetFingerPwd = AccountHelper.haveSetFingerPwd();
 
 		if (haveSetFingerPwd) {//如果已经设置了手势密码
             mTvShowMsg.setText("忘记手势密码");
@@ -68,13 +68,13 @@ public class SetGestureActivity extends BaseActivity {
             @Override
             public void checkedSuccess() {
                 if (haveSetFingerPwd && isChangeFingerPwd){
-                    SharedPreferencesHelper.setString(Constant.MIMA, "");
-                    SharedPreferencesHelper.setBoolean(Constant.HAVESETFINGERPWD, false);
+                    AccountHelper.haveFingerPwdChange(false);
+                    AccountHelper.setUserFingerPwd("");
                     initView();
                     ToastHelper.ShowToast("请输入新的手势密码!");
                 }else {
-                    SharedPreferencesHelper.setBoolean(Constant.HAVESETFINGERPWD, true);
-                    SharedPreferencesHelper.setString(Constant.MIMA, is_regserect);
+                    AccountHelper.haveFingerPwdChange(true);
+                    AccountHelper.setUserFingerPwd(is_regserect);
                     Intent intent = new Intent(SetGestureActivity.this, MainActivity.class);
                     startActivity(intent);
                     SetGestureActivity.this.finish();
@@ -85,14 +85,14 @@ public class SetGestureActivity extends BaseActivity {
             public void checkedFail() {
                 errorTime--;
                 if (errorTime < 1) {
-                    SharedPreferencesHelper.setString("Is_exit", "1");
-                    SharedPreferencesHelper.setBoolean(Constant.ISLOGIN,false);
-                    Intent intent = new Intent(SetGestureActivity.this,ChangePwdActivity.class);
+                    AccountHelper.setUser(null);
+                    Intent intent = new Intent(SetGestureActivity.this,LoginActivity.class);
                     startActivity(intent);
+                    ActivityCollector.finishAll();
                     SetGestureActivity.this.finish();
                 }else {
                     if (haveSetFingerPwd){
-                        SharedPreferencesHelper.setInt(Constant.GESNUMBER, errorTime);
+                        AccountHelper.setUserFingerPwdTimes(errorTime);
                         ToastHelper.ShowToast("今天还允许输入错误" + errorTime + "次");
                     }else {
                         ToastHelper.ShowToast("两次手势不一致!");
@@ -112,7 +112,6 @@ public class SetGestureActivity extends BaseActivity {
     @Override
     public void onClick(View view) {
         super.onClick(view);
-        SharedPreferencesHelper.setBoolean(Constant.ISLOGIN, false);// 保存字符串
         Intent intent = new Intent(SetGestureActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
@@ -138,7 +137,7 @@ public class SetGestureActivity extends BaseActivity {
                         @Override
                         public void doClick(DialogInterface dialog,
                                             int which) {
-                            SharedPreferencesHelper.setString(Constant.MIMA, oldFingerPwd);
+                            AccountHelper.setUserFingerPwd(oldFingerPwd);
                             SetGestureActivity.this.finish();
                         }
                     });
@@ -165,7 +164,7 @@ public class SetGestureActivity extends BaseActivity {
                         @Override
                         public void doClick(DialogInterface dialog,
                                             int which) {
-                            SharedPreferencesHelper.setString(Constant.MIMA, oldFingerPwd);
+                            AccountHelper.setUserFingerPwd(oldFingerPwd);
                             SetGestureActivity.this.finish();
                         }
                     });
