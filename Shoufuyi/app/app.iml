@@ -100,12 +100,13 @@
     <orderEntry type="library" exported="" name="universal-image-loader-1.9.5" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-23.2.1" level="project" />
     <orderEntry type="library" exported="" name="slf4j-api-1.6.3" level="project" />
+    <orderEntry type="library" exported="" name="android_auth_id" level="project" />
     <orderEntry type="library" exported="" name="crashreport-2.1.1" level="project" />
     <orderEntry type="library" exported="" name="android_auth" level="project" />
     <orderEntry type="library" exported="" name="fastjson-1.1.38" level="project" />
     <orderEntry type="library" exported="" name="ScanCamera" level="project" />
-    <orderEntry type="library" exported="" name="pki" level="project" />
     <orderEntry type="library" exported="" name="android-async-http-1.4.9" level="project" />
+    <orderEntry type="library" exported="" name="pki" level="project" />
     <orderEntry type="library" exported="" name="commons-lang3-3.3.2" level="project" />
     <orderEntry type="library" exported="" name="pe-enterx-guard-1.0" level="project" />
     <orderEntry type="library" exported="" name="gson-2.3.1" level="project" />
