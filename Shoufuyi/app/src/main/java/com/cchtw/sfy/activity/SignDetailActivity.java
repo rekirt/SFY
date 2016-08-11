@@ -936,6 +936,7 @@ public class SignDetailActivity extends BaseActivity {
         for (VerifyItem verifyItem : verifyGroup.getVerifyItemList()){
             switch (verifyItem.getVerifyItemCode()){
                 case "PAPER_PROTOCOL":
+                    mArrayListProtocolFileId.clear();
                     for (FileMsg fileMsg : verifyItem.getFileList()){
                         mArrayListProtocolFileId.add(fileMsg.getFileId());
                     }
@@ -947,7 +948,6 @@ public class SignDetailActivity extends BaseActivity {
         if (mArrayListProtocolFileId.size()>0){
             tv_agreement_pic_state.setText("点击查看");
             tv_agreement_pic_state.setTextColor(getResources().getColor(R.color.blue));
-
         }
     }
 

@@ -111,7 +111,7 @@ public class AccountHelper {
         return SharedPreferencesHelper.getString(getUserName()+Constant.FINGERPASSWORDTIMES, "5");
     }
     public static void setUserFingerPwdTimes(int i) {
-         SharedPreferencesHelper.setInt(getUserName()+Constant.FINGERPASSWORDTIMES, i);
+         SharedPreferencesHelper.setString(getUserName() + Constant.FINGERPASSWORDTIMES, i+"");
     }
 
     public static boolean haveSetFingerPwd() {
@@ -133,5 +133,6 @@ public class AccountHelper {
 
     public static void logout() {
         SharedPreferencesHelper.setString(Constant.USER, null);
+
     }
 }

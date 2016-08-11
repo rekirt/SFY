@@ -66,17 +66,22 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void redirectTo(){
-            boolean is_login = AccountHelper.isLogin();
-            //如果帐号存在，表示已登录
-            if (is_login) {
-                Intent intent = new Intent(SplashActivity.this, SetGestureActivity.class);
-                startActivity(intent);
-                SplashActivity.this.finish();
-            }else {
-                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                startActivity(intent);
-                SplashActivity.this.finish();
-            }
+        boolean is_login = AccountHelper.isLogin();
+        boolean haveSetFingerPwd = AccountHelper.haveSetFingerPwd();
+
+        if (is_login && haveSetFingerPwd) {
+            Intent intent = new Intent(SplashActivity.this, GestureLoginActivity.class);
+            startActivity(intent);
+            SplashActivity.this.finish();
+        }else if (is_login) {
+            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            startActivity(intent);
+            SplashActivity.this.finish();
+        }else {
+            Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+            startActivity(intent);
+            SplashActivity.this.finish();
+        }
     }
 
     /**

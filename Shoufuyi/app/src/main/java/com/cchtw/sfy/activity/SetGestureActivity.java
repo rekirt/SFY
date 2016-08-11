@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.uitls.AccountHelper;
+import com.cchtw.sfy.uitls.ActivityCollector;
 import com.cchtw.sfy.uitls.ToastHelper;
 import com.cchtw.sfy.uitls.dialog.AlertDialogHelper;
 import com.cchtw.sfy.uitls.dialog.ChooseDialogDoClickHelper;
@@ -87,6 +88,7 @@ public class SetGestureActivity extends BaseActivity {
                     AccountHelper.setUser(null);
                     Intent intent = new Intent(SetGestureActivity.this,LoginActivity.class);
                     startActivity(intent);
+                    ActivityCollector.finishAll();
                     SetGestureActivity.this.finish();
                 }else {
                     if (haveSetFingerPwd){

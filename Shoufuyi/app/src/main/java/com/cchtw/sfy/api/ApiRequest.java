@@ -109,7 +109,6 @@ public class ApiRequest {
              token = SharedPreferencesHelper.getString(MOBILE+"token", "");
              deskey = SharedPreferencesHelper.getString(MOBILE + "deskey", "");
              SharedPreferencesHelper.setString(Constant.PHONE, MOBILE);// 保存字符串
-
         }
         isActivation = SharedPreferencesHelper.getBoolean(MOBILE + Constant.ACTIVATION, false);
         String uuid = SharedPreferencesHelper.getString("uuid", "");

@@ -3,6 +3,7 @@ package com.cchtw.sfy.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -10,12 +11,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.api.ApiRequest;
 import com.cchtw.sfy.api.JsonHttpHandler;
 import com.cchtw.sfy.uitls.AccountHelper;
+import com.cchtw.sfy.uitls.ActivityCollector;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
@@ -87,25 +90,29 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 			public void onDo(JSONObject responseJsonObject) {
 				APP_120033 returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120033.class);
 				if ("0000".equals(returnapp.getDetailCode())) {
-                    AccountHelper.setUser(returnapp);
-                    if (cb_remember.isChecked()){
+					AccountHelper.setUser(returnapp);
+					if (cb_remember.isChecked()) {
 						SharedPreferencesHelper.setString(Constant.PHONE, mEditPhone.getText().toString());
 					}
-					Intent intent = new Intent();
-					intent.setClass(LoginActivity.this,SetGestureActivity.class);
+                    SharedPreferencesHelper.setString(mEditPhone.getText().toString() + Constant.DESK3KEY, AccountHelper.getDes3Key());
+                    SharedPreferencesHelper.setString(mEditPhone.getText().toString() + Constant.DESKEY, AccountHelper.getDesKey());
+                    SharedPreferencesHelper.setString(mEditPhone.getText().toString()+Constant.TOKEN, AccountHelper.getToken());
+
+                    Intent intent = new Intent();
+					intent.setClass(LoginActivity.this, SetGestureActivity.class);
 					startActivity(intent);
 					LoginActivity.this.finish();
-				}else if ("3998".equals(returnapp.getDetailCode())){
+				} else if ("3998".equals(returnapp.getDetailCode())) {
 					ToastHelper.ShowToast(returnapp.getDetailInfo());
 					Intent intent = new Intent();
-					intent.setClass(LoginActivity.this,StartToUseActivity.class);
+					intent.setClass(LoginActivity.this, StartToUseActivity.class);
 					startActivity(intent);
-				}else if ("1017".equals(returnapp.getDetailCode())){
-                    ToastHelper.ShowToast(returnapp.getDetailInfo());
-                    Intent intent = new Intent();
-                    intent.setClass(LoginActivity.this,StartToUseActivity.class);
-                    startActivity(intent);
-                }else{
+				} else if ("1017".equals(returnapp.getDetailCode())) {
+					ToastHelper.ShowToast(returnapp.getDetailInfo());
+					Intent intent = new Intent();
+					intent.setClass(LoginActivity.this, StartToUseActivity.class);
+					startActivity(intent);
+				} else {
 					ToastHelper.ShowToast(returnapp.getDetailInfo());
 				}
 			}
@@ -146,5 +153,26 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 			default:
 				break;
 		}
+	}
+
+	private long mExitTime;
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			if ((System.currentTimeMillis() - mExitTime) > 2000) {
+				Toast.makeText(this, "在按一次退出",
+						Toast.LENGTH_SHORT).show();
+				mExitTime = System.currentTimeMillis();
+			} else {
+				LoginActivity.this.finish();
+				ActivityCollector.finishAll();
+			}
+			return true;
+		}
+		//拦截MENU按钮点击事件，让他无任何操作
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }

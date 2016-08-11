@@ -239,7 +239,6 @@ public class QuerySignActivity extends BaseActivity implements
                         }
                         executeOnLoadDataSuccess(mSignList);
                         executeOnLoadFinish();
-                        DialogHelper.dismissProgressDialog();
                     }
 
                     @Override
@@ -254,6 +253,11 @@ public class QuerySignActivity extends BaseActivity implements
                     public void onFail(String msg) {
                         executeOnLoadDataError(msg);
                         executeOnLoadFinish();
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        DialogHelper.dismissProgressDialog();
                     }
                 }
         );
