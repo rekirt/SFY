@@ -197,7 +197,7 @@ public class ElementVerificationActivity extends BaseActivity {
      * 获取验证码
      */
     private void getMsgCode(){
-        DialogHelper.showProgressDialog(ElementVerificationActivity.this, "正在请求验证码...", true, true);
+        DialogHelper.showProgressDialog(ElementVerificationActivity.this, "正在请求...", true, true);
         APP_120031 app = new APP_120031();
         app.setMobile(edt_new_sign_phone_number.getText().toString());
         app.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));

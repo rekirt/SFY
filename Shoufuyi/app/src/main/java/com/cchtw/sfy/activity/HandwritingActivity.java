@@ -106,21 +106,20 @@ public class HandwritingActivity extends BaseActivity {
     private void sign(){
         WritePadDialog writeTabletDialog = new WritePadDialog(
                 HandwritingActivity.this, new DialogListener() {
+
+                @Override
+                public void refreshActivity(Object object) {
+                    mSignBitmap = (Bitmap) object;
+                    signPath = createFile();
+                    ivSign.setImageBitmap(mSignBitmap);
+                    tvSign.setVisibility(View.GONE);
+                    but_submit.setVisibility(View.VISIBLE);
+                    saveBitmap(mSignBitmap);
+                }
+
             @Override
-            public void refreshActivity(Object object) {
-                mSignBitmap = (Bitmap) object;
-                signPath = createFile();
-							/*
-							 * BitmapFactory.Options options = new
-							 * BitmapFactory.Options(); options.inSampleSize =
-							 * 15; options.inTempStorage = new byte[5 * 1024];
-							 * Bitmap zoombm =
-							 * BitmapFactory.decodeFile(signPath, options);
-							 */
-                ivSign.setImageBitmap(mSignBitmap);
-                tvSign.setVisibility(View.GONE);
-                but_submit.setVisibility(View.VISIBLE);
-                saveBitmap(mSignBitmap);
+            public void cancel() {
+                signPath = "";
             }
         });
         writeTabletDialog.show();
@@ -128,6 +127,10 @@ public class HandwritingActivity extends BaseActivity {
 
 
     private void upLoadImage() {
+        if (TextUtils.isEmpty(signPath)){
+            ToastHelper.ShowToast("请先签名再提交！");
+            return;
+        }
         UpLoadImageTask downloadTask = new UpLoadImageTask(HandwritingActivity.this);
         downloadTask.execute();
     }

@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.alibaba.fastjson.JSON;
@@ -25,6 +26,7 @@ import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.DatePickListener;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.TDevice;
+import com.cchtw.sfy.uitls.TimeUtils;
 import com.cchtw.sfy.uitls.ToastHelper;
 import com.cchtw.sfy.uitls.WeakAsyncTask;
 import com.cchtw.sfy.uitls.dialog.DialogHelper;
@@ -42,6 +44,7 @@ import org.json.JSONObject;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -64,10 +67,10 @@ public class QuerySignActivity extends BaseActivity implements
     private ParserTask mParserTask;
     private Spinner spinstatus;
     private EditText edt_date;
-
+    private ImageView iv_more;
     // 采集状态默认待采集
     private int collstate = 0;
-
+    private int totalPage = 1000;
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
 
         @Override
@@ -96,6 +99,7 @@ public class QuerySignActivity extends BaseActivity implements
     private void initView(){
         spinstatus = (Spinner) findViewById(R.id.spinstatus);
         edt_date = (EditText) findViewById(R.id.edt_date);
+        iv_more = (ImageView) findViewById(R.id.iv_more);
         mErrorLayout = (EmptyLayout) findViewById(R.id.error_layout);
         mSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.srl_refresh);
         mRecycleView = (RecyclerView) findViewById(R.id.recycleView);
@@ -104,6 +108,8 @@ public class QuerySignActivity extends BaseActivity implements
 
     private void initData(){
         edt_date.setOnClickListener(new DatePickListener(this, edt_date));
+        iv_more.setOnClickListener(new DatePickListener(this, edt_date));
+        setDate(edt_date);
         spinstatus.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
 
             @Override
@@ -120,7 +126,20 @@ public class QuerySignActivity extends BaseActivity implements
                             },
                             true, false);
                     refresh();
+                }else if (collstate != 0){
+                    collstate = arg2;
+                    DialogHelper.showProgressDialog(QuerySignActivity.this, "正在查询，请稍候...", new ProgressDialogDoClickHelper() {
+                                @Override
+                                public void doClick() {
+                                    if (requestHandle != null) {
+                                        requestHandle.cancel(true);
+                                    }
+                                }
+                            },
+                            true, false);
+                    refresh();
                 }
+
             }
 
             @Override
@@ -180,6 +199,31 @@ public class QuerySignActivity extends BaseActivity implements
             mErrorLayout.setErrorMessage(mStoreEmptyMessage);
         }
     }
+
+    private void setDate(EditText edt){
+        long time = System.currentTimeMillis();
+        Date date = new Date(time);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        Date beginDate = TimeUtils.getDaysAgo(0);
+        Calendar beginCalendar = Calendar.getInstance();
+        if (beginDate == null){
+            return;
+        }
+        beginCalendar.setTime(beginDate);
+        edt.setText(beginCalendar.get(Calendar.YEAR) + "." + changeNumber(beginCalendar.get(Calendar.MONTH)+1) + "." + changeNumber(beginCalendar.get(Calendar.DATE)) + "至\n" + calendar.get(Calendar.YEAR) + "." + changeNumber(calendar.get(Calendar.MONTH)+1) + "." + changeNumber(calendar.get(Calendar.DATE)) );
+    }
+
+
+
+    private String changeNumber(int number){
+        if (number<10){
+            return ("0"+number);
+        }
+        return number+"";
+    }
+
     @Override
     public void onClick(View view) {
         super.onClick(view);
@@ -203,7 +247,7 @@ public class QuerySignActivity extends BaseActivity implements
             Date date = new Date(time);
             endTime = format.format(date);
         }else {
-            String date[] = mDate.split("至");
+            String date[] = mDate.split("至\n");
             startTime = date[0].replace(".","");
             endTime = date[1].replace(".","");
         }
@@ -214,12 +258,18 @@ public class QuerySignActivity extends BaseActivity implements
         app.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
         app.setCreateUser(SharedPreferencesHelper.getString(Constant.PHONE, ""));
         Page page = new Page();
+        if (mCurrentPage>totalPage){
+            mAdapter.setState(RecycleBaseAdapter.STATE_NO_MORE);
+            return;
+        }
         page.setPageNo(String.valueOf(mCurrentPage));
         page.setPageSize(String.valueOf(TDevice.getPageSize()));
         app.setPage(page);
         if (collstate != 0){
             app.setState(String.valueOf(collstate));
         }
+        startTime = startTime.replaceAll(" ", "");
+        endTime = endTime.replaceAll(" ","");
         app.setCreateDateStart(startTime);
         app.setCreateDateEnd(endTime);
         requestHandle = ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {

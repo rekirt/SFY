@@ -245,7 +245,8 @@ public class NewSignActivity extends BaseActivity{
                 ToastHelper.ShowToast("请填写有效的手机号码");
                 return false;
             }
-            if (!RegexUtils.checkBankCard(mCardNumber)) {
+//            if (!RegexUtils.checkBankCard(mCardNumber)) {//去掉银行卡的校验，只判断长度
+            if (!bankCardIsValideLong(mCardNumber)) {
                 ToastHelper.ShowToast("请填写有效的银行卡卡号");
                 return false;
             }
@@ -253,6 +254,13 @@ public class NewSignActivity extends BaseActivity{
         return true;
     }
 
+    private boolean bankCardIsValideLong(String mCardNumber){
+        if (!TextUtils.isEmpty(mCardNumber) && mCardNumber.length() <= 32 ){
+            return true;
+        }else {
+            return false;
+        }
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

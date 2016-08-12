@@ -71,7 +71,7 @@ public class SignDetailActivity extends BaseActivity {
 	private TextView tv_bank_card_back_state;//银行卡背面照片状态
 	private TextView tv_deal_pwd_state;//交易密码状态
 	private TextView tv_phone_number;//手机号码
-	private TextView tv_card_holder;//持卡人
+//	private TextView tv_card_holder;//持卡人
 	private TextView tv_avatar_state;//头像
 	private TextView tv_id_number_state;//身份证状态
 	private TextView tv_id_number;//身份证号码
@@ -91,7 +91,7 @@ public class SignDetailActivity extends BaseActivity {
 		tv_bank_card_back_state = (TextView) findViewById(R.id.tv_bank_card_back_state);
 		tv_deal_pwd_state = (TextView) findViewById(R.id.tv_deal_pwd_state);
 		tv_phone_number = (TextView) findViewById(R.id.tv_phone_number);//
-		tv_card_holder = (TextView) findViewById(R.id.tv_card_holder);//
+//		tv_card_holder = (TextView) findViewById(R.id.tv_card_holder);//
 		tv_avatar_state = (TextView) findViewById(R.id.tv_avatar_state);//
 		tv_id_number_state = (TextView) findViewById(R.id.tv_id_number_state);//
 		tv_id_number = (TextView) findViewById(R.id.tv_id_number);//
@@ -728,7 +728,7 @@ public class SignDetailActivity extends BaseActivity {
         tv_phone_number.setText(mResult.getMobile());
         tv_card_number.setText(app_120024.getAccountNo());
         tv_id_number.setText(app_120024.getIdCard());
-        tv_card_holder.setText(app_120024.getUserName());
+//        tv_card_holder.setText(app_120024.getUserName());
         for (VerifyGroup verifyGroup : app_120024.getVerifyGroupList()){
             switch (verifyGroup.getVerifyGroupCode()){
                 case "PORTRAIT_COMPARISON"://人像比对验证（身份证照片、客户正面头像）
@@ -833,6 +833,9 @@ public class SignDetailActivity extends BaseActivity {
                     if (!TextUtils.isEmpty(mFrontIdCardFileId) && !TextUtils.isEmpty(mBackIdCardFileId)){
                         tv_id_card_front_state.setText("点击查看");
                         tv_id_card_back_state.setText("点击查看");
+                        tv_id_card_front_state.setTextColor(getResources().getColor(R.color.blue));
+                        tv_id_card_back_state.setTextColor(getResources().getColor(R.color.blue));
+
                     }
                     break;
                 case "PHOTO":
@@ -840,6 +843,7 @@ public class SignDetailActivity extends BaseActivity {
                         mPhotoFileId = verifyItem.getFileList().get(0).getFileId();
                     if (!TextUtils.isEmpty(mPhotoFileId)){
                         tv_avatar_state.setText("点击查看");
+                        tv_avatar_state.setTextColor(getResources().getColor(R.color.blue));
                     }
                     break;
                 default:

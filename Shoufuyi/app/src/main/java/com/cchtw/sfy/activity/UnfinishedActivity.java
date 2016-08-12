@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.R;
@@ -21,7 +23,9 @@ import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.TDevice;
+import com.cchtw.sfy.uitls.TimeUtils;
 import com.cchtw.sfy.uitls.ToastHelper;
+import com.cchtw.sfy.uitls.UnfinishDatePickListener;
 import com.cchtw.sfy.uitls.WeakAsyncTask;
 import com.cchtw.sfy.uitls.view.DividerItemDecoration;
 import com.cchtw.sfy.uitls.view.EmptyLayout;
@@ -35,6 +39,7 @@ import org.json.JSONObject;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -54,7 +59,8 @@ public class UnfinishedActivity extends BaseActivity implements
     protected EmptyLayout mErrorLayout;//错误页
     protected int mCurrentPage = 1;//列表第几页
     private ParserTask mParserTask;
-
+    private EditText edt_date;
+    private ImageView iv_more;
 
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
 
@@ -92,6 +98,8 @@ public class UnfinishedActivity extends BaseActivity implements
                 sendRequestData();
             }
         });
+        edt_date = (EditText) findViewById(R.id.edt_date);
+        iv_more = (ImageView) findViewById(R.id.iv_more);
 
         mSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.srl_refresh);
         mSwipeRefresh.setColorSchemeResources(R.color.main_green, R.color.main_gray, R.color.main_black, R.color.main_purple);
@@ -134,17 +142,53 @@ public class UnfinishedActivity extends BaseActivity implements
         if (!TextUtils.isEmpty(mStoreEmptyMessage)) {
             mErrorLayout.setErrorMessage(mStoreEmptyMessage);
         }
+        edt_date.setOnClickListener(new UnfinishDatePickListener(this, edt_date));
+        iv_more.setOnClickListener(new UnfinishDatePickListener(this, edt_date));
+        setDate(edt_date);
     }
 
+    private void setDate(EditText edt){
+        long time = System.currentTimeMillis();
+        Date date = new Date(time);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        Date beginDate = TimeUtils.getDaysAgo(7);
+        Calendar beginCalendar = Calendar.getInstance();
+        if (beginDate == null){
+            return;
+        }
+        beginCalendar.setTime(beginDate);
+
+        edt.setText(beginCalendar.get(Calendar.YEAR) + "." + changeNumber(beginCalendar.get(Calendar.MONTH)+1) + "." + changeNumber(beginCalendar.get(Calendar.DATE)) + "至" + calendar.get(Calendar.YEAR) + "." + changeNumber(calendar.get(Calendar.MONTH)+1) + "." + changeNumber(calendar.get(Calendar.DATE)) );
+    }
+
+    private String changeNumber(int number){
+        if (number<10){
+            return ("0"+number);
+        }
+        return number+"";
+    }
 
     APP_120023 mReturnApp = new APP_120023();
     private ArrayList<Result_120023> mSignList = new ArrayList<Result_120023>();
 
     protected void sendRequestData() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-        long time = System.currentTimeMillis();
-        Date date = new Date(time);
-        String endtime = format.format(date);
+
+        String endTime ="";
+        String startTime = "";
+        String mDate = edt_date.getText().toString();
+        if ("提交日期".equals(mDate)){
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+            long time = System.currentTimeMillis();
+            Date date = new Date(time);
+            endTime = format.format(date);
+        }else {
+            String date[] = mDate.split("至");
+            startTime = date[0].replace(".","");
+            endTime = date[1].replace(".","");
+        }
+
         APP_120023 app = new APP_120023();
         app.setMerchantId(AccountHelper.getMerchantId());
         app.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
@@ -154,8 +198,10 @@ public class UnfinishedActivity extends BaseActivity implements
         page.setPageSize(TDevice.getPageSize()+"");
         app.setPage(page);
         app.setState(String.valueOf(1));
-        app.setCreateDateStart("20151121");
-        app.setCreateDateEnd(endtime);
+        startTime = startTime.replaceAll(" ", "");
+        endTime = endTime.replaceAll(" ","");
+        app.setCreateDateStart(startTime);
+        app.setCreateDateEnd(endTime);
         ApiRequest.requestData(app,SharedPreferencesHelper.getString(Constant.PHONE, ""),new JsonHttpHandler() {
                     @Override
                     public void onDo(JSONObject responseJsonObject) {

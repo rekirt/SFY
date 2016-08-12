@@ -37,6 +37,7 @@
             android:textSize="@dimen/text_size_16"
             android:background="@null"/>
         <ImageView
+            android:id="@+id/iv_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_edt_bg"/>

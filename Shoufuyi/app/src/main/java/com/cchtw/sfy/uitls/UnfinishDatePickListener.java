@@ -14,7 +14,7 @@ import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
 import com.cchtw.sfy.R;
-import com.cchtw.sfy.activity.QuerySignActivity;
+import com.cchtw.sfy.activity.UnfinishedActivity;
 import com.cchtw.sfy.uitls.dialog.DialogHelper;
 
 import java.text.SimpleDateFormat;
@@ -31,14 +31,14 @@ import java.util.List;
  * Copyright © 2016-05-16/5/27 Jason. All rights reserved.
  * blog:http://fuhongliang.com/
  */
-public class DatePickListener  implements OnClickListener {
+public class UnfinishDatePickListener implements OnClickListener {
     private EditText editText = null;
     private Context context;
     private Date date;
     private long time;
     SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
 
-    public DatePickListener(Context c, EditText edit) {
+    public UnfinishDatePickListener(Context c, EditText edit) {
         this.context = c;
         this.editText = edit;
         editText.setFocusable(false);
@@ -78,10 +78,10 @@ public class DatePickListener  implements OnClickListener {
                             ToastHelper.ShowToast("开始时间不能大于结束时间");
                             return;
                         }else {
-                            editText.setText(beginYear+"."+changeNumber(beginMonth)+"."+changeNumber(beginDayOfMonth) + "至\n" + endYear+"."+changeNumber(endMonth)+"."+changeNumber(endDayOfMonth));
+                            editText.setText(beginYear+"."+changeNumber(beginMonth)+"."+changeNumber(beginDayOfMonth) + "至" + endYear+"."+changeNumber(endMonth)+"."+changeNumber(endDayOfMonth));
                             dialog.cancel();
                             DialogHelper.showProgressDialog(context, "正在查询...", true, false);
-                            ((QuerySignActivity)context).refresh();
+                            ((UnfinishedActivity)context).refresh();
                         }
                     }
                 }).show();

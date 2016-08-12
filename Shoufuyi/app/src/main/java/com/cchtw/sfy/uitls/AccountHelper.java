@@ -132,7 +132,8 @@ public class AccountHelper {
     }
 
     public static void logout() {
-        SharedPreferencesHelper.setString(Constant.USER, null);
-
+        AccountHelper.haveFingerPwdChange(false);
+        AccountHelper.setUserFingerPwd("");
+        AccountHelper.setUser(null);
     }
 }

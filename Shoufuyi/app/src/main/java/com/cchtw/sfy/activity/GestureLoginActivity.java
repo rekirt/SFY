@@ -2,7 +2,9 @@ package com.cchtw.sfy.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.uitls.AccountHelper;
@@ -18,10 +20,11 @@ public class GestureLoginActivity extends BaseActivity {
 	// 手势密码
 	private String is_regserect = "";
     private int errorTime;
+    private TextView tv_forget;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_gesture);
+		setContentView(R.layout.activity_gesture_login);
 		body_layout = (FrameLayout) findViewById(R.id.body_layout);
         String temp = AccountHelper.getUserFingerPwdTimes();
         errorTime =  Integer.parseInt(temp)-1;
@@ -31,6 +34,14 @@ public class GestureLoginActivity extends BaseActivity {
 
 	private void initView() {
 		is_regserect = AccountHelper.getUserFingerPwd();
+        tv_forget = (TextView) findViewById(R.id.tv_forget);
+        tv_forget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GestureLoginActivity.this,LoginActivity.class);
+                startActivity(intent);
+            }
+        });
         content = new ContentView(this, is_regserect, new DrawlRoute.GestureCallBack() {
 
             @Override

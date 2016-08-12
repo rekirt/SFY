@@ -24,8 +24,9 @@ public class WritePadDialog extends Dialog {
 	Context context;
 	LayoutParams p;
 	DialogListener dialogListener;
+    private boolean havePaint = false;
 
-	public WritePadDialog(Context context, DialogListener dialogListener) {
+    public WritePadDialog(Context context, DialogListener dialogListener) {
 		super(context);
 		this.context = context;
 		this.dialogListener = dialogListener;
@@ -64,11 +65,12 @@ public class WritePadDialog extends Dialog {
 		Button btnClear = (Button) findViewById(R.id.tablet_clear);
 		btnClear.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				mView.clear();
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                mView.clear();
+                havePaint = false;
+            }
+        });
 
 		Button btnOk = (Button) findViewById(R.id.tablet_ok);
 		btnOk.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +78,11 @@ public class WritePadDialog extends Dialog {
 			@Override
 			public void onClick(View v) {
 				try {
-					dialogListener.refreshActivity(mView.getCachebBitmap());
+                    if (havePaint){
+                        dialogListener.refreshActivity(mView.getCachebBitmap());
+                    }else {
+                        dialogListener.cancel();
+                    }
 					WritePadDialog.this.dismiss();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -90,6 +96,7 @@ public class WritePadDialog extends Dialog {
 			@Override
 			public void onClick(View v) {
 				cancel();
+                dialogListener.cancel();
 			}
 		});
 	}
@@ -171,7 +178,6 @@ public class WritePadDialog extends Dialog {
 		}
 
 		private float cur_x, cur_y;
-
 		@Override
 		public boolean onTouchEvent(MotionEvent event) {
 
@@ -179,29 +185,28 @@ public class WritePadDialog extends Dialog {
 			float y = event.getY();
 
 			switch (event.getAction()) {
-			case MotionEvent.ACTION_DOWN: {
-				cur_x = x;
-				cur_y = y;
-				path.moveTo(cur_x, cur_y);
-				break;
-			}
+				case MotionEvent.ACTION_DOWN: {
+					cur_x = x;
+					cur_y = y;
+					path.moveTo(cur_x, cur_y);
+					break;
+				}
 
-			case MotionEvent.ACTION_MOVE: {
-				path.quadTo(cur_x, cur_y, x, y);
-				cur_x = x;
-				cur_y = y;
-				break;
-			}
+				case MotionEvent.ACTION_MOVE: {
+					path.quadTo(cur_x, cur_y, x, y);
+					cur_x = x;
+					cur_y = y;
+					break;
+				}
 
-			case MotionEvent.ACTION_UP: {
-				cacheCanvas.drawPath(path, paint);
-				path.reset();
-				break;
+				case MotionEvent.ACTION_UP: {
+					cacheCanvas.drawPath(path, paint);
+					path.reset();
+                    havePaint = true;
+					break;
+				}
 			}
-			}
-
 			invalidate();
-
 			return true;
 		}
 	}

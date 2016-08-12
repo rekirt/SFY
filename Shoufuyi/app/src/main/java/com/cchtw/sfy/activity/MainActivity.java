@@ -1,6 +1,8 @@
 package com.cchtw.sfy.activity;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.view.PagerAdapter;
@@ -17,8 +19,17 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.R;
+import com.cchtw.sfy.api.ApiRequest;
+import com.cchtw.sfy.api.JsonHttpHandler;
+import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.ActivityCollector;
+import com.cchtw.sfy.uitls.UpdateManager;
+import com.itech.message.APP_Version;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +74,52 @@ public class MainActivity extends BaseActivity {
         initData();
         startBannerScrollThread();
         setRightView();
+        checkUpdate();
+        update = new UpdateManager(MainActivity.this);
+
     }
+
+    private UpdateManager update;
+
+
+    // 更新操作；
+    private void checkUpdate() {
+        APP_Version app = new APP_Version();
+        app.setTerminalType("1");
+        PackageManager pm = getPackageManager();
+        PackageInfo pi;
+        try {
+            pi = pm.getPackageInfo(getPackageName(), 0);
+            String oldCode = pi.versionName;
+            app.setVersion(oldCode);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        ApiRequest.requestData(app, AccountHelper.getUserName(), new JsonHttpHandler() {
+            @Override
+            public void onDo(JSONObject responseJsonObject) {
+                final APP_Version returnapp = JSON.parseObject(responseJsonObject.toString(), APP_Version.class);
+                if ("0000".equals(returnapp.getDetailCode())) {
+                    update.checkUpdateInfo(returnapp);
+                }
+            }
+
+            @Override
+            public void onDo(JSONArray responseJsonArray) {
+
+            }
+
+            @Override
+            public void onDo(String responseString) {
+
+            }
+
+            @Override
+            public void onFinish() {
+            }
+        });
+    }
+
 
     private void initView(){
         viewPager = (ViewPager) findViewById(R.id.viewpager);

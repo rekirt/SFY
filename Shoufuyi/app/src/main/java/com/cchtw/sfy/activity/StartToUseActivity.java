@@ -2,6 +2,7 @@ package com.cchtw.sfy.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -152,7 +153,7 @@ public class StartToUseActivity extends BaseActivity{
                     btn_getcode.setText(recLen+"S重新获取");
                     if(recLen < 0){
                         timer.cancel();
-                        btn_getcode.setText("获取验证码");
+                        btn_getcode.setText("获取初始密码");
                         btn_getcode.setClickable(true);
                         btn_getcode.setEnabled(true);
                     }
@@ -178,7 +179,7 @@ public class StartToUseActivity extends BaseActivity{
     // 获得验证码
     private void getCode(){
                 // 发送报文获取验证码
-        DialogHelper.showProgressDialog(StartToUseActivity.this, "正在请求验证码...", true, true);
+        DialogHelper.showProgressDialog(StartToUseActivity.this, "正在请求...", true, true);
         APP_120031 app = new APP_120031();
         mPhoneNumber = editphone.getText().toString().replaceAll(" ", "");
         app.setMobile(mPhoneNumber);
@@ -223,7 +224,7 @@ public class StartToUseActivity extends BaseActivity{
         app.setTrxCode("120032");
         app.setUserName(mPhoneNumber);
         String strserect = editcode.getText().toString().replaceAll(" ","");
-        if (strserect.equals("")) {
+        if (TextUtils.isEmpty(strserect)) {
             ToastHelper.ShowToast("验证码不能为空");
             return;
         }
@@ -239,15 +240,14 @@ public class StartToUseActivity extends BaseActivity{
                     public void onDo(JSONObject responseJsonObject) {
                         returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120032.class);
                         if ("0000".equals(returnapp.getDetailCode())){
-                            SharedPreferencesHelper.setBoolean(mPhoneNumber+Constant.ACTIVATION, true);// 记录登录成功状态
+                            SharedPreferencesHelper.setBoolean(mPhoneNumber + Constant.ACTIVATION, true);// 记录登录成功状态
                             SharedPreferencesHelper.setString(Constant.PHONE, mPhoneNumber);// 保存字符串
                             SharedPreferencesHelper.setString(mPhoneNumber+Constant.DESKEY, returnapp.getDesKey());
-                            SharedPreferencesHelper.setString(mPhoneNumber+Constant.DESK3KEY, returnapp.getDes3Key());
-                            SharedPreferencesHelper.setString(mPhoneNumber+Constant.TOKEN, returnapp.getToken());
+                            SharedPreferencesHelper.setString(mPhoneNumber + Constant.DESK3KEY, returnapp.getDes3Key());
+                            SharedPreferencesHelper.setString(mPhoneNumber + Constant.TOKEN, returnapp.getToken());
                             Intent intent = new Intent();
                             intent.setClass(StartToUseActivity.this, ChangePwdActivity.class);
                             startActivity(intent);
-                            StartToUseActivity.this.finish();
                         }else {
                             ToastHelper.ShowToast(returnapp.getDetailInfo());
                         }

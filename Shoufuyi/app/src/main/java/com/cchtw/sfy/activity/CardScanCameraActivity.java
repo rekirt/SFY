@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.cchtw.sfy.R;
 import com.wintone.bankcard.BankCardAPI;
 import com.wintone.bankcard.BankCardRecogUtils;
 import com.wintone.utils.Utils;
@@ -61,6 +62,7 @@ public class CardScanCameraActivity extends Activity implements SurfaceHolder.Ca
     private byte[] tackData;
     private TelephonyManager telephonyManager;
     private int WTAPP;
+//    private int WHICH;
     private String placeActivity;
     private String countStrs;
     private String devCode;
@@ -155,6 +157,8 @@ public class CardScanCameraActivity extends Activity implements SurfaceHolder.Ca
         this.returnAciton = intent.getStringExtra("ReturnAciton");
         this.resultAciton = this.intiResultAction(intent.getStringExtra("ResultAciton"));
         this.copyright = intent.getStringExtra("CopyrightInfo");
+//        this.WHICH = intent.getIntExtra("requestCode", 0x000001);
+
         this.findView();
     }
 
@@ -190,6 +194,23 @@ public class CardScanCameraActivity extends Activity implements SurfaceHolder.Ca
         this.re_c = (RelativeLayout)this.findViewById(re_c_);
         int help_word_ = this.getResources().getIdentifier("help_word", "id", this.getPackageName());
         this.help_word = (ImageView)this.findViewById(help_word_);
+//        switch (WHICH){
+//            case 0x000001:
+//                this.help_word.setBackground(this.getResources().getDrawable(R.drawable.camera_word));
+//                break;
+//            case 0x000002:
+//
+//                break;
+//            case 0x000003:
+//
+//                break;
+//            case 0x000004:
+//
+//                break;
+//
+//            default:
+//                break;
+//        }
         int back_camera_ = this.getResources().getIdentifier("back_camera", "id", this.getPackageName());
         this.back = (ImageButton)this.findViewById(back_camera_);
         int flash_camera_ = this.getResources().getIdentifier("flash_camera", "id", this.getPackageName());

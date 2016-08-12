@@ -1,5 +1,6 @@
 package com.cchtw.sfy.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.api.ApiRequest;
 import com.cchtw.sfy.api.JsonHttpHandler;
+import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
@@ -73,9 +75,12 @@ public class ChangePwdActivity extends BaseActivity {
                     returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120034.class);
                     if ("0000".equals(returnapp.getDetailCode())){
                         ToastHelper.ShowToast(returnapp.getDetailInfo());
-                        SharedPreferencesHelper.setString(returnapp.getUserName()+"LoginSerect",newPwd);// 保存字符串
-                        SharedPreferencesHelper.setBoolean(returnapp.getUserName()+Constant.GAIMIMA, true);
-                        ChangePwdActivity.this.finish();
+                        SharedPreferencesHelper.setString(returnapp.getUserName() + "LoginSerect", newPwd);// 保存字符串
+                        SharedPreferencesHelper.setBoolean(returnapp.getUserName() + Constant.GAIMIMA, true);
+                        AccountHelper.logout();
+                        Intent intent = new Intent(ChangePwdActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
                     }else {
                         ToastHelper.ShowToast(returnapp.getDetailInfo());
                     }

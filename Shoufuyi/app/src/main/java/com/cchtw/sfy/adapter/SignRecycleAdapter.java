@@ -2,6 +2,7 @@ package com.cchtw.sfy.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,6 @@ import com.cchtw.sfy.activity.SignDetailActivity;
 import com.cchtw.sfy.api.ApiRequest;
 import com.cchtw.sfy.api.JsonHttpHandler;
 import com.cchtw.sfy.uitls.Constant;
-import com.cchtw.sfy.uitls.ImageHelper;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
 import com.cchtw.sfy.uitls.dialog.DialogHelper;
@@ -83,21 +83,27 @@ public class SignRecycleAdapter extends RecycleBaseAdapter {
             case "1":
 //                ImageHelper.displayImage("drawable://" + R.drawable.ic_unsign, new_holder.iv_sign_stye);
                 new_holder.iv_sign_stye.setImageResource(R.drawable.ic_unsign);
+                new_holder.tv_give_up.setTextColor(Color.parseColor("#FF0000"));
+
                 break;
             case "2":
 //                ImageHelper.displayImage("drawable://" + R.drawable.ic_sign_finish, new_holder.iv_sign_stye);
                 new_holder.iv_sign_stye.setImageResource(R.drawable.ic_sign_finish);
                 new_holder.tv_give_up.setEnabled(false);
                 new_holder.tv_give_up.setClickable(false);
-
+                new_holder.tv_give_up.setTextColor(Color.parseColor("#ebebeb"));
                 break;
             case "3":
 //                ImageHelper.displayImage("drawable://" + R.drawable.ic_unfinish, new_holder.iv_sign_stye);
                 new_holder.iv_sign_stye.setImageResource(R.drawable.ic_unfinish);
+                new_holder.tv_give_up.setTextColor(Color.parseColor("#FF0000"));
+
                 break;
             default:
-                ImageHelper.displayImage("drawable://" + R.drawable.ic_unfinish, new_holder.iv_sign_stye);
-                new_holder.iv_sign_stye.setImageResource(R.drawable.ic_unfinish);
+//                ImageHelper.displayImage("drawable://" + R.drawable.ic_unfinish, new_holder.iv_sign_stye);
+//                new_holder.iv_sign_stye.setImageResource(R.drawable.ic_unfinish);
+                new_holder.tv_give_up.setTextColor(Color.parseColor("#FF0000"));
+
                 break;
         }
 
