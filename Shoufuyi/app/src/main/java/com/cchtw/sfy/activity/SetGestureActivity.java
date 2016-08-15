@@ -84,20 +84,22 @@ public class SetGestureActivity extends BaseActivity {
 
             @Override
             public void checkedFail() {
-                errorTime--;
-                if (errorTime < 1) {
-                    AccountHelper.setUser(null);
-                    Intent intent = new Intent(SetGestureActivity.this,LoginActivity.class);
-                    startActivity(intent);
-                    SetGestureActivity.this.finish();
-                }else {
                     if (haveSetFingerPwd){
+                        errorTime--;
+                        if (errorTime < 1) {
+                            AccountHelper.setUser(null);
+                            Intent intent = new Intent(SetGestureActivity.this,LoginActivity.class);
+                            startActivity(intent);
+                            SetGestureActivity.this.finish();
+                        }
                         AccountHelper.setUserFingerPwdTimes(errorTime);
                         ToastHelper.ShowToast("今天还允许输入错误" + errorTime + "次");
                     }else {
-                        ToastHelper.ShowToast("两次手势不一致!");
+                        AccountHelper.haveFingerPwdChange(false);
+                        AccountHelper.setUserFingerPwd("");
+                        initView();
+                        ToastHelper.ShowToast("两次手势不一致,请重新设置！");
                     }
-                }
             }
 
             @Override
