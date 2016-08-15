@@ -61,6 +61,7 @@ public class UnfinishedActivity extends BaseActivity implements
     private ParserTask mParserTask;
     private EditText edt_date;
     private ImageView iv_more;
+    private int totalPage = 1000;
 
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
 
@@ -93,7 +94,7 @@ public class UnfinishedActivity extends BaseActivity implements
             @Override
             public void onClick(View v) {
                 mCurrentPage = 1;
-                mState = STATE_REFRESH;//错误页面点击后刷新
+                mState = STATE_REFRESH;
                 mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                 sendRequestData();
             }
@@ -133,7 +134,6 @@ public class UnfinishedActivity extends BaseActivity implements
             mRecycleView.setAdapter(mAdapter);
             mCurrentPage = 1;
             mState = STATE_REFRESH;
-            mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
         }
 
         if (mStoreEmptyState != -1) {
@@ -195,6 +195,10 @@ public class UnfinishedActivity extends BaseActivity implements
         app.setCreateUser(SharedPreferencesHelper.getString(Constant.PHONE, ""));
         Page page = new Page();
         page.setPageNo(String.valueOf(mCurrentPage));
+        if (mCurrentPage>totalPage){
+            mAdapter.setState(RecycleBaseAdapter.STATE_NO_MORE);
+            return;
+        }
         page.setPageSize(TDevice.getPageSize()+"");
         app.setPage(page);
         app.setState(String.valueOf(1));
@@ -208,6 +212,7 @@ public class UnfinishedActivity extends BaseActivity implements
                         try {
                             mReturnApp = JSON.parseObject(responseJsonObject.toString(), APP_120023.class);
 //                            mSignList = GsonUtils.fromJsonArrayToArrayList(mReturnApp.getResultList().toString(), Result_120023.class);
+                            totalPage =  Integer.parseInt(mReturnApp.getPage().getPageTotal());
                             mSignList = (ArrayList<Result_120023>) mReturnApp.getResultList();
                             //更换解析方法
                             // save the cache
@@ -234,7 +239,11 @@ public class UnfinishedActivity extends BaseActivity implements
                     public void onFail(String msg) {
                         executeOnLoadDataError(msg);
                         executeOnLoadFinish();
-//                        new ReadCacheTask(UnfinishedActivity.this).execute();
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
                     }
                 }
         );
@@ -246,23 +255,12 @@ public class UnfinishedActivity extends BaseActivity implements
         refresh();
     }
 
-//    private static final int    REQUESTCODE    = 10;
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-//    {
-//        switch (requestCode)
-//        {
-//            case REQUESTCODE:
-//
-//                break;
-//
-//        }
-//    }
-
 
     public void refresh() {
         mCurrentPage = 1;
         mState = STATE_REFRESH;
+        totalPage = 1000;
+        mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
         sendRequestData();
     }
 
@@ -274,10 +272,6 @@ public class UnfinishedActivity extends BaseActivity implements
                 sendRequestData();
             }
         }
-    }
-
-    protected boolean requestDataIfViewCreated() {
-        return true;
     }
 
 

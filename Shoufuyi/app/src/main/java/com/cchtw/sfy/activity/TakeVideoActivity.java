@@ -143,7 +143,7 @@ public class TakeVideoActivity extends BaseActivity {
     }
 
     private String getCacheKey(){
-        return FileUtils.getCacheKey(mResult.getCreateTime(), "Video");
+        return FileUtils.getCacheKey(mResult.getCreateTime()+mResult.getAccountName()+mResult.getIdCard()+mResult.getMobile(), "Video");
     }
 
 

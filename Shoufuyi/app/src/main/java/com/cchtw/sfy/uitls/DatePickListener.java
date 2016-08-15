@@ -80,7 +80,6 @@ public class DatePickListener  implements OnClickListener {
                         }else {
                             editText.setText(beginYear+"."+changeNumber(beginMonth)+"."+changeNumber(beginDayOfMonth) + "至\n" + endYear+"."+changeNumber(endMonth)+"."+changeNumber(endDayOfMonth));
                             dialog.cancel();
-                            DialogHelper.showProgressDialog(context, "正在查询...", true, false);
                             ((QuerySignActivity)context).refresh();
                         }
                     }

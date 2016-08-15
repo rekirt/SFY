@@ -196,12 +196,15 @@ public class ElementVerificationActivity extends BaseActivity {
     /**
      * 获取验证码
      */
+    String sn = "";
     private void getMsgCode(){
         DialogHelper.showProgressDialog(ElementVerificationActivity.this, "正在请求...", true, true);
         APP_120031 app = new APP_120031();
         app.setMobile(edt_new_sign_phone_number.getText().toString());
         app.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
         app.setType("1");
+        sn = System.currentTimeMillis()+"";
+        app.setValSn(sn);
         ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
                     @Override
                     public void onDo(JSONObject responseJsonObject) {
@@ -309,6 +312,7 @@ public class ElementVerificationActivity extends BaseActivity {
                     return;
                 }else {
                     mSixVerifyItems[4].setVerifyItemValue(verif_code);
+                    app.setValCode(verif_code);
                 }
                 mSixVerifyItems[5] = new VerifyItem();
                 mSixVerifyItems[5].setVerifyItemCode("PASS");
@@ -352,6 +356,8 @@ public class ElementVerificationActivity extends BaseActivity {
         if (isNotIn){
             return;
         }
+
+        app.setValSn(sn);
         app.setVerifyItemList(verifyItemList);
         DialogHelper.showProgressDialog(ElementVerificationActivity.this, "正在请求...", true, true);
         ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
@@ -360,20 +366,6 @@ public class ElementVerificationActivity extends BaseActivity {
                 APP_120031 returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120031.class);
                     if ("0000".equals(returnapp.getDetailCode())) {
                         ToastHelper.ShowToast("验证成功");
-//                        Result_120023 mResult = new Result_120023();
-//                        mResult.setAccountName(mReturn.getAccountName());
-//                        mResult.setMobile(mReturn.getMobile());
-//                        mResult.setAccountNo(mReturn.getAccountNo());
-//                        mResult.setCreateTime("20150803151200");
-//                        mResult.setIdCard(mReturn.getIdCard());
-//                        mResult.setMerchantId(SharedPreferencesHelper.getString(Constant.MERCHANT,""));
-//                        mResult.setState("0");
-//                        Intent intent = new Intent(ElementVerificationActivity.this, SignDetailActivity.class);
-//                        Bundle bundle = new Bundle();
-//                        bundle.putSerializable("info", mResult);
-//                        intent.putExtras(bundle);
-//                        startActivity(intent);
-//
                         ElementVerificationActivity.this.finish();
                     }else {
                         ToastHelper.ShowToast(returnapp.getDetailInfo());

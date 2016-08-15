@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.BaseApplication;
-import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.itech.message.APPMsgPack;
@@ -102,19 +101,17 @@ public class ApiRequest {
         Boolean isActivation = false;
         String token ="";
         String deskey = "";
-        if (AccountHelper.isLogin()){
-            token = AccountHelper.getToken();
-            deskey = AccountHelper.getDesKey();
-        }else {
-             token = SharedPreferencesHelper.getString(MOBILE+"token", "");
-             deskey = SharedPreferencesHelper.getString(MOBILE + "deskey", "");
-             SharedPreferencesHelper.setString(Constant.PHONE, MOBILE);// 保存字符串
-        }
+        String mPhoneNumber = SharedPreferencesHelper.getString(Constant.PHONE, "");// 保存字符串
+
+        deskey = SharedPreferencesHelper.getString(mPhoneNumber + Constant.DESKEY, "");
+        token = SharedPreferencesHelper.getString(mPhoneNumber + Constant.TOKEN, "");
+
         isActivation = SharedPreferencesHelper.getBoolean(MOBILE + Constant.ACTIVATION, false);
         String uuid = SharedPreferencesHelper.getString("uuid", "");
+
         if (TextUtils.isEmpty(token)) {
             token = SequenceUtil.TOKEN;
-            SharedPreferencesHelper.getInstance().setString(MOBILE+"token", token);
+            returnapp.setTrxCode("120032");
         }
         if (!isActivation) {
             returnapp.getTrxCode().equals("120031");

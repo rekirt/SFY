@@ -28,6 +28,7 @@
             android:inputType="numberDecimal"
             />
         <ImageView
+            android:visibility="invisible"
             android:id="@+id/iv_id_camera"
             android:layout_width="60dp"
             android:layout_height="match_parent"
@@ -84,6 +85,7 @@
             android:inputType="number"
             android:text=""/>
         <ImageView
+            android:visibility="invisible"
             android:id="@+id/iv_card_camera"
             android:layout_width="60dp"
             android:layout_height="match_parent"

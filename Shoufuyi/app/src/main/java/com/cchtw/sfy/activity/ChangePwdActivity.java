@@ -13,7 +13,6 @@ import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.api.ApiRequest;
 import com.cchtw.sfy.api.JsonHttpHandler;
-import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
@@ -77,9 +76,12 @@ public class ChangePwdActivity extends BaseActivity {
                         ToastHelper.ShowToast(returnapp.getDetailInfo());
                         SharedPreferencesHelper.setString(returnapp.getUserName() + "LoginSerect", newPwd);// 保存字符串
                         SharedPreferencesHelper.setBoolean(returnapp.getUserName() + Constant.GAIMIMA, true);
-                        AccountHelper.logout();
+
+//                        SharedPreferencesHelper.setString(userPhone + Constant.DESK3KEY, returnapp.getDes3Key());
+//                        SharedPreferencesHelper.setString(userPhone + Constant.DESKEY, returnapp.getDesKey());
+//                        SharedPreferencesHelper.setString(userPhone + Constant.TOKEN, returnapp.getToken());
+
                         Intent intent = new Intent(ChangePwdActivity.this, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     }else {
                         ToastHelper.ShowToast(returnapp.getDetailInfo());

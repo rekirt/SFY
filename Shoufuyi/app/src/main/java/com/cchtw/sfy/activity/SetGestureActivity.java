@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.uitls.AccountHelper;
-import com.cchtw.sfy.uitls.ActivityCollector;
 import com.cchtw.sfy.uitls.ToastHelper;
 import com.cchtw.sfy.uitls.dialog.AlertDialogHelper;
 import com.cchtw.sfy.uitls.dialog.ChooseDialogDoClickHelper;
@@ -27,8 +26,6 @@ public class SetGestureActivity extends BaseActivity {
 
 	private FrameLayout body_layout;
 	private ContentView content;
-	// 手势密码
-	private String is_regserect = "";
 	private TextView mTvShowMsg;
     private int errorTime;
     private boolean isChangeFingerPwd;
@@ -44,9 +41,12 @@ public class SetGestureActivity extends BaseActivity {
         oldFingerPwd = AccountHelper.getUserFingerPwd();
         initView();
         setCanBack(true);
-	}
+        AccountHelper.setUserFingerPwdTimes(5);
+    }
 
     private String oldFingerPwd;
+    private String is_regserect = "";
+
     private boolean haveSetFingerPwd;
 	private void initView() {
 		// 初始化一个显示各个点的viewGroup
@@ -75,6 +75,7 @@ public class SetGestureActivity extends BaseActivity {
                 }else {
                     AccountHelper.haveFingerPwdChange(true);
                     AccountHelper.setUserFingerPwd(is_regserect);
+                    ToastHelper.ShowToast("设置成功!");
                     Intent intent = new Intent(SetGestureActivity.this, MainActivity.class);
                     startActivity(intent);
                     SetGestureActivity.this.finish();
@@ -88,7 +89,6 @@ public class SetGestureActivity extends BaseActivity {
                     AccountHelper.setUser(null);
                     Intent intent = new Intent(SetGestureActivity.this,LoginActivity.class);
                     startActivity(intent);
-                    ActivityCollector.finishAll();
                     SetGestureActivity.this.finish();
                 }else {
                     if (haveSetFingerPwd){
@@ -103,18 +103,83 @@ public class SetGestureActivity extends BaseActivity {
             @Override
             public void register() {
                 initView();
+                ToastHelper.ShowToast("请再输入一次!");
             }
         });
         // 设置手势解锁显示到哪个布局里面
         content.setParentView(body_layout);
 	}
 
+    private String tempFingerPwd = "";
+//    private void initView() {
+//        String mFingerPwd = AccountHelper.getUserFingerPwd();
+//
+//        if (TextUtils.isEmpty(mFingerPwd)) {
+//            mTvShowMsg.setText("请输入手势密码");
+//            mTvShowMsg.setOnClickListener(this);
+//        } else {//如果是没有设置过手势密码
+//            if (isChangeFingerPwd) {
+//                mTvShowMsg.setText("忘记手势密码");
+//            } else {
+//                mTvShowMsg.setText("请再次输入手势密码");
+//            }
+//        }
+//
+//        content = new ContentView(this, tempFingerPwd, new DrawlRoute.GestureCallBack() {
+//
+//            @Override
+//            public void checkedSuccess() {
+//                if (haveSetFingerPwd && isChangeFingerPwd){
+//                    AccountHelper.haveFingerPwdChange(false);
+//                    AccountHelper.setUserFingerPwd("");
+//                    initView();
+//                    ToastHelper.ShowToast("请输入新的手势密码!");
+//                }else {
+//                    AccountHelper.haveFingerPwdChange(true);
+//                    AccountHelper.setUserFingerPwd(tempFingerPwd);
+//                    Intent intent = new Intent(SetGestureActivity.this, MainActivity.class);
+//                    startActivity(intent);
+//                    SetGestureActivity.this.finish();
+//                }
+//            }
+//
+//            @Override
+//            public void checkedFail() {
+//                errorTime--;
+//                if (errorTime < 1) {
+//                    AccountHelper.setUser(null);
+//                    Intent intent = new Intent(SetGestureActivity.this,LoginActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    startActivity(intent);
+//                    SetGestureActivity.this.finish();
+//                }else {
+//                    if (haveSetFingerPwd){
+//                        AccountHelper.setUserFingerPwdTimes(errorTime);
+//                        ToastHelper.ShowToast("今天还允许输入错误" + errorTime + "次");
+//                    }else {
+//                        ToastHelper.ShowToast("两次手势不一致!");
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void register() {
+//
+//                initView();
+//            }
+//        });
+//        // 设置手势解锁显示到哪个布局里面
+//        content.setParentView(body_layout);
+//    }
+
     @Override
     public void onClick(View view) {
         super.onClick(view);
-        Intent intent = new Intent(SetGestureActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish();
+        if ("忘记手势密码".equals(mTvShowMsg.getText())){
+            Intent intent = new Intent(SetGestureActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
@@ -126,7 +191,7 @@ public class SetGestureActivity extends BaseActivity {
                         @Override
                         public void doClick(DialogInterface dialog,
                                             int which) {
-
+                            AccountHelper.setUserFingerPwd("");
                             SetGestureActivity.this.finish();
                         }
                     });
@@ -153,7 +218,7 @@ public class SetGestureActivity extends BaseActivity {
                         @Override
                         public void doClick(DialogInterface dialog,
                                             int which) {
-
+                            AccountHelper.setUserFingerPwd("");
                             SetGestureActivity.this.finish();
                         }
                     });

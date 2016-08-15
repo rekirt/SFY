@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import com.cchtw.sfy.BaseApplication;
 import com.cchtw.sfy.R;
-import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
@@ -57,24 +56,23 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
 
     @Override
     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-        String MOBILE="";
-        String token ="";
+        String token = "";
         String deskey = "";
-        if (AccountHelper.isLogin()){
-            token = AccountHelper.getToken();
-            deskey = AccountHelper.getDesKey();
-        }else {
-            MOBILE = SharedPreferencesHelper.getString(Constant.PHONE, "");
-            token = SharedPreferencesHelper.getString(MOBILE+Constant.TOKEN, "");
-            deskey = SharedPreferencesHelper.getString(MOBILE+Constant.DESKEY, "");
-        }
+        String mPhoneNumber = SharedPreferencesHelper.getString(Constant.PHONE, "");// 保存字符串
+
+        deskey = SharedPreferencesHelper.getString(mPhoneNumber + Constant.DESKEY, "");
+        token = SharedPreferencesHelper.getString(mPhoneNumber + Constant.TOKEN, "");
 
         APPMsgPack response = new APPMsgPack();
-        response.setToken(token);
+        if (TextUtils.isEmpty(token)){
+            token = Constant.token;
+        }
 
-        if (!TextUtils.isEmpty(deskey)) {
+        if (!TextUtils.isEmpty(deskey)){
             response.setDesKey(deskey);
         }
+
+        response.setToken(token);
 
         try {
             if (response.unpack(responseBody) == 0) { // 解析成功
@@ -121,7 +119,6 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
         if (mContext != null) {
             try {
                 if (statusCode == 0) {
-//                  nFail("java.net.SocketTimeoutException");
                     onFail("连接超时，请重试!");
                 } else if (statusCode >= 400) {
                     onFail(mContext.getString(R.string.error_http_request));

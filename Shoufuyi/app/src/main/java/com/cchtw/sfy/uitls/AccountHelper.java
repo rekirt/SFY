@@ -88,7 +88,14 @@ public class AccountHelper {
             return "";
         }
     }
-
+    public static String setReqSn(String sn) {
+        APP_120033 user = AccountHelper.getUser();
+        if (user != null){
+            return user.getReqSn();
+        }else {
+            return "";
+        }
+    }
     public static String getLoginState() {
         APP_120033 user = AccountHelper.getUser();
         if (user != null){
@@ -134,6 +141,9 @@ public class AccountHelper {
     public static void logout() {
         AccountHelper.haveFingerPwdChange(false);
         AccountHelper.setUserFingerPwd("");
+        String mPhoneNumber = SharedPreferencesHelper.getString(Constant.PHONE, "");// 保存字符串
+        SharedPreferencesHelper.setString(mPhoneNumber+Constant.DESKEY,"");
+        SharedPreferencesHelper.setString(mPhoneNumber + Constant.TOKEN, "");
         AccountHelper.setUser(null);
     }
 }

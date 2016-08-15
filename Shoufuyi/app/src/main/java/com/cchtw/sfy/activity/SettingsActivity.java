@@ -227,6 +227,7 @@ public class SettingsActivity extends BaseActivity {
                 try {
                     returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120033.class);
                     if (returnapp.getDetailCode().equals("0000")) {
+                        SharedPreferencesHelper.setString(phone + Constant.DESK3KEY, AccountHelper.getDes3Key());
                         AccountHelper.logout();
                         startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
                         SettingsActivity.this.finish();

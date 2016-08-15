@@ -150,10 +150,7 @@ public class QuerySignActivity extends BaseActivity implements
 
             @Override
             public void onClick(View v) {
-                mCurrentPage = 1;
-                mState = STATE_REFRESH;//错误页面点击后刷新
-                mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-                sendRequestData();
+                refresh();
             }
         });
         mSwipeRefresh.setColorSchemeResources(R.color.main_green, R.color.main_gray, R.color.main_black, R.color.main_purple);
@@ -184,9 +181,7 @@ public class QuerySignActivity extends BaseActivity implements
             if (requestDataIfViewCreated()) {
                 mCurrentPage = 1;
                 mState = STATE_REFRESH;
-                mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                 refresh();
-                // new ReadCacheTask(this).execute();
             } else {
                 mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             }
@@ -277,6 +272,7 @@ public class QuerySignActivity extends BaseActivity implements
                     public void onDo(JSONObject responseJsonObject) {
                         try {
                             mReturnApp = JSON.parseObject(responseJsonObject.toString(), APP_120023.class);
+                            totalPage =  Integer.parseInt(mReturnApp.getPage().getPageTotal());
                             mSignList = (ArrayList<Result_120023>) mReturnApp.getResultList();
                             //更换解析方法
                             // save the cache
@@ -317,6 +313,8 @@ public class QuerySignActivity extends BaseActivity implements
     public void refresh() {
         mCurrentPage = 1;
         mState = STATE_REFRESH;
+        totalPage = 1000;
+        mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
         sendRequestData();
     }
 

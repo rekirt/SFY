@@ -66,20 +66,19 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		APP_120033 app = new APP_120033();
 		app.setUserName(mEditPhone.getText().toString());
 		app.setLoginState("0000");
-        String des3key = SharedPreferencesHelper.getString(mEditPhone.getText().toString()+Constant.DESK3KEY, "");
-        if (TextUtils.isEmpty(des3key)){
-            ToastHelper.ShowToast("第一次在该设备登录，请先启用！");
-            Intent intent = new Intent();
-            intent.setClass(LoginActivity.this, StartToUseActivity.class);
-            startActivity(intent);
-            return;
-        }
+		String des3key = SharedPreferencesHelper.getString(mEditPhone.getText().toString()+Constant.DESK3KEY, "");
+//        if (TextUtils.isEmpty(des3key)){
+//            ToastHelper.ShowToast("第一次在该设备登录，请先启用！");
+//            Intent intent = new Intent();
+//            intent.setClass(LoginActivity.this, StartToUseActivity.class);
+//            startActivity(intent);
+//            return;
+//        }
 		try {
 			app.setUserPass(des3key, mEditPwd.getText().toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		DialogHelper.showProgressDialog(LoginActivity.this, "正在登录...", true, false);
 
 		ApiRequest.login(app, mEditPhone.getText().toString(), new JsonHttpHandler() {

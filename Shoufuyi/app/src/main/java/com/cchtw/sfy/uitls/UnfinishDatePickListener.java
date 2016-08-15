@@ -15,7 +15,6 @@ import android.widget.TimePicker;
 
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.activity.UnfinishedActivity;
-import com.cchtw.sfy.uitls.dialog.DialogHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -80,7 +79,6 @@ public class UnfinishDatePickListener implements OnClickListener {
                         }else {
                             editText.setText(beginYear+"."+changeNumber(beginMonth)+"."+changeNumber(beginDayOfMonth) + "至" + endYear+"."+changeNumber(endMonth)+"."+changeNumber(endDayOfMonth));
                             dialog.cancel();
-                            DialogHelper.showProgressDialog(context, "正在查询...", true, false);
                             ((UnfinishedActivity)context).refresh();
                         }
                     }

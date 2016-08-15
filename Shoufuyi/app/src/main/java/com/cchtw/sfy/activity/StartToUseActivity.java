@@ -266,7 +266,6 @@ public class StartToUseActivity extends BaseActivity{
 
                     @Override
                     public void onFinish() {
-                        super.onFinish();
                         DialogHelper.dismissProgressDialog();
                     }
                 }.setIsNeedToReturnResponseBody(true)
