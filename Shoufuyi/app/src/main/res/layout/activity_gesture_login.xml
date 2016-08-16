@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/_100dp"
+        android:layout_marginTop="@dimen/_50dp"
         android:textSize="@dimen/_16sp" />
 
     <LinearLayout
@@ -32,24 +32,24 @@
             android:layout_width="@dimen/_270dp"
             android:layout_height="@dimen/_270dp"
             android:layout_gravity="center_horizontal" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_40dp"
-            android:layout_marginTop="@dimen/_10dp">
-
-            <Button
-                android:id="@+id/forgetGestureBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/layout_grey_bg"
-                android:paddingLeft="@dimen/_5dp"
-                android:paddingRight="@dimen/_5dp"
-                android:text="@string/gesture_forget_gesture"
-                android:textSize="@dimen/_14sp" />
-
-        </RelativeLayout>
-
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/_10dp">
+
+        <Button
+            android:id="@+id/forgetGestureBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="@dimen/_10dp"
+            android:background="@drawable/layout_grey_bg"
+            android:paddingLeft="@dimen/_5dp"
+            android:paddingRight="@dimen/_5dp"
+            android:text="@string/gesture_forget_gesture"
+            android:textSize="@dimen/_14sp" />
+    </RelativeLayout>
 </LinearLayout>
