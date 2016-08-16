@@ -356,7 +356,7 @@ public class ElementVerificationActivity extends BaseActivity {
         if (isNotIn){
             return;
         }
-        if (TextUtils.isEmpty(sn)){
+        if (mElementMember == 6 && TextUtils.isEmpty(sn)){
             ToastHelper.ShowToast("请先获取短信验证码！");
             return;
         }

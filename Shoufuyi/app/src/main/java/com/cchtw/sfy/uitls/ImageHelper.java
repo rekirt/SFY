@@ -2,6 +2,7 @@ package com.cchtw.sfy.uitls;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -296,5 +298,29 @@ public class ImageHelper {
         return options;
     }
 
-
+    /**
+     * 获取视频缩略图（这里获取第一帧）
+     * @param filePath
+     * @return
+     */
+    public Bitmap getVideoThumbnail(String filePath) {
+        Bitmap bitmap = null;
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        try {
+            retriever.setDataSource(filePath);
+            bitmap = retriever.getFrameAtTime(TimeUnit.MILLISECONDS.toMicros(1));
+        }
+        catch(IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                retriever.release();
+            }
+            catch (RuntimeException e) {
+                e.printStackTrace();
+            }
+        }
+        return bitmap;
+    }
 }
