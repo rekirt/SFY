@@ -125,7 +125,7 @@ public class AccountHelper {
         return SharedPreferencesHelper.getBoolean(getUserName() + Constant.HAVESETFINGERPWD, false);
     }
 
-    public static void haveFingerPwdChange(boolean b) {
+    public static void haveSetFingerPwd(boolean b) {
          SharedPreferencesHelper.setBoolean(getUserName()+Constant.HAVESETFINGERPWD, b);
     }
 
@@ -139,8 +139,6 @@ public class AccountHelper {
     }
 
     public static void logout() {
-        AccountHelper.haveFingerPwdChange(false);
-        AccountHelper.setUserFingerPwd("");
         String mPhoneNumber = SharedPreferencesHelper.getString(Constant.PHONE, "");// 保存字符串
         SharedPreferencesHelper.setString(mPhoneNumber+Constant.DESKEY,"");
         SharedPreferencesHelper.setString(mPhoneNumber + Constant.TOKEN, "");

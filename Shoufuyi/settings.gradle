@@ -1,1 +1,1 @@
-include ':app', ':videorecorderlib'
+include ':app', ':videorecorderlib', ':lockpattern'

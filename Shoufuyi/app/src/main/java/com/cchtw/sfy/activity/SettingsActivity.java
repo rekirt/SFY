@@ -19,7 +19,6 @@ import com.cchtw.sfy.R;
 import com.cchtw.sfy.api.ApiRequest;
 import com.cchtw.sfy.api.JsonHttpHandler;
 import com.cchtw.sfy.uitls.AccountHelper;
-import com.cchtw.sfy.uitls.ActivityCollector;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
@@ -231,7 +230,6 @@ public class SettingsActivity extends BaseActivity {
                         AccountHelper.logout();
                         startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
                         SettingsActivity.this.finish();
-                        ActivityCollector.finishAll();
                     } else {
                         ToastHelper.ShowToast(returnapp.getDetailInfo());
                     }
@@ -320,7 +318,7 @@ public class SettingsActivity extends BaseActivity {
                     case AlertDialog.BUTTON_POSITIVE:
                         Intent intent = new Intent();
                         intent.putExtra("isChangeFingerPwd",true);
-                        intent.setClass(SettingsActivity.this, SetGestureActivity.class);
+                        intent.setClass(SettingsActivity.this, CreateGestureActivity.class);
                         startActivity(intent);
                         break;
                     case AlertDialog.BUTTON_NEGATIVE:

@@ -14,6 +14,7 @@ import com.cchtw.sfy.R;
 import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
+import com.cchtw.sfy.uitls.cache.ACache;
 import com.itech.utils.SequenceUtil;
 
 import java.util.UUID;
@@ -68,8 +69,10 @@ public class SplashActivity extends BaseActivity {
     private void redirectTo(){
         boolean is_login = AccountHelper.isLogin();
         boolean haveSetFingerPwd = AccountHelper.haveSetFingerPwd();
+        ACache aCache = ACache.get(SplashActivity.this);
+        byte[] gesturePassword= aCache.getAsBinary(AccountHelper.getUserName()+ Constant.GESTURE_PASSWORD);
 
-        if (is_login && haveSetFingerPwd) {
+        if (is_login && (gesturePassword != null)) {
             Intent intent = new Intent(SplashActivity.this, GestureLoginActivity.class);
             startActivity(intent);
             SplashActivity.this.finish();

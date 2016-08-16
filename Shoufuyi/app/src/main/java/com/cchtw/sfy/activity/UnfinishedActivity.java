@@ -211,11 +211,8 @@ public class UnfinishedActivity extends BaseActivity implements
                     public void onDo(JSONObject responseJsonObject) {
                         try {
                             mReturnApp = JSON.parseObject(responseJsonObject.toString(), APP_120023.class);
-//                            mSignList = GsonUtils.fromJsonArrayToArrayList(mReturnApp.getResultList().toString(), Result_120023.class);
                             totalPage =  Integer.parseInt(mReturnApp.getPage().getPageTotal());
                             mSignList = (ArrayList<Result_120023>) mReturnApp.getResultList();
-                            //更换解析方法
-                            // save the cache
                             if (mCurrentPage == 1 && !TextUtils.isEmpty(getCacheKey())) {
                                 CacheManager.setCache(getCacheKey(), mReturnApp.getResultList().toString().getBytes(),
                                         getCacheExpire(), CacheManager.TYPE_INTERNAL);

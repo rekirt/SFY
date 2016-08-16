@@ -30,7 +30,6 @@ import com.cchtw.sfy.uitls.TimeUtils;
 import com.cchtw.sfy.uitls.ToastHelper;
 import com.cchtw.sfy.uitls.WeakAsyncTask;
 import com.cchtw.sfy.uitls.dialog.DialogHelper;
-import com.cchtw.sfy.uitls.dialog.ProgressDialogDoClickHelper;
 import com.cchtw.sfy.uitls.view.DividerItemDecoration;
 import com.cchtw.sfy.uitls.view.EmptyLayout;
 import com.itech.message.APP_120023;
@@ -116,27 +115,9 @@ public class QuerySignActivity extends BaseActivity implements
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 if (arg2 > 0) {
                     collstate = arg2;
-                    DialogHelper.showProgressDialog(QuerySignActivity.this, "正在查询，请稍候...", new ProgressDialogDoClickHelper() {
-                                @Override
-                                public void doClick() {
-                                    if (requestHandle != null) {
-                                        requestHandle.cancel(true);
-                                    }
-                                }
-                            },
-                            true, false);
                     refresh();
                 }else if (collstate != 0){
                     collstate = arg2;
-                    DialogHelper.showProgressDialog(QuerySignActivity.this, "正在查询，请稍候...", new ProgressDialogDoClickHelper() {
-                                @Override
-                                public void doClick() {
-                                    if (requestHandle != null) {
-                                        requestHandle.cancel(true);
-                                    }
-                                }
-                            },
-                            true, false);
                     refresh();
                 }
 
@@ -248,7 +229,6 @@ public class QuerySignActivity extends BaseActivity implements
         }
 
         APP_120023 app = new APP_120023();
-
         app.setMerchantId(AccountHelper.getMerchantId());
         app.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
         app.setCreateUser(SharedPreferencesHelper.getString(Constant.PHONE, ""));
@@ -274,8 +254,6 @@ public class QuerySignActivity extends BaseActivity implements
                             mReturnApp = JSON.parseObject(responseJsonObject.toString(), APP_120023.class);
                             totalPage =  Integer.parseInt(mReturnApp.getPage().getPageTotal());
                             mSignList = (ArrayList<Result_120023>) mReturnApp.getResultList();
-                            //更换解析方法
-                            // save the cache
                             if (mCurrentPage == 1 && !TextUtils.isEmpty(getCacheKey())) {
                                 CacheManager.setCache(getCacheKey(), responseJsonObject.getJSONArray("data").toString().getBytes(),
                                         getCacheExpire(), CacheManager.TYPE_INTERNAL);

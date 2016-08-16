@@ -39,8 +39,9 @@
     <string name="start_to_use">启用操作员</string>
     <string name="start_to_use_activity">启动页面</string>
     <string name="login_activity">登录页面</string>
-    <string name="set_gesture_activity">请输入手势密码</string>
+    <string name="set_gesture_activity">请设置手势密码</string>
     <string name="gesture_login_activity">请输入手势密码</string>
+    <string name="change_gesture_activity">修改手势密码</string>
 
     <string name="change_pwd_activity">修改密码</string>
     <string name="main_activity">收付易签约</string>
@@ -129,4 +130,20 @@
     <string name="exception8">次数异常:</string>
     <string name="exception9">识别证件类型或拍照方式不正确</string>
     <string name="recognized_failed">识别失败</string>
+
+    <!-- Gesture login activity -->
+    <string name="gesture_forget_gesture">忘记手势密码</string>
+    <string name="gesture_default">请输入手势密码</string>
+    <string name="gesture_error">手势密码输入错误</string>
+    <string name="gesture_correct">输入正确</string>
+
+    <!-- Create gesture activity -->
+    <string name="create_gesture_activity">CreateGestureActivity</string>
+    <string name="create_gesture_default">绘制解锁图案</string>
+    <string name="create_gesture_correct">再次绘制解锁图案</string>
+    <string name="create_gesture_less_error">至少连接4个点，请重新输入</string>
+    <string name="create_gesture_confirm_error">与上一次绘制不一致，请重新绘制</string>
+    <string name="create_gesture_confirm_correct">设置成功</string>
+    <string name="create_gesture_reset">重新设置</string>
+
 </resources>

@@ -26,7 +26,7 @@ public class Constant {
 	public static String VIDEOHASHCODE = "VIDEOHASHCODE";
 	public static String SIGNHASHCODE = "SIGNHASHCODE";
 	public static int time = 91;
-
+	public static final String GESTURE_PASSWORD = "GesturePassword";
 	public static String UUID = "uuid";
 	public static String three="THREE_ELEMENT";
 	public static String four="FOUR_ELEMENT";

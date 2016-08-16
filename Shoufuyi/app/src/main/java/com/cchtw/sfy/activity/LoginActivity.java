@@ -95,7 +95,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
                     SharedPreferencesHelper.setString(mEditPhone.getText().toString()+Constant.TOKEN, AccountHelper.getToken());
 
                     Intent intent = new Intent();
-					intent.setClass(LoginActivity.this, SetGestureActivity.class);
+					intent.setClass(LoginActivity.this, CreateGestureActivity.class);
 					startActivity(intent);
 					LoginActivity.this.finish();
 				} else if ("3998".equals(returnapp.getDetailCode())) {

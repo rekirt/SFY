@@ -101,13 +101,18 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.SetGestureActivity"
+            android:name="com.cchtw.sfy.activity.CreateGestureActivity"
             android:label="@string/set_gesture_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name="com.cchtw.sfy.activity.GestureLoginActivity"
             android:label="@string/gesture_login_activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity
+            android:name="com.cchtw.sfy.activity.ChangeGestureActivity"
+            android:label="@string/change_gesture_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
