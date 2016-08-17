@@ -94,7 +94,24 @@ public class ApiRequest {
         byte[] data = pack(json, MOBILE);
         return AsyncHttp.post(BaseApplication.getInstance(), data, "application/octet-stream",handler);
     }
+    /**
+     * 提交请求
+     *
+     */
+    public static RequestHandle syncHttpRequestData(APP_Basic app,String MOBILE,
+                                            JsonHttpHandler handler) {
 
+        String uuid = SharedPreferencesHelper.getString("uuid", "");
+        if (uuid.equals("")) {
+            uuid = "2" + SequenceUtil.globalSequenceFor32();
+        }
+        app.setTerminalInfo(uuid);
+        returnapp = app;
+        String json = JSON.toJSONString(app, true);
+        // 要发送的字节数组
+        byte[] data = pack(json, MOBILE);
+        return SyncHttp.post(BaseApplication.getInstance(), data, "application/octet-stream", handler);
+    }
 
     // 压缩
     private static byte[] pack(String json, String MOBILE) {

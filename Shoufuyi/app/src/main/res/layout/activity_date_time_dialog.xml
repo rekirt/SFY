@@ -38,25 +38,37 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
-        <DatePicker
-            android:id="@+id/date_picker"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dip"
+        <!--<DatePicker-->
+            <!--android:id="@+id/date_picker"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="5dip"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_marginRight="2dp"/>-->
+        <com.cchtw.sfy.uitls.view.datepicker.HLDatePicker
+            android:id="@+id/datePicker"
+            android:layout_width="wrap_content"
             android:layout_weight="1"
-            android:layout_marginRight="2dp"/>
+            android:layout_height="wrap_content">
+        </com.cchtw.sfy.uitls.view.datepicker.HLDatePicker>
         <ImageView
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:src="@color/gray"/>
-        <DatePicker
+        <!--<DatePicker-->
+            <!--android:id="@+id/time_picker"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="5dip"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_marginLeft="2dp"-->
+            <!--android:layout_marginRight="1dp"-->
+            <!--/>-->
+        <com.cchtw.sfy.uitls.view.datepicker.HLDatePicker
             android:id="@+id/time_picker"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dip"
+            android:layout_width="wrap_content"
             android:layout_weight="1"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="1dp"
-            />
+            android:layout_height="wrap_content">
+        </com.cchtw.sfy.uitls.view.datepicker.HLDatePicker>
     </LinearLayout>
 </LinearLayout>
