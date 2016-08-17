@@ -155,7 +155,7 @@ public class CreateGestureActivity extends BaseActivity {
 	 */
 	private void saveChosenPattern(List<LockPatternView.Cell> cells) {
 		byte[] bytes = LockPatternUtil.patternToHash(cells);
-		aCache.put(AccountHelper.getUserName()+ Constant.GESTURE_PASSWORD, bytes);
+		aCache.put(AccountHelper.getUserName()+ Constant.GESTURE_PASSWORD, bytes,ACache.TIME_MONTH*12);
 	}
 
 	private enum Status {
