@@ -33,6 +33,7 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
         this.mContext = BaseApplication.getInstance();;
     }
 
+
     /**
      * 传入接口返回字段的构造函数
      *
@@ -213,4 +214,5 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
         this.isNeedToReturnResponseBody = isNeedToReturnResponseBody;
         return this;
     }
+
 }

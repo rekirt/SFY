@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.alibaba.fastjson.JSON;
@@ -30,7 +32,7 @@ import java.util.TimerTask;
 public class StartToUseActivity extends BaseActivity{
 	private Button butregister, btn_getcode;
 	private EditText editcode, editphone;
-
+    private CheckBox cb_privacy;
 	// 通过设备读取的手机号码
 	private APP_120032 returnapp;
 	@Override
@@ -39,6 +41,7 @@ public class StartToUseActivity extends BaseActivity{
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
         View view = View.inflate(this, R.layout.activity_start_to_use, null);
         setContentView(view);
+
 		initView();
         initData();
 	}
@@ -49,10 +52,24 @@ public class StartToUseActivity extends BaseActivity{
         btn_getcode = (Button) findViewById(R.id.btn_get_code);
         editcode = (EditText) findViewById(R.id.edt_code);
         editphone = (EditText) findViewById(R.id.edt_phone);
+        cb_privacy = (CheckBox) findViewById(R.id.cb_privacy);
+        cb_privacy.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    SharedPreferencesHelper.setBoolean(Constant.ISREMMBER, b);//是否记住密码
+            }
+        });
 	}
 
 	private void initData(){
-        editphone.setText(SharedPreferencesHelper.getString(Constant.PHONE, ""));
+        Boolean isRemmber = SharedPreferencesHelper.getBoolean(Constant.ISREMMBER, false);//是否记住密码
+        if (isRemmber){
+            editphone.setText(SharedPreferencesHelper.getString(Constant.PHONE, ""));
+        }
+        String phone = getIntent().getStringExtra("mEditPhone");
+        if (!TextUtils.isEmpty(phone)){
+            editphone.setText(phone);
+        }
         btn_getcode.setOnClickListener(this);
         butregister.setOnClickListener(this);
         editphone.addTextChangedListener(new SimpleTextWatcher() {

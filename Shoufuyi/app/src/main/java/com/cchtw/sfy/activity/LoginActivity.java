@@ -53,7 +53,11 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 	}
 
 	private void initData(){
-		strphone = SharedPreferencesHelper.getString(Constant.PHONE, "");
+		Boolean isRemmber = SharedPreferencesHelper.getBoolean(Constant.ISREMMBER, false);//是否记住密码
+		if (isRemmber){
+			strphone = SharedPreferencesHelper.getString(Constant.PHONE, "");
+		}
+
 		if (!TextUtils.isEmpty(strphone)){
 			mEditPhone.setText(strphone);
 		}
@@ -67,13 +71,14 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		app.setUserName(mEditPhone.getText().toString());
 		app.setLoginState("0000");
 		String des3key = SharedPreferencesHelper.getString(mEditPhone.getText().toString()+Constant.DESK3KEY, "");
-//        if (TextUtils.isEmpty(des3key)){
-//            ToastHelper.ShowToast("第一次在该设备登录，请先启用！");
-//            Intent intent = new Intent();
-//            intent.setClass(LoginActivity.this, StartToUseActivity.class);
-//            startActivity(intent);
-//            return;
-//        }
+        if (TextUtils.isEmpty(des3key)){
+            ToastHelper.ShowToast("第一次在该设备登录，请先启用！");
+            Intent intent = new Intent();
+			intent.putExtra("mEditPhone",mEditPhone.getText().toString());
+            intent.setClass(LoginActivity.this, StartToUseActivity.class);
+            startActivity(intent);
+            return;
+        }
 		try {
 			app.setUserPass(des3key, mEditPwd.getText().toString());
 		} catch (Exception e) {
