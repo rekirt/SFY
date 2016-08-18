@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import java.util.List;
  */
 public class DatePickListener  implements OnClickListener {
     private EditText editText = null;
+    private Handler mHandler = new Handler();
     private Context context;
     private Date date;
     private long time;
@@ -52,10 +54,18 @@ public class DatePickListener  implements OnClickListener {
         View view = View.inflate(context, R.layout.activity_date_time_dialog, null);
         final HLDatePicker beginTimePicker = (HLDatePicker) view
                 .findViewById(R.id.date_picker);
-        initDatePicker(beginTimePicker);
+
         final HLDatePicker endTimePicker = (HLDatePicker) view
                 .findViewById(R.id.time_picker);
-        initDatePicker(endTimePicker);
+        mHandler.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                initDatePicker(beginTimePicker);
+                initDatePicker(endTimePicker);
+            }
+        }, 100);
+
         builder.setView(view);
         builder.setTitle("请选取提交日期范围");
         builder.setPositiveButton("确定",
@@ -66,11 +76,11 @@ public class DatePickListener  implements OnClickListener {
 
                         int beginDayOfMonth=beginTimePicker.getCurrentDay();
                         int beginMonth=beginTimePicker.getCurrentMonth();
-                        int beginYear=beginTimePicker.getCurrentYear();
+                        int beginYear=beginTimePicker.getCurrentYear()+1899;
 
                         int endDayOfMonth=endTimePicker.getCurrentDay();
                         int endMonth=endTimePicker.getCurrentMonth();
-                        int endYear=endTimePicker.getCurrentYear();
+                        int endYear=endTimePicker.getCurrentYear()+1899;
 
                         int begin = beginDayOfMonth+beginMonth*100+beginYear*10000;
                         int end = endDayOfMonth+endMonth*100+endYear*10000;
@@ -87,14 +97,29 @@ public class DatePickListener  implements OnClickListener {
                 }).show();
     }
 
-    private void initDatePicker(HLDatePicker mTimePicker){
+    private void initDatePicker(HLDatePicker mPicker){
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR) - 1899;
         int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        mTimePicker.setCurrentDay(day);
-        mTimePicker.setCurrentMonth(month);
-        mTimePicker.setCurrentYear(year);
+
+        mPicker.setCurrentDay(day);
+        mPicker.setCurrentMonth(month);
+        mPicker.setCurrentYear(year);
+
+    }
+
+    private void initBeginPicker(HLDatePicker mPicker){
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR) - 1899;
+        int month = calendar.get(Calendar.MONTH)+1;
+        Date beginDate = TimeUtils.getDaysAgo(7);
+        calendar.setTime(beginDate);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        mPicker.setCurrentDay(day);
+        mPicker.setCurrentMonth(month);
+        mPicker.setCurrentYear(year);
+
     }
 
     private String changeNumber(int number){

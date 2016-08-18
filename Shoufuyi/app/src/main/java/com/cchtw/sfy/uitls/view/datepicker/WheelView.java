@@ -56,7 +56,7 @@ public class WheelView extends ScrollView{
 	private int itemHeight = 0;
 	private int initialY = 0;
 	/**当前选中的位置*/
-	public int currentIndex = 1;
+	public int currentIndex = 10;
 	/**滑动监听器*/
 	private OnScrollListener mOnScrollListener = null;
 	
@@ -186,7 +186,7 @@ public class WheelView extends ScrollView{
 				return;
 			}
 			if(i == position){
-				tv.setTextColor(Color.WHITE);
+				tv.setTextColor(Color.RED);
 			} else {
 				tv.setTextColor(Color.BLACK);
 			}
@@ -201,7 +201,7 @@ public class WheelView extends ScrollView{
 				return;
 			}
 			if(i == position){
-				tv.setTextColor(Color.WHITE);
+				tv.setTextColor(Color.RED);
 			} else {
 				tv.setTextColor(Color.BLACK);
 			}

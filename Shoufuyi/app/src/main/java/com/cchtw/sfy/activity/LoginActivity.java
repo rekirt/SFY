@@ -19,6 +19,7 @@ import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
+import com.cchtw.sfy.uitls.cache.ACache;
 import com.cchtw.sfy.uitls.dialog.DialogHelper;
 import com.itech.message.APP_120033;
 
@@ -57,7 +58,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		if (isRemmber){
 			strphone = SharedPreferencesHelper.getString(Constant.PHONE, "");
 		}
-
 		if (!TextUtils.isEmpty(strphone)){
 			mEditPhone.setText(strphone);
 		}
@@ -73,6 +73,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		String des3key = SharedPreferencesHelper.getString(mEditPhone.getText().toString()+Constant.DESK3KEY, "");
         if (TextUtils.isEmpty(des3key)){
             ToastHelper.ShowToast("第一次在该设备登录，请先启用！");
+            SharedPreferencesHelper.setBoolean(Constant.ISREMMBER, true);//是否记住密码
             Intent intent = new Intent();
 			intent.putExtra("mEditPhone",mEditPhone.getText().toString());
             intent.setClass(LoginActivity.this, StartToUseActivity.class);
@@ -86,21 +87,29 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		}
 		DialogHelper.showProgressDialog(LoginActivity.this, "正在登录...", true, false);
 
-		ApiRequest.login(app, mEditPhone.getText().toString(), new JsonHttpHandler() {
+		ApiRequest.login(app, mEditPhone.getText().toString(), new JsonHttpHandler(LoginActivity.this) {
 			@Override
 			public void onDo(JSONObject responseJsonObject) {
 				APP_120033 returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120033.class);
 				if ("0000".equals(returnapp.getDetailCode())) {
 					AccountHelper.setUser(returnapp);
 					if (cb_remember.isChecked()) {
-						SharedPreferencesHelper.setString(Constant.PHONE, mEditPhone.getText().toString());
-					}
+                        SharedPreferencesHelper.setBoolean(Constant.ISREMMBER, true);//是否记住密码
+					}else {
+                        SharedPreferencesHelper.setBoolean(Constant.ISREMMBER, false);//是否记住密码
+                    }
+                    SharedPreferencesHelper.setString(Constant.PHONE, mEditPhone.getText().toString());
                     SharedPreferencesHelper.setString(mEditPhone.getText().toString() + Constant.DESK3KEY, AccountHelper.getDes3Key());
                     SharedPreferencesHelper.setString(mEditPhone.getText().toString() + Constant.DESKEY, AccountHelper.getDesKey());
                     SharedPreferencesHelper.setString(mEditPhone.getText().toString()+Constant.TOKEN, AccountHelper.getToken());
-
+					ACache aCache = ACache.get(LoginActivity.this);
+					byte[] gesturePassword= aCache.getAsBinary(AccountHelper.getUserName() + Constant.GESTURE_PASSWORD);
                     Intent intent = new Intent();
-					intent.setClass(LoginActivity.this, CreateGestureActivity.class);
+                    if (gesturePassword == null){
+                        intent.setClass(LoginActivity.this, CreateGestureActivity.class);
+					}else {
+                        intent.setClass(LoginActivity.this, MainActivity.class);
+                    }
 					startActivity(intent);
 					LoginActivity.this.finish();
 				} else if ("3998".equals(returnapp.getDetailCode())) {

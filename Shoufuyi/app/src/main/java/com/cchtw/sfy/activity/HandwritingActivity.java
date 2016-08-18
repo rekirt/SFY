@@ -109,6 +109,7 @@ public class HandwritingActivity extends BaseActivity {
 
                 @Override
                 public void refreshActivity(Object object) {
+                    ivSign.setVisibility(View.VISIBLE);
                     mSignBitmap = (Bitmap) object;
                     signPath = createFile();
                     ivSign.setImageBitmap(mSignBitmap);
@@ -119,6 +120,9 @@ public class HandwritingActivity extends BaseActivity {
 
             @Override
             public void cancel() {
+                tvSign.setVisibility(View.VISIBLE);
+                ivSign.setVisibility(View.GONE);
+                but_submit.setVisibility(View.GONE);
                 signPath = "";
             }
         });
@@ -198,7 +202,7 @@ public class HandwritingActivity extends BaseActivity {
 
     private String contentBase64 = "";
 	private void UpLoadAttach(APP_120008 app) {
-        ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
+        ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler(HandwritingActivity.this) {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 APP_120008 result = JSON.parseObject(responseJsonObject.toString(), APP_120008.class);
@@ -231,9 +235,7 @@ public class HandwritingActivity extends BaseActivity {
 	public void saveBitmap(Bitmap bm) {
 		File fileFolder = new File(Environment.getExternalStorageDirectory()
 				+ "/SFY/PIC/");
-		// if (!fileFolder.exists()) { // 如果目录不存在，则创建一个名为"finger"的目录
 		fileFolder.mkdir();
-		// }
 		File jpgFile = new File(fileFolder,
 				getTimeName(System.currentTimeMillis()) + ".png");
 

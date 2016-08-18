@@ -120,7 +120,7 @@ public class SettingsActivity extends BaseActivity {
 		APP_UpdateLimit app = new APP_UpdateLimit();
 		app.setBusSysCode("00000001");
 		app.setUserName(phone);
-        ApiRequest.requestData(app, phone, new JsonHttpHandler() {
+        ApiRequest.requestData(app, phone, new JsonHttpHandler(SettingsActivity.this) {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 final APP_UpdateLimit returnapp = JSON.parseObject(responseJsonObject.toString(), APP_UpdateLimit.class);
@@ -219,14 +219,13 @@ public class SettingsActivity extends BaseActivity {
 		app.setUserPass("");
 		app.setLoginState("0001");
         DialogHelper.showProgressDialog(SettingsActivity.this, "正在退出，请稍候...", true, false);
-        ApiRequest.requestData(app, phone, new JsonHttpHandler() {
+        ApiRequest.requestData(app, phone, new JsonHttpHandler(SettingsActivity.this) {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 APP_120033 returnapp = null;
                 try {
                     returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120033.class);
                     if (returnapp.getDetailCode().equals("0000")) {
-                        SharedPreferencesHelper.setString(phone + Constant.DESK3KEY, AccountHelper.getDes3Key());
                         AccountHelper.logout();
                         startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
                         SettingsActivity.this.finish();
@@ -269,7 +268,7 @@ public class SettingsActivity extends BaseActivity {
 			e.printStackTrace();
 		}
 		DialogHelper.showProgressDialog(SettingsActivity.this, "正在查询，请稍候...", true, true);
-		ApiRequest.requestData(app, phone, new JsonHttpHandler() {
+		ApiRequest.requestData(app, phone, new JsonHttpHandler(SettingsActivity.this) {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 final APP_Version returnapp = JSON.parseObject(responseJsonObject.toString(), APP_Version.class);

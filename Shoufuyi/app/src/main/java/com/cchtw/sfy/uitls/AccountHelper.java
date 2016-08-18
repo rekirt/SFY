@@ -140,6 +140,7 @@ public class AccountHelper {
 
     public static void logout() {
         String mPhoneNumber = SharedPreferencesHelper.getString(Constant.PHONE, "");// 保存字符串
+        SharedPreferencesHelper.setString(mPhoneNumber + Constant.DESK3KEY, AccountHelper.getDes3Key());
         SharedPreferencesHelper.setString(mPhoneNumber+Constant.DESKEY,"");
         SharedPreferencesHelper.setString(mPhoneNumber + Constant.TOKEN, "");
         AccountHelper.setUser(null);

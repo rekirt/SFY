@@ -206,7 +206,7 @@ public class UnfinishedActivity extends BaseActivity implements
         endTime = endTime.replaceAll(" ","");
         app.setCreateDateStart(startTime);
         app.setCreateDateEnd(endTime);
-        ApiRequest.requestData(app,SharedPreferencesHelper.getString(Constant.PHONE, ""),new JsonHttpHandler() {
+        ApiRequest.requestData(app,SharedPreferencesHelper.getString(Constant.PHONE, ""),new JsonHttpHandler(UnfinishedActivity.this) {
                     @Override
                     public void onDo(JSONObject responseJsonObject) {
                         try {

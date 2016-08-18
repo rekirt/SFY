@@ -68,7 +68,7 @@ public class ChangePwdActivity extends BaseActivity {
             app.setUserName(userPhone);
             app.setOriPass(des3key, mEditOld.getText().toString());
             app.setNewPass(des3key, newPwd);
-            ApiRequest.requestData(app, userPhone, new JsonHttpHandler() {
+            ApiRequest.requestData(app, userPhone, new JsonHttpHandler(ChangePwdActivity.this) {
                 @Override
                 public void onDo(JSONObject responseJsonObject) {
                     returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120034.class);

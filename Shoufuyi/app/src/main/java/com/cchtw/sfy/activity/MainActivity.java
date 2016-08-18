@@ -95,7 +95,7 @@ public class MainActivity extends BaseActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        ApiRequest.requestData(app, AccountHelper.getUserName(), new JsonHttpHandler() {
+        ApiRequest.requestData(app, AccountHelper.getUserName(), new JsonHttpHandler(MainActivity.this) {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 final APP_Version returnapp = JSON.parseObject(responseJsonObject.toString(), APP_Version.class);

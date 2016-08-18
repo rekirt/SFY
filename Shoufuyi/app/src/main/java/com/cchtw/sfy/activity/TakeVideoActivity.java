@@ -23,6 +23,7 @@ import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.FileHelper;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
+import com.cchtw.sfy.uitls.cache.ACache;
 import com.cchtw.sfy.uitls.dialog.AlertDialogHelper;
 import com.cchtw.sfy.uitls.dialog.ChooseDialogDoClickHelper;
 import com.cchtw.sfy.uitls.dialog.DialogHelper;
@@ -57,6 +58,7 @@ public class TakeVideoActivity extends BaseActivity {
     RequestHandle requestHandle;
     private static int TAKEVEDIOREQUESTCODE = 80;
     private RequestHandle mRequestHandleDownload;
+    private ACache aCache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,7 @@ public class TakeVideoActivity extends BaseActivity {
         Bundle bundle = intent.getExtras();
         mResult = (Result_120023) bundle.get("info");
         mVideoFileId = bundle.getString("mVideoFileId","");
+        aCache = ACache.get(TakeVideoActivity.this);
         assignViews();
         initData();
         setCanBack(true);
@@ -97,6 +100,26 @@ public class TakeVideoActivity extends BaseActivity {
             mBtnUpload.setVisibility(View.GONE);
             iv_video.setVisibility(View.GONE);
             downLoadFile();
+        }
+
+        if (!TextUtils.isEmpty(mVideoFileId)){
+            mBtnUpload.setVisibility(View.GONE);
+            iv_video.setVisibility(View.GONE);
+            byte[] bytes = aCache.getAsBinary(mResult.getIdCard() + mVideoFileId);
+            if (bytes != null){
+                playVideo(bytes);
+            }else {
+                DialogHelper.showProgressDialog(TakeVideoActivity.this, "正在下载附件，请稍候...", new ProgressDialogDoClickHelper() {
+                            @Override
+                            public void doClick() {
+                                if (mRequestHandleDownload != null) {
+                                    mRequestHandleDownload.cancel(true);
+                                }
+                            }
+                        },
+                        true, false);
+                downLoadFile();
+            }
         }
     }
     @Override
@@ -211,13 +234,17 @@ public class TakeVideoActivity extends BaseActivity {
     }
 
 
-    private void UpLoadAttach(APP_120008 app_120008){
-        requestHandle =  ApiRequest.requestData(app_120008, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
+    private void UpLoadAttach(final APP_120008 app_120008){
+        requestHandle =  ApiRequest.requestData(app_120008, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler(TakeVideoActivity.this) {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 APP_120008 result = JSON.parseObject(responseJsonObject.toString(), APP_120008.class);
                 if ("0000".equals(result.getDetailCode())) {
                     ToastHelper.ShowToast("附件上传成功",1);
+                    if (result.getFileList().size()>0){
+                        byte[] content = app_120008.getFileList().get(0).getContent().getBytes();
+                        aCache.put(mResult.getIdCard() + result.getFileList().get(0).getFileId(), content, ACache.TIME_MONTH);
+                    }
                     TakeVideoActivity.this.finish();
                 }else {
                     ToastHelper.ShowToast(result.getDetailInfo(),1);
@@ -274,16 +301,7 @@ public class TakeVideoActivity extends BaseActivity {
         FileMsg file = new FileMsg();
         file.setFileId(mVideoFileId);
         app120028.setFileMsg(file);
-        DialogHelper.showProgressDialog(TakeVideoActivity.this, "正在下载附件，请稍候...", new ProgressDialogDoClickHelper() {
-                    @Override
-                    public void doClick() {
-                        if (requestHandle != null) {
-                            requestHandle.cancel(true);
-                        }
-                    }
-                },
-                true, false);
-        mRequestHandleDownload = ApiRequest.requestData(app120028, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
+        mRequestHandleDownload = ApiRequest.requestData(app120028, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler(TakeVideoActivity.this) {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 APP_120028 result = JSON.parseObject(responseJsonObject.toString(), APP_120028.class);
@@ -294,28 +312,7 @@ public class TakeVideoActivity extends BaseActivity {
                 }
                 contentString = result.getFileMsg().getContent();
                 byte[] content = contentString.getBytes();
-                try {
-                    String path = Environment
-                            .getExternalStorageDirectory()
-                            + "/" + "SFY/Video/";
-                    File dir = new File(path);
-                    if (!dir.exists())
-                        dir.mkdirs();
-                    String videoName = mResult.getMerchantId()+mResult.getAccountNo()+".mp4";
-                    FileHelper.getFile(ZipDataUtils
-                                    .unZipForBase64(content),
-                            path, videoName);
-                    filePath = path + videoName;
-                    if (TextUtils.isEmpty(filePath)) {
-                        ToastHelper.ShowToast("视频路径错误");
-                    }else {
-                        Uri videoUri = Uri.parse(filePath);
-                        mVideoView.setVideoURI(videoUri);
-                        mVideoView.start();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                playVideo(content);
             }
 
             @Override
@@ -335,7 +332,29 @@ public class TakeVideoActivity extends BaseActivity {
         });
     }
 
-
+    private void playVideo(byte[] content){
+        try {
+            String path = Environment.getExternalStorageDirectory() + "/" + "SFY/Video/";
+            File dir = new File(path);
+            if (!dir.exists())
+                dir.mkdirs();
+            String videoName = mResult.getMerchantId()+mResult.getAccountNo()+".mp4";
+            FileHelper.getFile(ZipDataUtils.unZipForBase64(content), path, videoName);
+            filePath = path + videoName;
+            if (TextUtils.isEmpty(filePath)) {
+                ToastHelper.ShowToast("视频路径错误");
+                aCache.remove(mResult.getIdCard() + mVideoFileId);
+            }else {
+                Uri videoUri = Uri.parse(filePath);
+                mVideoView.setVideoURI(videoUri);
+                mVideoView.start();
+                aCache.put(mResult.getIdCard() + mVideoFileId, content, ACache.TIME_MONTH);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            aCache.remove(mResult.getIdCard() + mVideoFileId);
+        }
+    }
 
     @Override
     public void onBackPressed() {

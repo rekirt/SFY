@@ -14,16 +14,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="50dp" />
 
-    <Button
-        android:id="@+id/submit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/btn_red_selector"
-        android:text="确定提交"
-        android:textColor="@color/white"
-        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_sign"
@@ -35,4 +25,14 @@
         android:text="点此签名"
         android:textSize="23dp" />
 
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/btn_red_selector"
+        android:text="确定提交"
+        android:textColor="@color/white"
+        android:visibility="gone" />
 </LinearLayout>

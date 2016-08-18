@@ -56,10 +56,5 @@
         android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
         android:id="@+id/tv_page"/>
-    <com.cchtw.sfy.uitls.view.EmptyLayout
-        android:id="@+id/error_layout"
-        android:layout_below="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
+
 </RelativeLayout>

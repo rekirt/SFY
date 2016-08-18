@@ -107,7 +107,7 @@ public class AgreementActivity extends BaseActivity {
         file.setFileId(fileId);
         app120028.setFileMsg(file);
         DialogHelper.showProgressDialog(AgreementActivity.this, "正在加载...", true, false);
-        ApiRequest.requestData(app120028, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
+        ApiRequest.requestData(app120028, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler(AgreementActivity.this) {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 APP_120028 result = JSON.parseObject(responseJsonObject.toString(), APP_120028.class);

@@ -167,7 +167,7 @@ public class NewSignActivity extends BaseActivity{
                     }
                 },
                 true, false);
-        requestHandle = ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
+        requestHandle = ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler(NewSignActivity.this) {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 try {
@@ -177,9 +177,11 @@ public class NewSignActivity extends BaseActivity{
                         Intent intent = new Intent();
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("return", mReturnApp);
+                        bundle.putBoolean("isComeFromDetail", false);
                         intent.putExtras(bundle);
                         intent.setClass(NewSignActivity.this, ElementVerificationActivity.class);
                         startActivity(intent);
+                        NewSignActivity.this.finish();
                     }else {
                         ToastHelper.ShowToast("录入失败提示："+mReturnApp.getDetailInfo());
                     }

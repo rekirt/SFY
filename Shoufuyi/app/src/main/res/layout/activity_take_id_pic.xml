@@ -19,7 +19,7 @@
         android:layout_marginRight="@dimen/space_15"
         android:layout_marginTop="@dimen/space_15"
         android:layout_height="200dp"
-        android:padding="@dimen/space_5"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_id_card_front_tip"
         android:background="@drawable/ic_id_photo_bg"
         />
@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_margin="@dimen/space_15"
         android:layout_height="200dp"
-        android:padding="@dimen/space_5"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_id_card_back_tip"
         android:background="@drawable/ic_id_photo_bg"/>
     <Button

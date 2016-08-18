@@ -4,10 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
@@ -15,9 +15,11 @@ import android.widget.TimePicker;
 
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.activity.UnfinishedActivity;
+import com.cchtw.sfy.uitls.view.datepicker.HLDatePicker;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +34,7 @@ import java.util.List;
  */
 public class UnfinishDatePickListener implements OnClickListener {
     private EditText editText = null;
+    private Handler mHandler = new Handler();
     private Context context;
     private Date date;
     private long time;
@@ -49,11 +52,20 @@ public class UnfinishDatePickListener implements OnClickListener {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = View.inflate(context, R.layout.activity_date_time_dialog, null);
-        final DatePicker beginTimePicker = (DatePicker) view
+        final HLDatePicker beginTimePicker = (HLDatePicker) view
                 .findViewById(R.id.date_picker);
 
-        final DatePicker endTimePicker = (DatePicker) view
+        final HLDatePicker endTimePicker = (HLDatePicker) view
                 .findViewById(R.id.time_picker);
+        mHandler.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                initBeginPicker(beginTimePicker);
+                initDatePicker(endTimePicker);
+            }
+        }, 100);
+
         builder.setView(view);
         builder.setTitle("请选取提交日期范围");
         builder.setPositiveButton("确定",
@@ -62,13 +74,13 @@ public class UnfinishDatePickListener implements OnClickListener {
                     @Override
                     public void onClick(DialogInterface dialog, int arg1) {
 
-                        int beginDayOfMonth=beginTimePicker.getDayOfMonth();
-                        int beginMonth=beginTimePicker.getMonth()+1;
-                        int beginYear=beginTimePicker.getYear();
+                        int beginDayOfMonth=beginTimePicker.getCurrentDay();
+                        int beginMonth=beginTimePicker.getCurrentMonth();
+                        int beginYear=beginTimePicker.getCurrentYear()+1899;
 
-                        int endDayOfMonth=endTimePicker.getDayOfMonth();
-                        int endMonth=endTimePicker.getMonth()+1;
-                        int endYear=endTimePicker.getYear();
+                        int endDayOfMonth=endTimePicker.getCurrentDay();
+                        int endMonth=endTimePicker.getCurrentMonth();
+                        int endYear=endTimePicker.getCurrentYear()+1899;
 
                         int begin = beginDayOfMonth+beginMonth*100+beginYear*10000;
                         int end = endDayOfMonth+endMonth*100+endYear*10000;
@@ -83,6 +95,31 @@ public class UnfinishDatePickListener implements OnClickListener {
                         }
                     }
                 }).show();
+    }
+
+    private void initDatePicker(HLDatePicker mPicker){
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR) - 1899;
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        mPicker.setCurrentDay(day);
+        mPicker.setCurrentMonth(month);
+        mPicker.setCurrentYear(year);
+
+    }
+
+    private void initBeginPicker(HLDatePicker mPicker){
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR) - 1899;
+        int month = calendar.get(Calendar.MONTH)+1;
+        Date beginDate = TimeUtils.getDaysAgo(7);
+        calendar.setTime(beginDate);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        mPicker.setCurrentDay(day);
+        mPicker.setCurrentMonth(month);
+        mPicker.setCurrentYear(year);
+
     }
 
     private String changeNumber(int number){

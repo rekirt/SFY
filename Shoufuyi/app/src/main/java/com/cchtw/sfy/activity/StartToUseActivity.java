@@ -194,8 +194,10 @@ public class StartToUseActivity extends BaseActivity{
 
 
     // 获得验证码
+    String sn = "";
     private void getCode(){
                 // 发送报文获取验证码
+        sn = System.currentTimeMillis()+"";
         DialogHelper.showProgressDialog(StartToUseActivity.this, "正在请求...", true, true);
         APP_120031 app = new APP_120031();
         mPhoneNumber = editphone.getText().toString().replaceAll(" ", "");
@@ -203,8 +205,10 @@ public class StartToUseActivity extends BaseActivity{
         app.setUserName(mPhoneNumber);
         app.setTrxCode("120031");
         app.setType("2");
+        app.setValSn(sn);
+        app.setReqSn(sn);
         SharedPreferencesHelper.setBoolean(mPhoneNumber+Constant.ACTIVATION, false);
-        ApiRequest.getMsgCode(app, mPhoneNumber, new JsonHttpHandler() {
+        ApiRequest.getMsgCode(app, mPhoneNumber, new JsonHttpHandler(StartToUseActivity.this) {
                     @Override
                     public void onDo(JSONObject responseJsonObject) {
                         APP_120031 returnapp = JSON.parseObject(responseJsonObject.toString(),
@@ -245,6 +249,11 @@ public class StartToUseActivity extends BaseActivity{
             ToastHelper.ShowToast("验证码不能为空");
             return;
         }
+        if (TextUtils.isEmpty(sn)){
+            ToastHelper.ShowToast("请先获取短信验证码！");
+            return;
+        }
+        app.setReqSn(sn);
         try {
             app.setUserPass(null, strserect);
         } catch (Exception e) {
@@ -252,7 +261,7 @@ public class StartToUseActivity extends BaseActivity{
         }
 
         DialogHelper.showProgressDialog(StartToUseActivity.this, "正在请求启用...", true, false);
-        ApiRequest.requestData(app, mPhoneNumber, new JsonHttpHandler() {
+        ApiRequest.requestData(app, mPhoneNumber, new JsonHttpHandler(StartToUseActivity.this) {
                     @Override
                     public void onDo(JSONObject responseJsonObject) {
                         returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120032.class);
@@ -262,6 +271,11 @@ public class StartToUseActivity extends BaseActivity{
                             SharedPreferencesHelper.setString(mPhoneNumber+Constant.DESKEY, returnapp.getDesKey());
                             SharedPreferencesHelper.setString(mPhoneNumber + Constant.DESK3KEY, returnapp.getDes3Key());
                             SharedPreferencesHelper.setString(mPhoneNumber + Constant.TOKEN, returnapp.getToken());
+                            if (cb_privacy.isChecked()){
+                                SharedPreferencesHelper.setBoolean(Constant.ISREMMBER, true);//是否记住密码
+                            }else {
+                                SharedPreferencesHelper.setBoolean(Constant.ISREMMBER, false);//是否记住密码
+                            }
                             Intent intent = new Intent();
                             intent.setClass(StartToUseActivity.this, ChangePwdActivity.class);
                             startActivity(intent);

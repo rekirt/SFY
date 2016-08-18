@@ -96,7 +96,9 @@ public class SignRecycleAdapter extends RecycleBaseAdapter {
             case "3":
 //                ImageHelper.displayImage("drawable://" + R.drawable.ic_unfinish, new_holder.iv_sign_stye);
                 new_holder.iv_sign_stye.setImageResource(R.drawable.ic_unfinish);
-                new_holder.tv_give_up.setTextColor(Color.parseColor("#FF0000"));
+                new_holder.tv_give_up.setEnabled(false);
+                new_holder.tv_give_up.setClickable(false);
+                new_holder.tv_give_up.setTextColor(Color.parseColor("#ebebeb"));
 
                 break;
             default:
@@ -134,7 +136,7 @@ public class SignRecycleAdapter extends RecycleBaseAdapter {
         app.setIdCard(signBean.getIdCard());
         app.setAccountNo(signBean.getAccountNo());
         app.setUserName(SharedPreferencesHelper.getString(Constant.PHONE,""));
-        ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
+        ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler(context) {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 APP_120009 app120009 = JSON.parseObject(responseJsonObject.toString(), APP_120009.class);

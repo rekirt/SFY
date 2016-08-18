@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -82,6 +83,7 @@ public class SignDetailActivity extends BaseActivity {
 	private TextView tv_e_agreement_state;//电子协议状态
     private EmptyLayout mErrorLayout;//错误页
     private Button btn_submit;
+    private LinearLayout ll_deal_pwd;
 
 	public void assignViews() {
 		// 显示信息
@@ -101,6 +103,8 @@ public class SignDetailActivity extends BaseActivity {
 		tv_agreement_pic_state = (TextView) findViewById(R.id.tv_agreement_pic_state);//
 		tv_e_agreement_state = (TextView) findViewById(R.id.tv_e_agreement_state);//
         mErrorLayout = (EmptyLayout) findViewById(R.id.error_layout);
+        ll_deal_pwd = (LinearLayout) findViewById(R.id.ll_deal_pwd);
+
         btn_submit = (Button) findViewById(R.id.btn_submit);//
 
     }
@@ -217,6 +221,11 @@ public class SignDetailActivity extends BaseActivity {
         List<VerifyItem> verifyItemListELEMENT = new ArrayList<VerifyItem>();
         switch (mELEMENTS){
             case "SIX_ELEMENT"://六要素(卡号\户名\身份证号\手机号\手机验证码\支付密码)
+                if(haveSixElement){
+                    ToastHelper.ShowToast("请先进行要素验证！");
+                    return;
+                }
+
                 VerifyItem[] item = new VerifyItem[6];
                 item[0] = new VerifyItem();
                 item[0].setVerifyItemCode("ACCOUNT_NO");
@@ -430,7 +439,7 @@ public class SignDetailActivity extends BaseActivity {
     private void VerifyElements(APP_120002 app_120002, final String Msg){
 
         DialogHelper.upDateProgressDialog(SignDetailActivity.this, Msg+"验证中...", true, false);
-        ApiRequest.requestData(app_120002,mPhoneNumber,new JsonHttpHandler() {
+        ApiRequest.requestData(app_120002,mPhoneNumber,new JsonHttpHandler(SignDetailActivity.this) {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 APP_120003 mReturnApp = JSON.parseObject(responseJsonObject.toString(), APP_120003.class);
@@ -498,7 +507,7 @@ public class SignDetailActivity extends BaseActivity {
         app.setIdCard(mResult.getIdCard());
         app.setUserName(mPhoneNumber);
         DialogHelper.upDateProgressDialog(SignDetailActivity.this, "正在提交签约...", true, false);
-        ApiRequest.requestData(app, mPhoneNumber, new JsonHttpHandler() {
+        ApiRequest.requestData(app, mPhoneNumber, new JsonHttpHandler(SignDetailActivity.this) {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 APP_120003 mReturnApp = JSON.parseObject(responseJsonObject.toString(), APP_120003.class);
@@ -640,6 +649,7 @@ public class SignDetailActivity extends BaseActivity {
         mReturn.setMobile(mResult.getMobile());
         mReturn.setTrxCode("120001");
         bundle.putSerializable("return", mReturn);
+        bundle.putBoolean("isComeFromDetail",true);
         intent.putExtras(bundle);
         intent.setClass(SignDetailActivity.this, ElementVerificationActivity.class);
         startActivity(intent);
@@ -688,7 +698,7 @@ public class SignDetailActivity extends BaseActivity {
         app.setAccountNo(mResult.getAccountNo());
         app.setIdCard(mResult.getIdCard());
         app.setUserName(SharedPreferencesHelper.getString(Constant.PHONE, ""));
-        ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
+        ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler(SignDetailActivity.this) {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 mSignDetail = JSON.parseObject(responseJsonObject.toString(), APP_120024.class);
@@ -1063,6 +1073,7 @@ public class SignDetailActivity extends BaseActivity {
      * 处理六要素
      * @param verifyGroup 验证组合
      */
+    private boolean haveSixElement = false;
     private void handleSixElement(VerifyGroup verifyGroup){
         //1：未验证 2：验证通过 3：验证不通过
         switch (verifyGroup.getVerifyState()){
@@ -1071,9 +1082,10 @@ public class SignDetailActivity extends BaseActivity {
                 tv_id_number_state.setText("未验证");
                 tv_deal_pwd_state.setTextColor(getResources().getColor(R.color.red));
                 tv_id_number_state.setTextColor(getResources().getColor(R.color.red));
-
+                haveSixElement = false;
                 break;
             case "2":
+                haveSixElement = true;
                 tv_deal_pwd_state.setText("验证通过");
                 tv_id_number_state.setText("验证通过");
                 tv_deal_pwd_state.setEnabled(false);
@@ -1082,12 +1094,14 @@ public class SignDetailActivity extends BaseActivity {
                 tv_id_number_state.setTextColor(getResources().getColor(R.color.blue));
                 break;
             case "3":
+                haveSixElement = false;
                 tv_deal_pwd_state.setText("验证不通过");
                 tv_id_number_state.setText("验证不通过");
                 tv_deal_pwd_state.setTextColor(getResources().getColor(R.color.red));
                 tv_id_number_state.setTextColor(getResources().getColor(R.color.red));
                 break;
             default:
+                haveSixElement = false;
                 tv_deal_pwd_state.setText("未验证");
                 tv_id_number_state.setText("未验证");
                 tv_deal_pwd_state.setTextColor(getResources().getColor(R.color.red));
@@ -1123,6 +1137,28 @@ public class SignDetailActivity extends BaseActivity {
      * @param verifyGroup
      */
     private void handleTwoThreeFourElement(VerifyGroup verifyGroup){
+        ll_deal_pwd.setVisibility(View.GONE);
+        //1：未验证 2：验证通过 3：验证不通过
+        switch (verifyGroup.getVerifyState()){
+            case "1":
+                tv_id_number_state.setText("未验证");
+                tv_id_number_state.setTextColor(getResources().getColor(R.color.red));
+                break;
+            case "2":
+                tv_id_number_state.setText("验证通过");
+                tv_id_number_state.setEnabled(false);
+                tv_id_number_state.setTextColor(getResources().getColor(R.color.blue));
+                break;
+            case "3":
+                tv_id_number_state.setText("验证不通过");
+                tv_id_number_state.setTextColor(getResources().getColor(R.color.red));
+                break;
+            default:
+                tv_id_number_state.setText("未验证");
+                tv_id_number_state.setTextColor(getResources().getColor(R.color.red));
+                break;
+        }
+
         for (VerifyItem verifyItem : verifyGroup.getVerifyItemList()){
             switch (verifyItem.getVerifyItemCode()){
                 case "IDCARD"://身份证号

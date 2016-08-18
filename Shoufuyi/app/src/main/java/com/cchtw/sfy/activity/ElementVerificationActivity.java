@@ -24,6 +24,7 @@ import com.csii.powerenter.PEEditTextAttrSet;
 import com.itech.message.APP_120001;
 import com.itech.message.APP_120002;
 import com.itech.message.APP_120031;
+import com.itech.message.Result_120023;
 import com.itech.message.VerifyGroup;
 import com.itech.message.VerifyItem;
 
@@ -54,7 +55,7 @@ public class ElementVerificationActivity extends BaseActivity {
     private APP_120001 mReturn = new APP_120001();
     private String mElementVerifyGroupCode;
     int mElementMember = 0;
-
+    private boolean isComeFromDetail = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +63,7 @@ public class ElementVerificationActivity extends BaseActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         mReturn = (APP_120001) bundle.get("return");
+        isComeFromDetail = bundle.getBoolean("isComeFromDetail");
         initView();
         initData();
         judgeElement();
@@ -103,6 +105,7 @@ public class ElementVerificationActivity extends BaseActivity {
     /**
      * 初始化布局
      */
+
     private void initView(){
         edt_new_sign_id = (EditText) findViewById(R.id.edt_new_sign_id);
         edt_new_sign_name = (EditText) findViewById(R.id.edt_new_sign_name);
@@ -112,6 +115,12 @@ public class ElementVerificationActivity extends BaseActivity {
         password = (PEEditText) findViewById(R.id.password);
         btn_get_code = (Button) findViewById(R.id.btn_get_code);
         btn_submit = (Button) findViewById(R.id.btn_submit);
+        ll_new_sign_id = (LinearLayout) findViewById(R.id.ll_new_sign_id);
+        ll_new_sign_name = (LinearLayout) findViewById(R.id.ll_new_sign_name);
+        ll_new_sign_card_number = (LinearLayout) findViewById(R.id.ll_new_sign_card_number);
+        ll_new_sign_phone_number = (LinearLayout) findViewById(R.id.ll_new_sign_phone_number);
+        ll_new_sign_verif_code = (LinearLayout) findViewById(R.id.ll_new_sign_verif_code);
+
     }
 
     /**
@@ -205,7 +214,8 @@ public class ElementVerificationActivity extends BaseActivity {
         app.setType("1");
         sn = System.currentTimeMillis()+"";
         app.setValSn(sn);
-        ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
+        app.setReqSn(sn);
+        ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler(ElementVerificationActivity.this) {
                     @Override
                     public void onDo(JSONObject responseJsonObject) {
                         APP_120031 returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120031.class);
@@ -363,13 +373,30 @@ public class ElementVerificationActivity extends BaseActivity {
         app.setValSn(sn);
         app.setVerifyItemList(verifyItemList);
         DialogHelper.showProgressDialog(ElementVerificationActivity.this, "正在请求...", true, true);
-        ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler() {
+        ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler(ElementVerificationActivity.this) {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 APP_120031 returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120031.class);
                     if ("0000".equals(returnapp.getDetailCode())) {
                         ToastHelper.ShowToast("验证成功");
-                        ElementVerificationActivity.this.finish();
+                       if (isComeFromDetail){
+                           ElementVerificationActivity.this.finish();
+                       }else {
+                           Intent intent = new Intent();
+                           Bundle bundle = new Bundle();
+                           Result_120023 mResult = new Result_120023();
+                           mResult.setMobile(mReturn.getMobile());
+                           mResult.setMerchantId(mReturn.getMerchantId());
+                           mResult.setIdCard(mReturn.getIdCard());
+                           mResult.setAccountName(mReturn.getAccountName());
+                           mResult.setCreateUser(mReturn.getUserName());
+                           mResult.setAccountNo(mReturn.getAccountNo());
+                           bundle.putSerializable("info", mResult);
+                           intent.putExtras(bundle);
+                           intent.setClass(ElementVerificationActivity.this, SignDetailActivity.class);
+                           ElementVerificationActivity.this.startActivity(intent);
+                           ElementVerificationActivity.this.finish();
+                       }
                     }else {
                         ToastHelper.ShowToast(returnapp.getDetailInfo());
                     }

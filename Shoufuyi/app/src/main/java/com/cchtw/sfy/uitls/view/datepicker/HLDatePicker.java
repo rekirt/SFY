@@ -7,11 +7,13 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.LinearLayout;
 
+import com.cchtw.sfy.uitls.view.datepicker.WheelView.OnScrollListener;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class HLDatePicker extends LinearLayout implements WheelView.OnScrollListener {
+public class HLDatePicker extends LinearLayout implements OnScrollListener{
 
 	private WheelView yearWheelView = null;
 	private WheelView monthWheelView = null;
@@ -20,9 +22,10 @@ public class HLDatePicker extends LinearLayout implements WheelView.OnScrollList
 	private List<String> yearWheelViewDataList = null;
 	private List<String> monthWheelViewDataList = null;
 	private List<String> dayWheelViewDataList = null;
-    private LayoutParams layoutParams = null;
+	private LayoutParams layoutParams = null;
 	public HLDatePicker(Context context) {
 		super(context);
+		// TODO Auto-generated constructor stub
 		init(context);
 	}
 	
@@ -53,7 +56,7 @@ public class HLDatePicker extends LinearLayout implements WheelView.OnScrollList
 		dayWheelView.setScrollbarFadingEnabled(false);
 		
 		this.setOrientation(HORIZONTAL);
-        layoutParams = new LayoutParams(100,LayoutParams.WRAP_CONTENT);
+		layoutParams = new LayoutParams(100,LayoutParams.WRAP_CONTENT);
 		yearWheelView.setLayoutParams(layoutParams);
 		monthWheelView.setLayoutParams(layoutParams);
 		dayWheelView.setLayoutParams(layoutParams);
@@ -143,6 +146,7 @@ public class HLDatePicker extends LinearLayout implements WheelView.OnScrollList
 
 	@Override
 	public void onRefreshDayWheelView() {
+		// TODO Auto-generated method stub
 		int year = yearWheelView.getCurrentIndex();
 		int month = monthWheelView.getCurrentIndex();
 		Log.i("Garment0424", "onRefreshDayWheelView year:" + year + ";month:" + month);
@@ -171,7 +175,7 @@ public class HLDatePicker extends LinearLayout implements WheelView.OnScrollList
 		if(dayWheelView != null){
 			return dayWheelView.getCurrentIndex();
 		}else {
-			return 1;
+			return 2;
 		}
 	}
 
@@ -179,15 +183,17 @@ public class HLDatePicker extends LinearLayout implements WheelView.OnScrollList
 		if(monthWheelView != null){
 			return monthWheelView.getCurrentIndex();
 		}else {
-			return 1;
+			return 2;
 		}
 	}
 
 	public int getCurrentYear(){
 		if(yearWheelView != null){
+			String year = yearWheelView.getCurrentItem();
 			return yearWheelView.getCurrentIndex();
 		}else {
 			return 1900;
 		}
 	}
+	
 }

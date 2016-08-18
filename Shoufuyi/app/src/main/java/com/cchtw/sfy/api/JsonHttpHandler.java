@@ -1,10 +1,13 @@
 package com.cchtw.sfy.api;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 
 import com.cchtw.sfy.BaseApplication;
 import com.cchtw.sfy.R;
+import com.cchtw.sfy.activity.LoginActivity;
+import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
@@ -29,7 +32,7 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
     private String mMessageTag = "errMsg";
     private String mDataTag = "data";
 
-    public JsonHttpHandler() {
+    public JsonHttpHandler(Context context) {
         this.mContext = BaseApplication.getInstance();;
     }
 
@@ -107,6 +110,8 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
                 onFail("报文不完整");
             } else if (response.unpack(responseBody) == 2) {
                 // 报文指纹不正确
+                AccountHelper.logout();
+                mContext.startActivity(new Intent(mContext, LoginActivity.class));
                 onFail("报文指纹不正确");
             }
         } catch (Exception e) {
