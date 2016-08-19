@@ -8,6 +8,7 @@ import com.cchtw.sfy.BaseApplication;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.activity.LoginActivity;
 import com.cchtw.sfy.uitls.AccountHelper;
+import com.cchtw.sfy.uitls.ActivityCollector;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
@@ -111,7 +112,11 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
             } else if (response.unpack(responseBody) == 2) {
                 // 报文指纹不正确
                 AccountHelper.logout();
-                mContext.startActivity(new Intent(mContext, LoginActivity.class));
+                Intent intent_login = new Intent();
+                intent_login.setClass(mContext, LoginActivity.class);
+                intent_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //关键的一句，将新的activity置为栈顶
+                mContext.startActivity(intent_login);
+                ActivityCollector.finishAll();
                 onFail("报文指纹不正确");
             }
         } catch (Exception e) {

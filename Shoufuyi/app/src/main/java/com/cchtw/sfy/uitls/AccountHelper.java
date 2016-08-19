@@ -1,8 +1,11 @@
 package com.cchtw.sfy.uitls;
 
+import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 
 import com.cchtw.sfy.BaseApplication;
+import com.cchtw.sfy.activity.LoginActivity;
 import com.google.gson.Gson;
 import com.itech.message.APP_120033;
 
@@ -144,5 +147,14 @@ public class AccountHelper {
         SharedPreferencesHelper.setString(mPhoneNumber+Constant.DESKEY,"");
         SharedPreferencesHelper.setString(mPhoneNumber + Constant.TOKEN, "");
         AccountHelper.setUser(null);
+    }
+
+    public static void logoutAndGotoLogin(Context mContext) {
+        logout();
+        Intent intent_login = new Intent();
+        intent_login.setClass(mContext,LoginActivity.class);
+        intent_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //关键的一句，将新的activity置为栈顶
+        mContext.startActivity(intent_login);
+        ActivityCollector.finishAll();
     }
 }

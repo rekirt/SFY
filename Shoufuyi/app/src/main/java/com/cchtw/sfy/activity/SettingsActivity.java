@@ -19,6 +19,7 @@ import com.cchtw.sfy.R;
 import com.cchtw.sfy.api.ApiRequest;
 import com.cchtw.sfy.api.JsonHttpHandler;
 import com.cchtw.sfy.uitls.AccountHelper;
+import com.cchtw.sfy.uitls.ActivityCollector;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
@@ -227,8 +228,14 @@ public class SettingsActivity extends BaseActivity {
                     returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120033.class);
                     if (returnapp.getDetailCode().equals("0000")) {
                         AccountHelper.logout();
-                        startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
-                        SettingsActivity.this.finish();
+//                        startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
+//                        SettingsActivity.this.finish();
+                        Intent intent_login = new Intent();
+                        intent_login.setClass(SettingsActivity.this,LoginActivity.class);
+                        intent_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //关键的一句，将新的activity置为栈顶
+                        startActivity(intent_login);
+                        finish();
+                        ActivityCollector.finishAll();
                     } else {
                         ToastHelper.ShowToast(returnapp.getDetailInfo());
                     }
