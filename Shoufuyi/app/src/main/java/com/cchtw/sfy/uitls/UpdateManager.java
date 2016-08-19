@@ -188,7 +188,7 @@ public class UpdateManager {
 			noticeDialog = builder.create();
 			noticeDialog.show();
 		} else {
-//			CommonUtils.showMessage(mContext, "当前已是最新版本");
+			ToastHelper.ShowToast(version.getErrMsg());
 		}
 		Looper.loop();
 

@@ -74,7 +74,6 @@ public class MainActivity extends BaseActivity {
         initData();
         startBannerScrollThread();
         setRightView();
-        checkUpdate();
         update = new UpdateManager(MainActivity.this);
 
     }
@@ -214,6 +213,12 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        checkUpdate();
+    }
+
+    @Override
     public void onClick(View view) {
         super.onClick(view);
         switch (view.getId()){
@@ -327,7 +332,7 @@ public class MainActivity extends BaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if ((System.currentTimeMillis() - mExitTime) > 2000) {
-                    Toast.makeText(this, "在按一次退出",
+                    Toast.makeText(this, "再按一次退出",
                             Toast.LENGTH_SHORT).show();
                     mExitTime = System.currentTimeMillis();
                 } else {

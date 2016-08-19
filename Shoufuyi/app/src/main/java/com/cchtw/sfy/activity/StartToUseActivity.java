@@ -120,6 +120,7 @@ public class StartToUseActivity extends BaseActivity{
     @Override
     public void onClick(View view) {
         super.onClick(view);
+        mPhoneNumber = editphone.getText().toString().replaceAll(" ", "");
         switch (view.getId()){
             case R.id.btn_get_code:
                     getCode();
@@ -198,11 +199,12 @@ public class StartToUseActivity extends BaseActivity{
     String sn = "";
     private void getCode(){
                 // 发送报文获取验证码
-        sn = System.currentTimeMillis()+"";
-        SharedPreferencesHelper.setString("sn",sn);
+
         DialogHelper.showProgressDialog(StartToUseActivity.this, "正在请求...", true, true);
         APP_120031 app = new APP_120031();
         mPhoneNumber = editphone.getText().toString().replaceAll(" ", "");
+        sn = System.currentTimeMillis()+"";
+        SharedPreferencesHelper.setString(mPhoneNumber+"sn",sn);
         app.setMobile(mPhoneNumber);
         app.setUserName(mPhoneNumber);
         app.setTrxCode("120031");
@@ -250,7 +252,7 @@ public class StartToUseActivity extends BaseActivity{
             ToastHelper.ShowToast("验证码不能为空");
             return;
         }
-        sn = SharedPreferencesHelper.getString("sn","");
+        sn = SharedPreferencesHelper.getString(mPhoneNumber+"sn", "");
         if (TextUtils.isEmpty(sn)){
             ToastHelper.ShowToast("请先获取短信验证码！");
             return;
@@ -268,7 +270,7 @@ public class StartToUseActivity extends BaseActivity{
                     public void onDo(JSONObject responseJsonObject) {
                         returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120032.class);
                         if ("0000".equals(returnapp.getDetailCode())){
-                            SharedPreferencesHelper.setBoolean(mPhoneNumber + Constant.ACTIVATION, true);// 记录登录成功状态
+                            SharedPreferencesHelper.setBoolean(mPhoneNumber + Constant.ACTIVATION, true);// 记录启用成功状态
                             SharedPreferencesHelper.setString(Constant.PHONE, mPhoneNumber);// 保存字符串
                             SharedPreferencesHelper.setString(mPhoneNumber+Constant.DESKEY, returnapp.getDesKey());
                             SharedPreferencesHelper.setString(mPhoneNumber + Constant.DESK3KEY, returnapp.getDes3Key());

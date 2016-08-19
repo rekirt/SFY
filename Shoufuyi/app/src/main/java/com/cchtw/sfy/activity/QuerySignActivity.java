@@ -247,6 +247,7 @@ public class QuerySignActivity extends BaseActivity implements
         endTime = endTime.replaceAll(" ","");
         app.setCreateDateStart(startTime);
         app.setCreateDateEnd(endTime);
+
         requestHandle = ApiRequest.requestData(app, SharedPreferencesHelper.getString(Constant.PHONE, ""), new JsonHttpHandler(QuerySignActivity.this) {
                     @Override
                     public void onDo(JSONObject responseJsonObject) {

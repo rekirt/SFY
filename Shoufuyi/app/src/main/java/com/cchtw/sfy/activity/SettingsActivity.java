@@ -84,7 +84,9 @@ public class SettingsActivity extends BaseActivity {
         mRlSetting.setOnClickListener(this);
         setCanBack(true);
         user = AccountHelper.getUser();
-        tv_name.setText(user.getUserName());
+        if (user != null){
+            tv_name.setText(user.getUserName());
+        }
     }
 
     @Override
@@ -228,8 +230,6 @@ public class SettingsActivity extends BaseActivity {
                     returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120033.class);
                     if (returnapp.getDetailCode().equals("0000")) {
                         AccountHelper.logout();
-//                        startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
-//                        SettingsActivity.this.finish();
                         Intent intent_login = new Intent();
                         intent_login.setClass(SettingsActivity.this,LoginActivity.class);
                         intent_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //关键的一句，将新的activity置为栈顶
@@ -281,6 +281,8 @@ public class SettingsActivity extends BaseActivity {
                 final APP_Version returnapp = JSON.parseObject(responseJsonObject.toString(), APP_Version.class);
                 if ("0000".equals(returnapp.getDetailCode())) {
                     update.checkUpdateInfo(returnapp);
+                }else {
+                    ToastHelper.ShowToast(returnapp.getErrMsg());
                 }
             }
 

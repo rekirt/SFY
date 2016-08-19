@@ -777,7 +777,7 @@ public class SignDetailActivity extends BaseActivity {
             }
         }
         //已签约则不可提交再次签约
-        if ("2".equals(app_120024.getState())){
+        if ("2".equals(app_120024.getState()) || "3".equals(app_120024.getState())){
             btn_submit.setEnabled(false);
             btn_submit.setClickable(false);
             signedState = true;
