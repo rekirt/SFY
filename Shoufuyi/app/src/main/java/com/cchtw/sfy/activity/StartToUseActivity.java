@@ -59,6 +59,7 @@ public class StartToUseActivity extends BaseActivity{
                     SharedPreferencesHelper.setBoolean(Constant.ISREMMBER, b);//是否记住密码
             }
         });
+        editcode.setEnabled(true);
 	}
 
 	private void initData(){
@@ -198,6 +199,7 @@ public class StartToUseActivity extends BaseActivity{
     private void getCode(){
                 // 发送报文获取验证码
         sn = System.currentTimeMillis()+"";
+        SharedPreferencesHelper.setString("sn",sn);
         DialogHelper.showProgressDialog(StartToUseActivity.this, "正在请求...", true, true);
         APP_120031 app = new APP_120031();
         mPhoneNumber = editphone.getText().toString().replaceAll(" ", "");
@@ -215,7 +217,6 @@ public class StartToUseActivity extends BaseActivity{
                                 APP_120031.class);
                         if (returnapp.getDetailCode().equals("0000")) {
                             ToastHelper.ShowToast("短信发送成功");
-                            editcode.setEnabled(true);
                             Countdown();
                         } else {
                             ToastHelper.ShowToast(returnapp.getDetailInfo());
@@ -249,6 +250,7 @@ public class StartToUseActivity extends BaseActivity{
             ToastHelper.ShowToast("验证码不能为空");
             return;
         }
+        sn = SharedPreferencesHelper.getString("sn","");
         if (TextUtils.isEmpty(sn)){
             ToastHelper.ShowToast("请先获取短信验证码！");
             return;

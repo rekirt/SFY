@@ -221,7 +221,7 @@ public class SignDetailActivity extends BaseActivity {
         List<VerifyItem> verifyItemListELEMENT = new ArrayList<VerifyItem>();
         switch (mELEMENTS){
             case "SIX_ELEMENT"://六要素(卡号\户名\身份证号\手机号\手机验证码\支付密码)
-                if(haveSixElement){
+                if(!haveSixElement){
                     ToastHelper.ShowToast("请先进行要素验证！");
                     return;
                 }

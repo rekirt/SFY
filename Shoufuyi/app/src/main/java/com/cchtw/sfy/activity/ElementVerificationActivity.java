@@ -178,7 +178,7 @@ public class ElementVerificationActivity extends BaseActivity {
                 break;
             case 4:
                 password.setVisibility(View.GONE);
-                ll_new_sign_id.setVisibility(View.GONE);
+                ll_new_sign_id.setVisibility(View.VISIBLE);
                 ll_new_sign_verif_code.setVisibility(View.GONE);
                 break;
             default:
