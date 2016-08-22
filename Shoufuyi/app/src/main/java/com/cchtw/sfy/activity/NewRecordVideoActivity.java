@@ -116,7 +116,7 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
         findViewById(R.id.button_start).setOnTouchListener(this);
         findViewById(R.id.capture_top_back).setOnClickListener(this);
         recordProgressBar = (RecordProgressBar) findViewById(R.id.record_progressbar);
-        recordProgressBar.setRunningTime(Integer.parseInt(SharedPreferencesHelper.getString(Constant.VEDIOLONG, "6")));
+        recordProgressBar.setRunningTime(mVideoLong);
     }
 
     @Override
@@ -150,7 +150,7 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
                     isCancelRecord = false;
                     isRecordTimeNotLong = false;
                     isTimeOutOfRecord = true;
-                    mTvTime.setText("6" + "秒");
+                    mTvTime.setText(mVideoLong + "秒");
                     stopRecord();
                     mTimeCount = 0;
                     break;
@@ -368,7 +368,7 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
             @Override
             public void run() {
                 ++mTimeCount;
-                if (mTimeCount>mVideoLong){
+                if (mTimeCount>=mVideoLong){
                     Message messageTimeOut = new Message();
                     messageTimeOut.what = -1;
                     handlerTime.sendMessage(messageTimeOut);
@@ -379,7 +379,7 @@ public class NewRecordVideoActivity extends BaseActivity implements View.OnTouch
                 }
             }
         };
-        mTimer.schedule(mTimerTask, 0, 1000);
+        mTimer.schedule(mTimerTask, 1000, 1000);
     }
 
     /**

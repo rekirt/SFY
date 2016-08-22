@@ -1090,8 +1090,8 @@ public class SignDetailActivity extends BaseActivity {
                 tv_id_number_state.setText("验证通过");
                 tv_deal_pwd_state.setEnabled(false);
                 tv_id_number_state.setEnabled(false);
-                tv_deal_pwd_state.setTextColor(getResources().getColor(R.color.blue));
-                tv_id_number_state.setTextColor(getResources().getColor(R.color.blue));
+                tv_deal_pwd_state.setTextColor(getResources().getColor(R.color.gray));
+                tv_id_number_state.setTextColor(getResources().getColor(R.color.gray));
                 break;
             case "3":
                 haveSixElement = false;
@@ -1147,7 +1147,7 @@ public class SignDetailActivity extends BaseActivity {
             case "2":
                 tv_id_number_state.setText("验证通过");
                 tv_id_number_state.setEnabled(false);
-                tv_id_number_state.setTextColor(getResources().getColor(R.color.blue));
+                tv_id_number_state.setTextColor(getResources().getColor(R.color.gray));
                 break;
             case "3":
                 tv_id_number_state.setText("验证不通过");

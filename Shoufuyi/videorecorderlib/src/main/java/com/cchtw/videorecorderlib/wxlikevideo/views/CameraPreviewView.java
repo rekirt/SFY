@@ -389,6 +389,7 @@ public class CameraPreviewView extends FrameLayout {
         public void surfaceDestroyed(SurfaceHolder holder) {
             // empty. Take care of releasing the Camera preview in your activity.
             Log.d(TAG, "surfaceDestroyed");
+            holder.removeCallback(this);
         }
 
         public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {

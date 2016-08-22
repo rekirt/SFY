@@ -67,6 +67,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 	}
 
 	private void login() {
+		SharedPreferencesHelper.setString(Constant.PHONE, mEditPhone.getText().toString());
+
 		APP_120033 app = new APP_120033();
 		app.setUserName(mEditPhone.getText().toString());
 		app.setLoginState("0000");

@@ -23,6 +23,7 @@ import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.api.ApiRequest;
 import com.cchtw.sfy.api.JsonHttpHandler;
+import com.cchtw.sfy.listener.DialogListener;
 import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.ActivityCollector;
 import com.cchtw.sfy.uitls.UpdateManager;
@@ -65,6 +66,8 @@ public class MainActivity extends BaseActivity {
     private LinearLayout llDotGroup;
 
     private GridView gridview;
+
+    private boolean hasTips = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,8 +77,12 @@ public class MainActivity extends BaseActivity {
         initData();
         startBannerScrollThread();
         setRightView();
-        update = new UpdateManager(MainActivity.this);
-
+        update = new UpdateManager(MainActivity.this, new DialogListener() {
+            @Override
+            public void cancel() {
+                hasTips = true;
+            }
+        });
     }
 
     private UpdateManager update;
@@ -215,7 +222,9 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        checkUpdate();
+        if (!hasTips){
+            checkUpdate();
+        }
     }
 
     @Override

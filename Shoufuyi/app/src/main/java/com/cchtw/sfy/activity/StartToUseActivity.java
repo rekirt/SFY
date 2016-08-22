@@ -249,12 +249,12 @@ public class StartToUseActivity extends BaseActivity{
         app.setUserName(mPhoneNumber);
         String strserect = editcode.getText().toString().replaceAll(" ","");
         if (TextUtils.isEmpty(strserect)) {
-            ToastHelper.ShowToast("验证码不能为空");
+            ToastHelper.ShowToast("初始密码不能为空");
             return;
         }
         sn = SharedPreferencesHelper.getString(mPhoneNumber+"sn", "");
         if (TextUtils.isEmpty(sn)){
-            ToastHelper.ShowToast("请先获取短信验证码！");
+            ToastHelper.ShowToast("请先获取短信初始密码！");
             return;
         }
         app.setReqSn(sn);

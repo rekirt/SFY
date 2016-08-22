@@ -20,18 +20,12 @@ import com.cchtw.videorecorderlib.wxlikevideo.views.CameraPreviewView;
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 
-
-/**
- * 仿微信录像机
- *
- * @author Martin
- */
 public class WXLikeVideoRecorder implements Camera.PreviewCallback, CameraPreviewView.PreviewEventListener {
 
     private static final String TAG = "InstantVideoRecorder";
 
     // 最长录制时间6秒
-    private static final long MAX_RECORD_TIME = 6000;
+    private static final long MAX_RECORD_TIME = 100000;
     // 帧率
     private static final int FRAME_RATE = 30;
     // 声音采样率

@@ -17,6 +17,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.widget.ProgressBar;
 
+import com.cchtw.sfy.listener.DialogListener;
 import com.itech.message.APP_Version;
 
 import org.apache.http.HttpEntity;
@@ -75,6 +76,7 @@ public class UpdateManager {
 
 	private boolean isupdate;
 
+	private DialogListener dialogListener;
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -113,9 +115,11 @@ public class UpdateManager {
 
 	public UpdateManager(Context context) {
 		this.mContext = context;
-
 	}
-
+	public UpdateManager(Context context,DialogListener dialogListener) {
+		this.mContext = context;
+		this.dialogListener = dialogListener;
+	}
 	// 外部接口让主Activity调用
 	public void checkUpdateInfo(APP_Version version) {
 		showNoticeDialog(version);
@@ -179,6 +183,9 @@ public class UpdateManager {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
+						if (dialogListener != null){
+							dialogListener.cancel();
+						}
 					}
 				});
 			}
