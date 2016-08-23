@@ -76,17 +76,13 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
         if (!TextUtils.isEmpty(deskey)){
             response.setDesKey(deskey);
         }
-
         response.setToken(token);
-
         try {
             if (response.unpack(responseBody) == 0) { // 解析成功
                 byte[] data = response.getMainData(); // 数据包字节数组
                 JSONObject responsedata = new JSONObject(new String(data, "UTF-8"));
                 String status = responsedata.getString(this.mStatusTag);
-
                 if ("0000".equals(status) ) {
-
                         try {
                             if (isNeedToReturnResponseBody) {
                                 onDo(responsedata);

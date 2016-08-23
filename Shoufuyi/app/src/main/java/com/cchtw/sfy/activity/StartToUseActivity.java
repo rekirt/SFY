@@ -41,7 +41,6 @@ public class StartToUseActivity extends BaseActivity{
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
         View view = View.inflate(this, R.layout.activity_start_to_use, null);
         setContentView(view);
-
 		initView();
         initData();
 	}

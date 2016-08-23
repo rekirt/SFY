@@ -234,30 +234,29 @@ public class NewSignActivity extends BaseActivity{
         mCardNumber = mEdtNewSignCardNumber.getText().toString().replace(" ", "");
         mNewSignPhoneNumber = mEdtNewSignPhoneNumber.getText().toString().replace(" ", "");
 
-        if (TextUtils.isEmpty(mIdCardNumber)|| TextUtils.isEmpty(mNewSignName) || TextUtils.isEmpty(mCardNumber)
-                || TextUtils.isEmpty(mNewSignPhoneNumber)){
+        boolean isMatch = RegexUtils.checkIdCard(mIdCardNumber);
+        if (!isMatch) {
+            ToastHelper.ShowToast("请填写有效的身份证号码");
             return false;
-        }else {
-            boolean isMatch = RegexUtils.checkIdCard(mIdCardNumber);
-            if (!isMatch) {
-                ToastHelper.ShowToast("请填写有效的身份证号码");
-                return false;
-            }
-            if (!RegexUtils.checkMobile(mNewSignPhoneNumber)) {
-                ToastHelper.ShowToast("请填写有效的手机号码");
-                return false;
-            }
-//            if (!RegexUtils.checkBankCard(mCardNumber)) {//去掉银行卡的校验，只判断长度
-            if (!bankCardIsValideLong(mCardNumber)) {
-                ToastHelper.ShowToast("请填写有效的银行卡卡号");
-                return false;
-            }
+        }
+        if (TextUtils.isEmpty(mNewSignName)){
+            ToastHelper.ShowToast("请填写有效的户名");
+            return false;
+        }
+//      if (!RegexUtils.checkBankCard(mCardNumber)) {//去掉银行卡的校验，只判断长度
+        if (!bankCardIsValideLong(mCardNumber)) {
+            ToastHelper.ShowToast("请填写有效的银行卡卡号");
+            return false;
+        }
+        if (!RegexUtils.checkMobile(mNewSignPhoneNumber)) {
+            ToastHelper.ShowToast("请填写有效的手机号码");
+            return false;
         }
         return true;
     }
 
     private boolean bankCardIsValideLong(String mCardNumber){
-        if (!TextUtils.isEmpty(mCardNumber) && mCardNumber.length() <= 32 ){
+        if (!TextUtils.isEmpty(mCardNumber) && mCardNumber.length() <= 32 && mCardNumber.length() >= 10){
             return true;
         }else {
             return false;

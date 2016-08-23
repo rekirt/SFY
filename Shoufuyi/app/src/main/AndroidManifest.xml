@@ -55,12 +55,12 @@
 
     <!-- android:supportsRtl="true" -->
     <application
-        android:name="com.cchtw.sfy.BaseApplication"
+        android:name=".BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name="com.cchtw.sfy.activity.SplashActivity">
+        <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -68,13 +68,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.cchtw.sfy.activity.StartToUseActivity"
+            android:name=".activity.StartToUseActivity"
             android:label="@string/start_to_use_activity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.LoginActivity"
+            android:name=".activity.LoginActivity"
             android:label="@string/login_activity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
@@ -86,121 +86,119 @@
         <!-- android:theme="@style/Theme.AppCompat.Light.NoActionBar" /> -->
 
         <activity
-            android:name="com.cchtw.sfy.activity.MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/main_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.ChangePwdActivity"
+            android:name=".activity.ChangePwdActivity"
             android:label="@string/change_pwd_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.SettingsActivity"
+            android:name=".activity.SettingsActivity"
             android:label="@string/setting_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.CreateGestureActivity"
+            android:name=".activity.CreateGestureActivity"
             android:label="@string/set_gesture_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.GestureLoginActivity"
+            android:name=".activity.GestureLoginActivity"
             android:label="@string/gesture_login_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.ChangeGestureActivity"
+            android:name=".activity.ChangeGestureActivity"
             android:label="@string/change_gesture_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.NewSignActivity"
+            android:name=".activity.NewSignActivity"
             android:label="@string/new_sign_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.NewSignActivity" />
             </intent-filter>
-            </activity>
+        </activity>
         <activity
-            android:name="com.cchtw.sfy.activity.ElementVerificationActivity"
+            android:name=".activity.ElementVerificationActivity"
             android:label="@string/element_verification_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.UnfinishedActivity"
+            android:name=".activity.UnfinishedActivity"
             android:label="@string/query_unfinish_sign_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.QuerySignActivity"
+            android:name=".activity.QuerySignActivity"
             android:label="@string/query_sign_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.SignDetailActivity"
+            android:name=".activity.SignDetailActivity"
             android:label="@string/sign_detail_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.RunningSettingActivity"
+            android:name=".activity.RunningSettingActivity"
             android:label="@string/running_setting_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.TakeVideoActivity"
+            android:name=".activity.TakeVideoActivity"
             android:label="@string/take_video_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.NewRecordVideoActivity"
+            android:name=".activity.NewRecordVideoActivity"
             android:label="@string/new_record_video_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.PlayVideoActiviy"
+            android:name=".activity.PlayVideoActiviy"
             android:label="@string/play_video_activiy"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.TakeBankCardPhotoActivity"
+            android:name=".activity.TakeBankCardPhotoActivity"
             android:label="@string/take_bank_card_photo_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.TakeIDCardPhotoActivity"
+            android:name=".activity.TakeIDCardPhotoActivity"
             android:label="@string/take_id_card_photo_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.TakeAvatarPhotoActivity"
+            android:name=".activity.TakeAvatarPhotoActivity"
             android:label="@string/take_avatar_photo_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.TakeProtocolPicActivity"
+            android:name=".activity.TakeProtocolPicActivity"
             android:label="@string/take_protocol_photo_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
-
         <activity
-            android:name="com.cchtw.sfy.activity.AgreementActivity"
+            android:name=".activity.AgreementActivity"
             android:label="@string/agreement_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.cchtw.sfy.activity.HandwritingActivity"
+            android:name=".activity.HandwritingActivity"
             android:label="@string/handwriting_activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
-
         <activity
             android:name=".activity.CardScanCameraActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|touchscreen|uiMode"
             android:label="@string/title_activity_scan_camera"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name="com.wintone.bankcard.camera.ScanCamera"
             android:configChanges="keyboard|keyboardHidden|orientation|touchscreen|uiMode"
@@ -213,13 +211,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.cchtw.sfy.activity.ShowResultActivity"
+            android:name=".activity.ShowResultActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|touchscreen|uiMode"
             android:label="@string/title_activity_show_result"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="com.wintone.smartvision_bankCard.ShowResult" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -247,36 +246,38 @@
         <receiver android:name="wintone.idcard.android.DataChangeReceiver" />
 
         <activity
-            android:name="com.cchtw.sfy.activity.CameraActivity"
+            android:name=".activity.CameraActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.cchtw.sfy.uitls.wintone.FileManageActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:name=".uitls.wintone.FileManageActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name="wintone.idcard.android.AuthService"
-            android:enabled="true" >
+            android:enabled="true">
             <intent-filter>
                 <action android:name="wintone.idcard.authService" />
             </intent-filter>
         </service>
         <service
             android:name="wintone.idcard.android.RecogService"
-            android:enabled="true" >
+            android:enabled="true">
             <intent-filter>
                 <action android:name="wintone.idcard.recogService" />
             </intent-filter>
         </service>
         <service
             android:name="wintone.idcard.android.TimeService"
-            android:enabled="true" >
+            android:enabled="true">
             <intent-filter>
                 <action android:name="wintone.idcard.TimeService" />
             </intent-filter>
         </service>
+
         <receiver android:name="wintone.idcard.android.DataChangeReceiver" />
+
+        <activity android:name=".activity.Main2Activity"></activity>
     </application>
 
 </manifest>
