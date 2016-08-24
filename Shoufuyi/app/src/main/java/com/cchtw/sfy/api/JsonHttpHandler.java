@@ -141,6 +141,7 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
     private void handForcedOffLine(JSONObject data){
         try {
             ToastHelper.ShowToast(data.getString("errMsg"),1);
+            SharedPreferencesHelper.setBoolean(AccountHelper.getUserName()+Constant.ISFORCEDOFFLINE, true);
             SharedPreferencesHelper.setString(AccountHelper.getUserName()+Constant.DESK3KEY, "");
             AccountHelper.logout();
             Intent intent_login = new Intent();

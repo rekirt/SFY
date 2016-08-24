@@ -269,6 +269,7 @@ public class StartToUseActivity extends BaseActivity{
                     public void onDo(JSONObject responseJsonObject) {
                         returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120032.class);
                         if ("0000".equals(returnapp.getDetailCode())){
+                            SharedPreferencesHelper.setBoolean(mPhoneNumber+Constant.ISFORCEDOFFLINE, false);
                             SharedPreferencesHelper.setBoolean(mPhoneNumber + Constant.ACTIVATION, true);// 记录启用成功状态
                             SharedPreferencesHelper.setString(Constant.PHONE, mPhoneNumber);// 保存字符串
                             SharedPreferencesHelper.setString(mPhoneNumber+Constant.DESKEY, returnapp.getDesKey());

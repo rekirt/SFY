@@ -73,8 +73,14 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		app.setUserName(mEditPhone.getText().toString());
 		app.setLoginState("0000");
 		String des3key = SharedPreferencesHelper.getString(mEditPhone.getText().toString()+Constant.DESK3KEY, "");
-        if (TextUtils.isEmpty(des3key)){
-            ToastHelper.ShowToast("第一次在该设备登录，请先启用！");
+        boolean ForcedOffLine = SharedPreferencesHelper.getBoolean(AccountHelper.getUserName()+Constant.ISFORCEDOFFLINE, false);
+
+		if (TextUtils.isEmpty(des3key)){
+			if (ForcedOffLine){
+				ToastHelper.ShowToast("账户在其它设备登录，请重新启用！");
+			}else {
+				ToastHelper.ShowToast("第一次在该设备登录，请先启用！");
+			}
             SharedPreferencesHelper.setBoolean(Constant.ISREMMBER, true);//是否记住密码
             Intent intent = new Intent();
 			intent.putExtra("mEditPhone",mEditPhone.getText().toString());
@@ -101,7 +107,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
                         SharedPreferencesHelper.setBoolean(Constant.ISREMMBER, false);//是否记住密码
                     }
                     SharedPreferencesHelper.setString(Constant.PHONE, mEditPhone.getText().toString());
-                    SharedPreferencesHelper.setString(mEditPhone.getText().toString() + Constant.DESK3KEY, AccountHelper.getDes3Key());
+					SharedPreferencesHelper.setBoolean(mEditPhone.getText().toString()+Constant.ISFORCEDOFFLINE, false);
+					SharedPreferencesHelper.setString(mEditPhone.getText().toString() + Constant.DESK3KEY, AccountHelper.getDes3Key());
                     SharedPreferencesHelper.setString(mEditPhone.getText().toString() + Constant.DESKEY, AccountHelper.getDesKey());
                     SharedPreferencesHelper.setString(mEditPhone.getText().toString()+Constant.TOKEN, AccountHelper.getToken());
 					ACache aCache = ACache.get(LoginActivity.this);

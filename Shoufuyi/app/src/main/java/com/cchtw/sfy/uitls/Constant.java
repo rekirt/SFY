@@ -53,7 +53,7 @@ public class Constant {
 //	public static String MIMA = "mima";
 //	public static String MERCHANT = "merchant";
 	public static String LOGIN = "login";
-//	public static String ISLOGIN = "Is_Login";
+	public static String ISFORCEDOFFLINE = "ISFORCEDOFFLINE";//是否被强行退出
 	public static String LOGINSERECT = "LoginSerect";
 
 	public static String FINGERPASSWORD = "FINGERPASSWORD";//手势密码
