@@ -34,6 +34,7 @@
                     android:id="@+id/iv_setting_right"
                     style="@style/setting_image_style"
                     android:src="@drawable/ic_right"
+                    android:visibility="invisible"
                     />
     </RelativeLayout>
             <ImageView
@@ -58,6 +59,7 @@
         <ImageView
             android:id="@+id/iv_time"
             style="@style/setting_image_style"
+            android:visibility="invisible"
             android:src="@drawable/ic_right"/>
     </RelativeLayout>
             <ImageView
@@ -78,10 +80,11 @@
                     />
                 <TextView
                     style="@style/setting_text_style"
-                    android:text="手势密码次数"/>
+                    android:text="手势密码错误次数"/>
                 <ImageView
                     android:id="@+id/iv_finger_times"
                     style="@style/setting_image_style"
+                    android:visibility="invisible"
                     android:src="@drawable/ic_right"/>
             </RelativeLayout>
             <ImageView
@@ -104,6 +107,7 @@
                     style="@style/setting_text_style"
                     android:text="视频时长"/>
                 <ImageView
+                    android:visibility="invisible"
                     android:id="@+id/iv_video_time"
                     style="@style/setting_image_style"
                     android:src="@drawable/ic_right"/>
@@ -129,6 +133,7 @@
                     android:text="图片视频缓存时长"/>
                 <ImageView
                     android:id="@+id/iv_cache_time"
+                    android:visibility="invisible"
                     style="@style/setting_image_style"
                     android:src="@drawable/ic_right"/>
             </RelativeLayout>

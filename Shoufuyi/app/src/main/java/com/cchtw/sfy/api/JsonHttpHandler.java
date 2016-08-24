@@ -7,14 +7,18 @@ import android.text.TextUtils;
 import com.cchtw.sfy.BaseApplication;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.activity.LoginActivity;
+import com.cchtw.sfy.activity.StartToUseActivity;
 import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.ActivityCollector;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
 import com.itech.message.APPMsgPack;
+import com.itech.utils.ASCUtil;
+import com.itech.utils.SequenceUtil;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,48 +65,40 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
 
     @Override
     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-        String token = "";
-        String deskey = "";
-        String mPhoneNumber = SharedPreferencesHelper.getString(Constant.PHONE, "");// 保存字符串
-
-        deskey = SharedPreferencesHelper.getString(mPhoneNumber + Constant.DESKEY, "");
-        token = SharedPreferencesHelper.getString(mPhoneNumber + Constant.TOKEN, "");
-
         APPMsgPack response = new APPMsgPack();
+        String mPhoneNumber = SharedPreferencesHelper.getString(Constant.PHONE, "");// 保存字符串
+        String deskey       = SharedPreferencesHelper.getString(mPhoneNumber + Constant.DESKEY, "");
+        String token        = SharedPreferencesHelper.getString(mPhoneNumber + Constant.TOKEN, "");
+
         if (TextUtils.isEmpty(token)){
             token = Constant.token;
         }
-
         if (!TextUtils.isEmpty(deskey)){
             response.setDesKey(deskey);
         }
+
         response.setToken(token);
+        String stye = ASCUtil.ASCToStr(ArrayUtils.subarray(responseBody, 75, 77));
+        if ("0".equals(stye)){//加密方式为0,使用固态token解包
+            response.setToken(SequenceUtil.TOKEN);
+        }
+
         try {
             if (response.unpack(responseBody) == 0) { // 解析成功
                 byte[] data = response.getMainData(); // 数据包字节数组
                 JSONObject responsedata = new JSONObject(new String(data, "UTF-8"));
                 String status = responsedata.getString(this.mStatusTag);
-                if ("0000".equals(status) ) {
-                        try {
-                            if (isNeedToReturnResponseBody) {
-                                onDo(responsedata);
-                            } else {
-                                onDo(responsedata.getJSONObject(this.mDataTag));
-                            }
-                        } catch (JSONException e) {
-                            try {
-                                onDo(responsedata.getJSONArray(this.mDataTag));
-                            } catch (JSONException e1) {
-                                try {
-                                    onDo(responsedata.getString(this.mDataTag));
-                                } catch (JSONException e2) {
-                                    e2.printStackTrace();
-                                }
-                            }
-                        }
-                    } else {
+                switch (status){
+                    case "0000":
+                        handSuccess(responsedata);
+                        break;
+                    case "1018":
+                        handForcedOffLine(responsedata);
+                        break;
+                    default:
                         onFail(responsedata.getString(mMessageTag));
-                    }
+                        break;
+                }
             }else if (response.unpack(responseBody) == 1) {
                 // 报文不完整
                 onFail("报文不完整");
@@ -119,6 +115,41 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
         } catch (Exception e) {
             e.printStackTrace();
             onFail("返回错误数据格式");
+        }
+    }
+
+    private void handSuccess(JSONObject data){
+        try {
+            if (isNeedToReturnResponseBody) {
+                onDo(data);
+            } else {
+                onDo(data.getJSONObject(this.mDataTag));
+            }
+        } catch (JSONException e) {
+            try {
+                onDo(data.getJSONArray(this.mDataTag));
+            } catch (JSONException e1) {
+                try {
+                    onDo(data.getString(this.mDataTag));
+                } catch (JSONException e2) {
+                    e2.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void handForcedOffLine(JSONObject data){
+        try {
+            ToastHelper.ShowToast(data.getString("errMsg"),1);
+            SharedPreferencesHelper.setString(AccountHelper.getUserName()+Constant.DESK3KEY, "");
+            AccountHelper.logout();
+            Intent intent_login = new Intent();
+            intent_login.setClass(mContext, StartToUseActivity.class);
+            intent_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //关键的一句，将新的activity置为栈顶
+            mContext.startActivity(intent_login);
+            ActivityCollector.finishAll();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 

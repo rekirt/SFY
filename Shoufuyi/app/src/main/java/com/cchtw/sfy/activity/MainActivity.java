@@ -26,7 +26,12 @@ import com.cchtw.sfy.api.JsonHttpHandler;
 import com.cchtw.sfy.listener.DialogListener;
 import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.ActivityCollector;
+import com.cchtw.sfy.uitls.Constant;
+import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.UpdateManager;
+import com.cchtw.sfy.uitls.cache.ACache;
+import com.itech.message.APP_Parameters;
+import com.itech.message.APP_RunParm;
 import com.itech.message.APP_Version;
 
 import org.json.JSONArray;
@@ -83,6 +88,7 @@ public class MainActivity extends BaseActivity {
                 hasTips = true;
             }
         });
+        updataRunParameter();
     }
 
     private UpdateManager update;
@@ -356,4 +362,61 @@ public class MainActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+
+    // 更新运行参数功能
+    private void updataRunParameter() {
+        APP_RunParm app = new APP_RunParm();
+        app.setType("1000");
+        if (!AccountHelper.isLogin()){
+            return;
+        }
+        ApiRequest.requestData(app, AccountHelper.getUserName(), new JsonHttpHandler("detailCode","errMsg","data") {
+            @Override
+            public void onDo(JSONObject responseJsonObject) {
+                final APP_RunParm returnapp = JSON.parseObject(responseJsonObject.toString(), APP_RunParm.class);
+                if (returnapp.getDetailCode().equals("0000")) {
+                    List<APP_Parameters> list = returnapp.getParametersList();
+                    for (APP_Parameters par : list) {
+                        switch (par.getParCode()){
+                            case "0001":
+                                SharedPreferencesHelper.setString(Constant.PAGESIZE,par.getParValue());
+                                break;
+                            case "0002":
+                                SharedPreferencesHelper.setString(Constant.FINGERPASSWORDTIMES,par.getParValue());
+                                AccountHelper.setUserFingerPwdTimes(Integer.parseInt(par.getParValue()));
+                                break;
+                            case "0003":
+                                SharedPreferencesHelper.setString(Constant.VEDIOLONG,par.getParValue());
+                                break;
+                            case "0004":
+                                SharedPreferencesHelper.setString(Constant.VEDIOANDPHOTOCACHELONG,par.getParValue());
+                                ACache.TIME_CACHE = ACache.TIME_DAY*(Integer.parseInt(par.getParValue()));
+                                break;
+                            case "0005":
+                                SharedPreferencesHelper.setString(Constant.TIMEOUT,par.getParValue());
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onDo(JSONArray responseJsonArray) {
+
+            }
+
+            @Override
+            public void onDo(String responseString) {
+
+            }
+
+            @Override
+            public void onFinish() {
+            }
+        });
+    }
+
 }

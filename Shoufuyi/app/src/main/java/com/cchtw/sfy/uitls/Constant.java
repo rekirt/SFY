@@ -62,13 +62,14 @@ public class Constant {
 	public static final long CACHE_EXPIRE_DAY = 3600000*200;//两百天
     public static final long CACHE_EXPIRE_OND_DAY =3600000*(Integer.parseInt(SharedPreferencesHelper.getString(Constant.VEDIOANDPHOTOCACHELONG, "10")));//默认十天
 
-//运行参数
-	public static String VEDIOANDPHOTOCACHELONG = "VEDIOANDPHOTOCACHELONG";//视频图片缓存时长
-	public static String FINGERPASSWORDTIMES = "FINGERPASSWORDTIMES";//手势密码次数
-	public static String VEDIOLONG = "VEDIOLONG";//视频时长
-	public static String TIMEOUT = "ITMEOUT";//超时时长
-	public static String PAGESIZE = "PAGESIZE";//每页数据量
-    public static String PRIVILAGE = "privilage";//用户权限
+	//运行参数
+
+	public static String VEDIOANDPHOTOCACHELONG = AccountHelper.getUserName()+"VEDIOANDPHOTOCACHELONG";//视频图片缓存时长
+	public static String FINGERPASSWORDTIMES = AccountHelper.getUserName()+"FINGERPASSWORDTIMES";//手势密码次数
+	public static String VEDIOLONG = AccountHelper.getUserName()+"VEDIOLONG";//视频时长
+	public static String TIMEOUT = AccountHelper.getUserName()+"ITMEOUT";//超时时长
+	public static String PAGESIZE = AccountHelper.getUserName()+"PAGESIZE";//每页数据量
+    public static String PRIVILAGE = AccountHelper.getUserName()+"privilage";//用户权限
 
 	public static String BANKCRADNUMBER = "BANKCRADNUMBER";//识别后银行卡号码
 	public static String IDCRADNUMBER = "IDCRADNUMBER";//识别后ID卡号码

@@ -110,26 +110,26 @@ public class AccountHelper {
 
 
     public static void setUserFingerPwd(String pwd) {
-            SharedPreferencesHelper.setString(getUserName()+Constant.FINGERPASSWORD, pwd);
+            SharedPreferencesHelper.setString(Constant.FINGERPASSWORD, pwd);
     }
 
     public static String getUserFingerPwd() {
-        return SharedPreferencesHelper.getString(getUserName()+Constant.FINGERPASSWORD, "");
+        return SharedPreferencesHelper.getString(Constant.FINGERPASSWORD, "");
     }
 
     public static String getUserFingerPwdTimes() {
-        return SharedPreferencesHelper.getString(getUserName()+Constant.FINGERPASSWORDTIMES, "5");
+        return SharedPreferencesHelper.getString(Constant.FINGERPASSWORDTIMES, "5");
     }
     public static void setUserFingerPwdTimes(int i) {
-         SharedPreferencesHelper.setString(getUserName() + Constant.FINGERPASSWORDTIMES, i+"");
+         SharedPreferencesHelper.setString(Constant.FINGERPASSWORDTIMES, i+"");
     }
 
     public static boolean haveSetFingerPwd() {
-        return SharedPreferencesHelper.getBoolean(getUserName() + Constant.HAVESETFINGERPWD, false);
+        return SharedPreferencesHelper.getBoolean(Constant.HAVESETFINGERPWD, false);
     }
 
     public static void haveSetFingerPwd(boolean b) {
-         SharedPreferencesHelper.setBoolean(getUserName()+Constant.HAVESETFINGERPWD, b);
+         SharedPreferencesHelper.setBoolean(Constant.HAVESETFINGERPWD, b);
     }
 
     public static boolean isLogin() {

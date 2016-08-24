@@ -51,7 +51,7 @@
     <string name="query_sign_activity">签约查询</string>
     <string name="query_unfinish_sign_activity">查询未完成签约</string>
     <string name="sign_detail_activity">信息详情</string>
-    <string name="running_setting_activity">系统参数设置</string>
+    <string name="running_setting_activity">运行参数设置</string>
     <string name="new_record_video_activity">录制视频</string>
     <string name="play_video_activiy">回放视频</string>
     <string name="take_bank_card_photo_activity">采集银行卡照片</string>

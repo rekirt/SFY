@@ -137,7 +137,7 @@ public class StartToUseActivity extends BaseActivity{
      *
      */
     Timer timer ;
-    private int recLen = 10;
+    private int recLen = 30;
     private MyTask task;
     public void Countdown(){
         recLen= 10;

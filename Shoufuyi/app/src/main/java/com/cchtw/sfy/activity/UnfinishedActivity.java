@@ -213,10 +213,10 @@ public class UnfinishedActivity extends BaseActivity implements
                             mReturnApp = JSON.parseObject(responseJsonObject.toString(), APP_120023.class);
                             totalPage =  Integer.parseInt(mReturnApp.getPage().getPageTotal());
                             mSignList = (ArrayList<Result_120023>) mReturnApp.getResultList();
-                            if (mCurrentPage == 1 && !TextUtils.isEmpty(getCacheKey())) {
-                                CacheManager.setCache(getCacheKey(), mReturnApp.getResultList().toString().getBytes(),
-                                        getCacheExpire(), CacheManager.TYPE_INTERNAL);
-                            }
+//                            if (mCurrentPage == 1 && !TextUtils.isEmpty(getCacheKey())) {
+//                                CacheManager.setCache(getCacheKey(), mReturnApp.getResultList().toString().getBytes(),
+//                                        getCacheExpire(), CacheManager.TYPE_INTERNAL);
+//                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

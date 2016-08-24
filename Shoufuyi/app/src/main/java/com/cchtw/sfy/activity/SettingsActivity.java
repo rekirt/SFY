@@ -24,6 +24,7 @@ import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
 import com.cchtw.sfy.uitls.UpdateManager;
+import com.cchtw.sfy.uitls.cache.ACache;
 import com.cchtw.sfy.uitls.dialog.DialogHelper;
 import com.itech.message.APP_120033;
 import com.itech.message.APP_Parameters;
@@ -175,12 +176,15 @@ public class SettingsActivity extends BaseActivity {
                                 break;
                             case "0002":
                                 SharedPreferencesHelper.setString(Constant.FINGERPASSWORDTIMES,par.getParValue());
+                                AccountHelper.setUserFingerPwdTimes(Integer.parseInt(par.getParValue()));
                                 break;
                             case "0003":
                                 SharedPreferencesHelper.setString(Constant.VEDIOLONG,par.getParValue());
                                 break;
                             case "0004":
                                 SharedPreferencesHelper.setString(Constant.VEDIOANDPHOTOCACHELONG,par.getParValue());
+                                ACache.TIME_CACHE = ACache.TIME_DAY*(Integer.parseInt(par.getParValue()));
+
                                 break;
                             case "0005":
                                 SharedPreferencesHelper.setString(Constant.TIMEOUT,par.getParValue());

@@ -243,7 +243,7 @@ public class TakeVideoActivity extends BaseActivity {
                     ToastHelper.ShowToast("附件上传成功",1);
                     if (result.getFileList().size()>0){
                         byte[] content = app_120008.getFileList().get(0).getContent().getBytes();
-                        aCache.put(mResult.getIdCard() + result.getFileList().get(0).getFileId(), content, ACache.TIME_MONTH);
+                        aCache.put(mResult.getIdCard() + result.getFileList().get(0).getFileId(), content, ACache.TIME_CACHE);
                     }
                     TakeVideoActivity.this.finish();
                 }else {
@@ -348,7 +348,7 @@ public class TakeVideoActivity extends BaseActivity {
                 Uri videoUri = Uri.parse(filePath);
                 mVideoView.setVideoURI(videoUri);
                 mVideoView.start();
-                aCache.put(mResult.getIdCard() + mVideoFileId, content, ACache.TIME_MONTH);
+                aCache.put(mResult.getIdCard() + mVideoFileId, content, ACache.TIME_CACHE);
             }
         } catch (Exception e) {
             e.printStackTrace();

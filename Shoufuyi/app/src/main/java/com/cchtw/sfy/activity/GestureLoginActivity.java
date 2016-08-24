@@ -47,9 +47,8 @@ public class GestureLoginActivity extends AppCompatActivity {
     }
 
     private void init() {
-        AccountHelper.setUserFingerPwdTimes(5);
         String temp = AccountHelper.getUserFingerPwdTimes();
-        errorTime =  Integer.parseInt(temp)-1;
+        errorTime =  Integer.parseInt(temp);
         aCache = ACache.get(GestureLoginActivity.this);
         //得到当前用户的手势密码
         gesturePassword = aCache.getAsBinary(AccountHelper.getUserName()+ Constant.GESTURE_PASSWORD);
@@ -77,7 +76,7 @@ public class GestureLoginActivity extends AppCompatActivity {
         }
     };
 
-    private int errorTime;
+    private int errorTime = 5;
 
     private void updateErroTimes(){
         errorTime--;

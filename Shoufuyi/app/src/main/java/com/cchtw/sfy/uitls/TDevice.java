@@ -25,6 +25,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.cchtw.sfy.BaseApplication;
+
 import java.io.File;
 import java.text.NumberFormat;
 import java.util.List;
@@ -132,9 +133,13 @@ public class TDevice {
 				_pageSize = 12;
 			else
 				_pageSize = 12;
-//		return _pageSize;
-		return Integer.parseInt(SharedPreferencesHelper.getString(Constant.PAGESIZE, "12"));
-    }
+		if (AccountHelper.isLogin()){
+			_pageSize =  Integer.parseInt(SharedPreferencesHelper.getString(Constant.PAGESIZE, "12"));
+		}
+
+//		return Integer.parseInt(SharedPreferencesHelper.getString(Constant.PAGESIZE, "12"));
+		return _pageSize;
+	}
 
 
     public static boolean hasBigScreen() {
