@@ -17,9 +17,6 @@ public class SyncHttp {
     public static SyncHttpClient getClient() {
         if (client == null) {
             client = new SyncHttpClient();
-            client.setConnectTimeout(120000);
-            client.setMaxRetriesAndTimeout(1,120000);
-            client.setResponseTimeout(120000);
         }
         return client;
     }

@@ -24,11 +24,10 @@ public class AsyncHttp {
             client = new AsyncHttpClient();
         }
         int mTimeout = Integer.parseInt(SharedPreferencesHelper.getString(Constant.TIMEOUT, "30"))*1000;
-        if (mTimeout>5000){//如果设置大于5秒则设置连接超时为后台设置的超时时间
-            client.setConnectTimeout(mTimeout);
-            client.setMaxRetriesAndTimeout(3,mTimeout);
-            client.setResponseTimeout(mTimeout);
-        }
+//        client.setConnectTimeout(5000);
+        client.setTimeout(5000);
+//        client.setMaxRetriesAndTimeout(0,5000);
+//        client.setResponseTimeout(mTimeout);
         return client;
     }
 

@@ -13,8 +13,6 @@ import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.api.ApiRequest;
 import com.cchtw.sfy.api.JsonHttpHandler;
-import com.cchtw.sfy.cache.FileUtils;
-import com.cchtw.sfy.cache.v2.CacheManager;
 import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.RegexUtils;
@@ -211,18 +209,12 @@ public class NewSignActivity extends BaseActivity{
                 if(TDevice.hasInternet()){
                     ToastHelper.ShowToast("失败提示："+msg);
                 }else {
-                    CacheManager.setCache(getCacheKey(), app.toString().getBytes(),
-                            Constant.CACHE_EXPIRE_OND_DAY, CacheManager.TYPE_INTERNAL);
-                    ToastHelper.ShowToast("已保存在本地数据库.");
-                    NewSignActivity.this.finish();
+                    ToastHelper.ShowToast("网络连接失败,请检查你的网络");
                 }
             }
         });
     }
 
-    private String getCacheKey(){
-        return FileUtils.getCacheKey(mCardNumber, mIdCardNumber);
-    }
     private String mIdCardNumber;// 身份证号
     private String mCardNumber;// 卡号
     private String mNewSignName;// 户名

@@ -263,6 +263,7 @@ public class TakeVideoActivity extends BaseActivity {
 
             @Override
             public void onFail(String msg) {
+                ToastHelper.ShowToast("提示:"+msg,1);
             }
 
             @Override

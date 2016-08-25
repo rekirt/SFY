@@ -16,7 +16,7 @@
         android:layout_margin="10dip"
         android:layout_below="@+id/ll_capture_top"
         android:textColor="#0ff0ff"
-        android:text="拍摄时间（不能小于4秒）："/>
+        android:text="拍摄时间（建议不小于4秒）："/>
 
     <TextView
         android:id="@+id/tv_time"

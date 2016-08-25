@@ -73,7 +73,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		app.setUserName(mEditPhone.getText().toString());
 		app.setLoginState("0000");
 		String des3key = SharedPreferencesHelper.getString(mEditPhone.getText().toString()+Constant.DESK3KEY, "");
-        boolean ForcedOffLine = SharedPreferencesHelper.getBoolean(AccountHelper.getUserName()+Constant.ISFORCEDOFFLINE, false);
+        boolean ForcedOffLine = SharedPreferencesHelper.getBoolean(mEditPhone.getText().toString()+Constant.ISFORCEDOFFLINE, false);
 
 		if (TextUtils.isEmpty(des3key)){
 			if (ForcedOffLine){

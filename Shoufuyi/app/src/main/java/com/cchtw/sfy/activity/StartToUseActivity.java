@@ -281,6 +281,7 @@ public class StartToUseActivity extends BaseActivity{
                                 SharedPreferencesHelper.setBoolean(Constant.ISREMMBER, false);//是否记住密码
                             }
                             Intent intent = new Intent();
+                            intent.putExtra("isFromStartToUseActivity",true);
                             intent.setClass(StartToUseActivity.this, ChangePwdActivity.class);
                             startActivity(intent);
                         }else {

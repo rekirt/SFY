@@ -82,7 +82,6 @@ public class ApiRequest {
      */
     public static RequestHandle requestData(APP_Basic app,String MOBILE,
                                            JsonHttpHandler handler) {
-
         String uuid = SharedPreferencesHelper.getString("uuid", "");
         if (uuid.equals("")) {
             uuid = "2" + SequenceUtil.globalSequenceFor32();

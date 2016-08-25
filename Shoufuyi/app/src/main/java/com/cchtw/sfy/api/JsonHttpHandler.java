@@ -6,7 +6,6 @@ import android.text.TextUtils;
 
 import com.cchtw.sfy.BaseApplication;
 import com.cchtw.sfy.R;
-import com.cchtw.sfy.activity.LoginActivity;
 import com.cchtw.sfy.activity.StartToUseActivity;
 import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.ActivityCollector;
@@ -79,6 +78,7 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
 
         response.setToken(token);
         String stye = ASCUtil.ASCToStr(ArrayUtils.subarray(responseBody, 75, 77));
+
         if ("0".equals(stye)){//加密方式为0,使用固态token解包
             response.setToken(SequenceUtil.TOKEN);
         }
@@ -106,7 +106,7 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
                 // 报文指纹不正确
                 AccountHelper.logout();
                 Intent intent_login = new Intent();
-                intent_login.setClass(mContext, LoginActivity.class);
+                intent_login.setClass(mContext, StartToUseActivity.class);
                 intent_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //关键的一句，将新的activity置为栈顶
                 mContext.startActivity(intent_login);
                 ActivityCollector.finishAll();
@@ -114,7 +114,6 @@ public abstract class JsonHttpHandler extends AsyncHttpResponseHandler {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            onFail("返回错误数据格式");
         }
     }
 
