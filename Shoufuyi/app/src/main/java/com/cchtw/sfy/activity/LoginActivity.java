@@ -118,7 +118,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
                         intent.setClass(LoginActivity.this, CreateGestureActivity.class);
 					}else {
                         intent.setClass(LoginActivity.this, MainActivity.class);
-                    }
+						intent.putExtra("isCheckUpdate",true);
+					}
 					startActivity(intent);
 					LoginActivity.this.finish();
 				} else if ("3998".equals(returnapp.getDetailCode())) {

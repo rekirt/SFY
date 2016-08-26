@@ -72,27 +72,29 @@ public class MainActivity extends BaseActivity {
 
     private GridView gridview;
 
-    private boolean hasTips = false;
+    private boolean isCheckUpdate = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+        isCheckUpdate = getIntent().getBooleanExtra("isCheckUpdate",false);
+
         initView();
         initData();
         startBannerScrollThread();
         setRightView();
+        updataRunParameter();//更新运行参数
+
         update = new UpdateManager(MainActivity.this, new DialogListener() {
             @Override
             public void cancel() {
-                hasTips = true;
+                isCheckUpdate = false;
             }
         });
-        updataRunParameter();
     }
 
     private UpdateManager update;
-
 
     // 更新操作；
     private void checkUpdate() {
@@ -113,6 +115,7 @@ public class MainActivity extends BaseActivity {
                 final APP_Version returnapp = JSON.parseObject(responseJsonObject.toString(), APP_Version.class);
                 if ("0000".equals(returnapp.getDetailCode())) {
                     update.checkUpdateInfo(returnapp);
+                    isCheckUpdate = false;
                 }
             }
 
@@ -228,7 +231,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!hasTips){
+        if (isCheckUpdate){
             checkUpdate();
         }
     }

@@ -145,6 +145,7 @@ public class CreateGestureActivity extends BaseActivity {
         ToastHelper.ShowToast("设置成功!");
         if (!isChangeFingerPwd){
             Intent intent = new Intent(CreateGestureActivity.this, MainActivity.class);
+			intent.putExtra("isCheckUpdate",true);
             startActivity(intent);
         }
         CreateGestureActivity.this.finish();
