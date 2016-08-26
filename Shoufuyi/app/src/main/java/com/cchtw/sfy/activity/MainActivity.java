@@ -73,6 +73,8 @@ public class MainActivity extends BaseActivity {
     private GridView gridview;
 
     private boolean isCheckUpdate = false;
+    private boolean isShowingDialog = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +92,12 @@ public class MainActivity extends BaseActivity {
             @Override
             public void cancel() {
                 isCheckUpdate = false;
+                isShowingDialog = false;
+            }
+
+            @Override
+            public void ok() {
+                isShowingDialog= true;
             }
         });
     }
@@ -114,8 +122,12 @@ public class MainActivity extends BaseActivity {
             public void onDo(JSONObject responseJsonObject) {
                 final APP_Version returnapp = JSON.parseObject(responseJsonObject.toString(), APP_Version.class);
                 if ("0000".equals(returnapp.getDetailCode())) {
-                    update.checkUpdateInfo(returnapp);
-                    isCheckUpdate = false;
+                    if (isCheckUpdate){
+                        isCheckUpdate = !isCheckUpdate;
+                        update.checkUpdateInfo(returnapp);
+                    }else if (returnapp.isForceUpgrade()){
+                        update.checkUpdateInfo(returnapp);
+                    }
                 }
             }
 
@@ -231,9 +243,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (isCheckUpdate){
-            checkUpdate();
-        }
+        checkUpdate();
     }
 
     @Override

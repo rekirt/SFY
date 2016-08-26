@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
+import com.cchtw.sfy.uitls.TDevice;
 import com.cchtw.sfy.uitls.TLog;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -23,11 +24,15 @@ public class AsyncHttp {
         if (client == null) {
             client = new AsyncHttpClient();
         }
-        int mTimeout = Integer.parseInt(SharedPreferencesHelper.getString(Constant.TIMEOUT, "30"))*1000;
-//        client.setConnectTimeout(5000);
-        client.setTimeout(5000);
-//        client.setMaxRetriesAndTimeout(0,5000);
-//        client.setResponseTimeout(mTimeout);
+        int mTimeout = Integer.parseInt(SharedPreferencesHelper.getString(Constant.TIMEOUT, "30"))/3;
+//        client.setConnectTimeout(1000*8);
+//        client.setTimeout(1000*5);
+        if (TDevice.hasInternet()){
+            client.setMaxRetriesAndTimeout(1,1000*mTimeout);
+        }else {
+            client.setMaxRetriesAndTimeout(1,1000*mTimeout*3);
+        }
+//        client.setResponseTimeout(1000*8);
         return client;
     }
 

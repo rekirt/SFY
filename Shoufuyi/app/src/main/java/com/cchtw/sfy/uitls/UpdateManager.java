@@ -151,52 +151,59 @@ public class UpdateManager {
 
 	}
 
+    boolean isShowing = false;
 	private void showNoticeDialog(APP_Version version) {
-		String oldCode = "";
-		String newCode = "";
-		PackageManager pm = mContext.getPackageManager();
-		PackageInfo pi;
-		try {
-			pi = pm.getPackageInfo(mContext.getPackageName(), 0);
-			oldCode = pi.versionName;
-		} catch (NameNotFoundException e) {
-			e.printStackTrace();
-		}
-		// getPackageName()是你当前类的包名，0代表是获取版本信息
+        if (!isShowing){
+            isShowing = true;
+            String oldCode = "";
+            String newCode = "";
+            PackageManager pm = mContext.getPackageManager();
+            PackageInfo pi;
+            try {
+                pi = pm.getPackageInfo(mContext.getPackageName(), 0);
+                oldCode = pi.versionName;
+            } catch (NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            // getPackageName()是你当前类的包名，0代表是获取版本信息
 
-		newCode = version.getVersion();
-		if (isUpdate(oldCode, newCode)) {
-			apkUrl = version.getDownPath();
-			AlertDialog.Builder builder = new Builder(mContext);
-			builder.setTitle("软件版本更新");
-			if (version.getDescribe() != null)
-				builder.setMessage(updateMsg + "版本说明：" + version.getDescribe());
-			builder.setPositiveButton("下载", new OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-					showDownloadDialog();
-				}
-			});
-			if (!version.isForceUpgrade()) {
-				builder.setNegativeButton("以后再说", new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						if (dialogListener != null){
-							dialogListener.cancel();
-						}
-					}
-				});
-			}
-			isupdate = version.isForceUpgrade();
-			builder.setCancelable(false);
+            newCode = version.getVersion();
+            if (isUpdate(oldCode, newCode)) {
+                apkUrl = version.getDownPath();
+                AlertDialog.Builder builder = new Builder(mContext);
+                builder.setTitle("软件版本更新");
+                if (version.getDescribe() != null)
+                    builder.setMessage(updateMsg + "版本说明：" + version.getDescribe());
+                builder.setPositiveButton("下载", new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        showDownloadDialog();
+                        dialogListener.ok();
+                    }
+                });
+                if (!version.isForceUpgrade()) {
+                    builder.setNegativeButton("以后再说", new OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            isShowing = false;
+                            if (dialogListener != null){
+                                dialogListener.cancel();
+                            }
+                        }
+                    });
+                }
+                isupdate = version.isForceUpgrade();
+                builder.setCancelable(false);
 
-			noticeDialog = builder.create();
-			noticeDialog.show();
-		} else {
-			ToastHelper.ShowToast(version.getErrMsg());
-		}
+                noticeDialog = builder.create();
+                noticeDialog.show();
+            } else {
+                ToastHelper.ShowToast(version.getErrMsg());
+            }
+        }
+
 		Looper.loop();
 
 	}
@@ -218,7 +225,6 @@ public class UpdateManager {
 
 	@SuppressWarnings("deprecation")
 	private void showDownloadDialog() {
-		if (proDia == null) {
 			proDia = new ProgressDialog(mContext);
 			proDia.setTitle("新版本正在下载");
 			proDia.setMessage("请耐心等待");
@@ -234,15 +240,10 @@ public class UpdateManager {
                     }
                 });
 			}
-
 			proDia.onStart(); // 启动进度
-
 			proDia.show(); // 显示对话框
 			proDia.setCancelable(false);
 			downloadApk();
-		} else {
-			proDia.show(); // 显示对话框
-		}
 	}
 
 	private Runnable mdownApkRunnable = new Runnable() {
@@ -276,6 +277,7 @@ public class UpdateManager {
 					mHandler.sendEmptyMessage(DOWN_UPDATE);
 
 					if (numread <= 0) {
+                        isShowing = false;
 						// 下载完成通知安装
 						mHandler.sendEmptyMessage(DOWN_OVER);
 						break;
@@ -320,6 +322,5 @@ public class UpdateManager {
 		i.setDataAndType(Uri.parse("file://" + apkfile.toString()),
 				"application/vnd.android.package-archive");
 		mContext.startActivity(i);
-
 	}
 }
