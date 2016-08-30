@@ -80,5 +80,8 @@ public class Constant {
 	public final static String BASE_DIR = Environment
 			.getExternalStorageDirectory().getAbsolutePath() + "/SFY/";
 	//缓存路径
-	public final static String CACHE_DIR = BASE_DIR + ".cache/";
+    public final static String CACHE_DIR = BASE_DIR + ".cache/";
+
+
+    public final static String ISDOWNLOADING = "ISDOWNLOADING";
 }

@@ -98,4 +98,6 @@ public class BaseApplication extends Application {
     public static String string(int id) {
         return instance.getResources().getString(id);
     }
+
+
 }

@@ -24,13 +24,13 @@ public class AsyncHttp {
         if (client == null) {
             client = new AsyncHttpClient();
         }
-        int mTimeout = Integer.parseInt(SharedPreferencesHelper.getString(Constant.TIMEOUT, "30"))/3;
+        int mTimeout = Integer.parseInt(SharedPreferencesHelper.getString(Constant.TIMEOUT, "30"));
 //        client.setConnectTimeout(1000*8);
 //        client.setTimeout(1000*5);
         if (TDevice.hasInternet()){
             client.setMaxRetriesAndTimeout(1,1000*mTimeout);
         }else {
-            client.setMaxRetriesAndTimeout(1,1000*mTimeout*3);
+            client.setMaxRetriesAndTimeout(1,1000*mTimeout);
         }
 //        client.setResponseTimeout(1000*8);
         return client;

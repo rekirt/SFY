@@ -76,6 +76,8 @@ public class UpdateManager {
 
 	private boolean isupdate;
 
+	private boolean isDownloading = SharedPreferencesHelper.getBoolean(Constant.ISDOWNLOADING,false);
+
 	private DialogListener dialogListener;
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -154,6 +156,10 @@ public class UpdateManager {
     boolean isShowing = false;
 	private void showNoticeDialog(APP_Version version) {
         if (!isShowing){
+            if (isDownloading){
+                ToastHelper.ShowToast("正在后台下载,请等待!");
+                return;
+            }
             isShowing = true;
             String oldCode = "";
             String newCode = "";
@@ -188,6 +194,7 @@ public class UpdateManager {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                             isShowing = false;
+                            SharedPreferencesHelper.setBoolean(Constant.ISDOWNLOADING,false);
                             if (dialogListener != null){
                                 dialogListener.cancel();
                             }
@@ -202,6 +209,8 @@ public class UpdateManager {
             } else {
                 ToastHelper.ShowToast(version.getErrMsg());
             }
+        }else {
+
         }
 
 		Looper.loop();
@@ -236,6 +245,9 @@ public class UpdateManager {
 				proDia.setButton("后台处理", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        isDownloading = true;
+                        isShowing = false;
+                        SharedPreferencesHelper.setBoolean(Constant.ISDOWNLOADING,true);
                         proDia.dismiss(); // 关闭对话框
                     }
                 });
@@ -250,7 +262,8 @@ public class UpdateManager {
 		@Override
 		public void run() {
 			try {
-				Looper.prepare();
+                TLog.error("mdownApkRunnable---run");
+                Looper.prepare();
 				URL url = new URL(apkUrl);
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.connect();
@@ -269,8 +282,8 @@ public class UpdateManager {
 				byte buf[] = new byte[1024];
 
 				do {
-
-					int numread = is.read(buf);
+                    TLog.error("mdownApkRunnable---do read");
+                    int numread = is.read(buf);
 					count += numread;
 					progress = (int) (((float) count / length) * 100);
 					// 更新进度
@@ -278,7 +291,9 @@ public class UpdateManager {
 
 					if (numread <= 0) {
                         isShowing = false;
-						// 下载完成通知安装
+                        isDownloading = false;
+                        SharedPreferencesHelper.setBoolean(Constant.ISDOWNLOADING,false);
+                        // 下载完成通知安装
 						mHandler.sendEmptyMessage(DOWN_OVER);
 						break;
 					}
@@ -288,15 +303,28 @@ public class UpdateManager {
 				is.close();
 				Looper.loop();
 			} catch (FileNotFoundException e) {
-				mHandler.sendEmptyMessage(FILENOFOUND);
+                TLog.error("mdownApkRunnable---FileNotFoundException");
+                isDownloading = false;
+                isShowing = false;
+                SharedPreferencesHelper.setBoolean(Constant.ISDOWNLOADING,false);
+                mHandler.sendEmptyMessage(FILENOFOUND);
                 proDia.dismiss(); // 关闭对话框
 			} catch (MalformedURLException e) {
-				e.printStackTrace();
+                TLog.error("mdownApkRunnable---MalformedURLException");
+                isShowing = false;
+                isDownloading = false;
+                SharedPreferencesHelper.setBoolean(Constant.ISDOWNLOADING,false);
+                e.printStackTrace();
 			} catch (IOException e) {
-				e.printStackTrace();
+                TLog.error("mdownApkRunnable---IOException");
+                isDownloading = false;
+                isShowing = false;
+                SharedPreferencesHelper.setBoolean(Constant.ISDOWNLOADING,false);
+                e.printStackTrace();
 			}
-
 		}
+
+
 	};
 
 	/**
@@ -318,7 +346,8 @@ public class UpdateManager {
 		if (!apkfile.exists()) {
 			return;
 		}
-		Intent i = new Intent(Intent.ACTION_VIEW);
+        SharedPreferencesHelper.setBoolean(Constant.ISDOWNLOADING,false);
+        Intent i = new Intent(Intent.ACTION_VIEW);
 		i.setDataAndType(Uri.parse("file://" + apkfile.toString()),
 				"application/vnd.android.package-archive");
 		mContext.startActivity(i);

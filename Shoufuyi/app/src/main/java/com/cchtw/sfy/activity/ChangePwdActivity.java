@@ -158,6 +158,8 @@ public class ChangePwdActivity extends BaseActivity {
                             ChangePwdActivity.this.finish();
                         }
                     });
+        }else {
+            ChangePwdActivity.this.finish();
         }
     }
 
@@ -174,9 +176,10 @@ public class ChangePwdActivity extends BaseActivity {
                             SharedPreferencesHelper.setString(userPhone+Constant.DESKEY, "");
                             SharedPreferencesHelper.setString(userPhone + Constant.TOKEN, "");
                             ChangePwdActivity.this.finish();
-                            ChangePwdActivity.this.finish();
                         }
                     });
+        }else {
+            ChangePwdActivity.this.finish();
         }
     }
 }

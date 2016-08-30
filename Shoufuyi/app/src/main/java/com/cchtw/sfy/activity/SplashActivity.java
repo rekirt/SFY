@@ -32,6 +32,7 @@ public class SplashActivity extends BaseActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//设置启动页面全屏
         view = View.inflate(this, R.layout.activity_splash, null);
         setContentView(view);
+        SharedPreferencesHelper.setBoolean(Constant.ISDOWNLOADING,false);
         //保存UUID
 		if (TextUtils.isEmpty(getUUID())) {
             SharedPreferencesHelper.setString(Constant.UUID, "2" + SequenceUtil.globalSequenceFor32());

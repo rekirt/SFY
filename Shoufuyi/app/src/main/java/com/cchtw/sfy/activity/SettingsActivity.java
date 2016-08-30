@@ -22,6 +22,7 @@ import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.ActivityCollector;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
+import com.cchtw.sfy.uitls.TDevice;
 import com.cchtw.sfy.uitls.ToastHelper;
 import com.cchtw.sfy.uitls.UpdateManager;
 import com.cchtw.sfy.uitls.cache.ACache;
@@ -219,6 +220,9 @@ public class SettingsActivity extends BaseActivity {
 
 	// 退出登录
 	private void exit() {
+        if (!TDevice.hasInternet()){
+            ToastHelper.ShowToast("网络异常,退出登录失败!");
+        }
 		// 修改登录密码
 		APP_120033 app = new APP_120033();
 		app.setTrxCode("120033");
@@ -255,6 +259,12 @@ public class SettingsActivity extends BaseActivity {
 
             @Override
             public void onDo(String responseString) {
+
+            }
+
+            @Override
+            public void onFail(String msg) {
+                ToastHelper.ShowToast("异常提示:"+msg);
 
             }
 

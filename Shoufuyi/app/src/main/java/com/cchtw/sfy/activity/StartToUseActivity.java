@@ -285,7 +285,8 @@ public class StartToUseActivity extends BaseActivity{
                             intent.setClass(StartToUseActivity.this, ChangePwdActivity.class);
                             startActivity(intent);
                         }else {
-                            ToastHelper.ShowToast(returnapp.getDetailInfo());
+//                            ToastHelper.ShowToast(returnapp.getDetailInfo());
+                            ToastHelper.ShowToast("启用失败，密码错误!");
                         }
 
                     }
