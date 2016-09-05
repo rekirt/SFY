@@ -13,7 +13,7 @@ import android.widget.EditText;
 import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.api.ApiRequest;
-import com.cchtw.sfy.api.JsonHttpHandler;
+import com.cchtw.sfy.api.StartToUseJsonHttpHandler;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.PhoneUtils;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
@@ -35,6 +35,7 @@ public class StartToUseActivity extends BaseActivity{
     private CheckBox cb_privacy;
 	// 通过设备读取的手机号码
 	private APP_120032 returnapp;
+    private boolean isGetCode = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -125,7 +126,11 @@ public class StartToUseActivity extends BaseActivity{
                     getCode();
                 break;
             case R.id.zhucejihuo:
+                if (isGetCode){
                     StartToUse();
+                }else {
+                    ToastHelper.ShowToast("请先重新请求初始密码!");
+                }
                 break;
             default:
                 break;
@@ -211,13 +216,14 @@ public class StartToUseActivity extends BaseActivity{
         app.setValSn(sn);
         app.setReqSn(sn);
         SharedPreferencesHelper.setBoolean(mPhoneNumber+Constant.ACTIVATION, false);
-        ApiRequest.getMsgCode(app, mPhoneNumber, new JsonHttpHandler(StartToUseActivity.this) {
+        ApiRequest.getMsgCode(app, mPhoneNumber, new StartToUseJsonHttpHandler(StartToUseActivity.this) {
                     @Override
                     public void onDo(JSONObject responseJsonObject) {
                         APP_120031 returnapp = JSON.parseObject(responseJsonObject.toString(),
                                 APP_120031.class);
                         if (returnapp.getDetailCode().equals("0000")) {
-                            ToastHelper.ShowToast("短信发送成功");
+                            isGetCode = true;
+                            ToastHelper.ShowToast("请求发送成功");
                             Countdown();
                         } else {
                             ToastHelper.ShowToast(returnapp.getDetailInfo());
@@ -264,7 +270,7 @@ public class StartToUseActivity extends BaseActivity{
         }
 
         DialogHelper.showProgressDialog(StartToUseActivity.this, "正在请求启用...", true, false);
-        ApiRequest.requestData(app, mPhoneNumber, new JsonHttpHandler(StartToUseActivity.this) {
+        ApiRequest.requestStart(app, mPhoneNumber, new StartToUseJsonHttpHandler(StartToUseActivity.this) {
                     @Override
                     public void onDo(JSONObject responseJsonObject) {
                         returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120032.class);

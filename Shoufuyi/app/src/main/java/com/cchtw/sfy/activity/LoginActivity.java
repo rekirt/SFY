@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.api.ApiRequest;
-import com.cchtw.sfy.api.JsonHttpHandler;
+import com.cchtw.sfy.api.StartToUseJsonHttpHandler;
 import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
@@ -74,28 +74,38 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		app.setLoginState("0000");
 		String des3key = SharedPreferencesHelper.getString(mEditPhone.getText().toString()+Constant.DESK3KEY, "");
         boolean ForcedOffLine = SharedPreferencesHelper.getBoolean(mEditPhone.getText().toString()+Constant.ISFORCEDOFFLINE, false);
-
-		if (TextUtils.isEmpty(des3key)){
-			if (ForcedOffLine){
-				ToastHelper.ShowToast("账户在其它设备登录，请重新启用！");
-			}else {
-				ToastHelper.ShowToast("第一次在该设备登录，请先启用！");
-			}
-            SharedPreferencesHelper.setBoolean(Constant.ISREMMBER, true);//是否记住密码
+		//为了解决由于不同步造成的密码错误的问题
+//		if (TextUtils.isEmpty(des3key)){
+//			if (ForcedOffLine){
+//				ToastHelper.ShowToast("账户在其它设备登录，请重新启用！");
+//			}else {
+//				ToastHelper.ShowToast("第一次在该设备登录，请先启用！");
+//			}
+//            SharedPreferencesHelper.setBoolean(Constant.ISREMMBER, true);//是否记住密码
+//            Intent intent = new Intent();
+//			intent.putExtra("mEditPhone",mEditPhone.getText().toString());
+//            intent.setClass(LoginActivity.this, StartToUseActivity.class);
+//            startActivity(intent);
+//            return;
+//        }
+		if (ForcedOffLine){
+			ToastHelper.ShowToast("账户在其它设备登录，请重新启用！");
+			SharedPreferencesHelper.setBoolean(Constant.ISREMMBER, true);
             Intent intent = new Intent();
 			intent.putExtra("mEditPhone",mEditPhone.getText().toString());
             intent.setClass(LoginActivity.this, StartToUseActivity.class);
             startActivity(intent);
             return;
-        }
+		}
+
 		try {
-			app.setUserPass(des3key, mEditPwd.getText().toString());
+			app.setUserPass("", mEditPwd.getText().toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		DialogHelper.showProgressDialog(LoginActivity.this, "正在登录...", true, false);
 
-		ApiRequest.login(app, mEditPhone.getText().toString(), new JsonHttpHandler(LoginActivity.this) {
+		ApiRequest.login(app, mEditPhone.getText().toString(), new StartToUseJsonHttpHandler(LoginActivity.this) {
 			@Override
 			public void onDo(JSONObject responseJsonObject) {
 				APP_120033 returnapp = JSON.parseObject(responseJsonObject.toString(), APP_120033.class);
@@ -111,6 +121,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 					SharedPreferencesHelper.setString(mEditPhone.getText().toString() + Constant.DESK3KEY, AccountHelper.getDes3Key());
                     SharedPreferencesHelper.setString(mEditPhone.getText().toString() + Constant.DESKEY, AccountHelper.getDesKey());
                     SharedPreferencesHelper.setString(mEditPhone.getText().toString()+Constant.TOKEN, AccountHelper.getToken());
+					SharedPreferencesHelper.setBoolean(mEditPhone.getText().toString() + Constant.ACTIVATION, true);
+
 					ACache aCache = ACache.get(LoginActivity.this);
 					byte[] gesturePassword= aCache.getAsBinary(AccountHelper.getUserName() + Constant.GESTURE_PASSWORD);
                     Intent intent = new Intent();

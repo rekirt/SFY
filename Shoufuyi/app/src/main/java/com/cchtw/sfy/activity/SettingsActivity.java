@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.R;
 import com.cchtw.sfy.api.ApiRequest;
 import com.cchtw.sfy.api.JsonHttpHandler;
+import com.cchtw.sfy.api.StartToUseJsonHttpHandler;
 import com.cchtw.sfy.uitls.AccountHelper;
 import com.cchtw.sfy.uitls.ActivityCollector;
 import com.cchtw.sfy.uitls.Constant;
@@ -230,7 +231,7 @@ public class SettingsActivity extends BaseActivity {
 		app.setUserPass("");
 		app.setLoginState("0001");
         DialogHelper.showProgressDialog(SettingsActivity.this, "正在退出，请稍候...", true, false);
-        ApiRequest.requestData(app, phone, new JsonHttpHandler(SettingsActivity.this) {
+        ApiRequest.logout(app, phone, new StartToUseJsonHttpHandler(SettingsActivity.this) {
             @Override
             public void onDo(JSONObject responseJsonObject) {
                 APP_120033 returnapp = null;
@@ -265,7 +266,6 @@ public class SettingsActivity extends BaseActivity {
             @Override
             public void onFail(String msg) {
                 ToastHelper.ShowToast("异常提示:"+msg);
-
             }
 
             @Override

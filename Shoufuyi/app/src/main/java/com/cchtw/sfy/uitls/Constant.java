@@ -38,7 +38,7 @@ public class Constant {
 
 	public static String banknumber="";
 
-	public static String SHARED_PREFERENCE_NAME = TDevice.getVersionName()+"SFY_SHARED_PREFERENCE_NAME";
+	public static String SHARED_PREFERENCE_NAME = "SFY_SHARED_PREFERENCE_NAME";
     public static String ACTIVATION = "jihuo";
     public static String PHONE = "phone";
 	public static String ISREMMBER = "ISREMMBER";

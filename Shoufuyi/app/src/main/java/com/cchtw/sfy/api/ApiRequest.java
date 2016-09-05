@@ -6,11 +6,15 @@ import com.alibaba.fastjson.JSON;
 import com.cchtw.sfy.BaseApplication;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
+import com.cchtw.sfy.uitls.TDevice;
+import com.cchtw.sfy.uitls.TLog;
 import com.itech.message.APPMsgPack;
 import com.itech.message.APP_Basic;
 import com.itech.utils.SequenceUtil;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
+
+import static com.cchtw.sfy.uitls.Constant.secretType;
 
 public class ApiRequest {
 
@@ -41,7 +45,7 @@ public class ApiRequest {
      *
      */
     public static RequestHandle login(APP_Basic app,String MOBILE,
-                                      JsonHttpHandler handler) {
+                                      StartToUseJsonHttpHandler handler) {
 
         String uuid = SharedPreferencesHelper.getString("uuid", "");
         if (uuid.equals("")) {
@@ -51,7 +55,25 @@ public class ApiRequest {
         returnapp = app;
         String json = JSON.toJSONString(app, true);
         // 要发送的字节数组
-        byte[] data = pack(json, MOBILE);
+        byte[] data = packForStart(json, MOBILE);
+        return AsyncHttp.postLogin(BaseApplication.getInstance(), data, "application/octet-stream",handler);
+    }
+    /**
+     * 退出登录
+     *
+     */
+    public static RequestHandle logout(APP_Basic app,String MOBILE,
+                                      StartToUseJsonHttpHandler handler) {
+
+        String uuid = SharedPreferencesHelper.getString("uuid", "");
+        if (uuid.equals("")) {
+            uuid = "2" + SequenceUtil.globalSequenceFor32();
+        }
+        app.setTerminalInfo(uuid);
+        returnapp = app;
+        String json = JSON.toJSONString(app, true);
+        // 要发送的字节数组
+        byte[] data = packForStart(json, MOBILE);
         return AsyncHttp.post(BaseApplication.getInstance(), data, "application/octet-stream",handler);
     }
 
@@ -60,7 +82,7 @@ public class ApiRequest {
      *
      */
     public static RequestHandle getMsgCode(APP_Basic app,String MOBILE,
-                                      JsonHttpHandler handler) {
+                                           StartToUseJsonHttpHandler handler) {
 
         String uuid = SharedPreferencesHelper.getString("uuid", "");
         if (uuid.equals("")) {
@@ -71,7 +93,7 @@ public class ApiRequest {
         String json = JSON.toJSONString(app, true);
 
         // 要发送的字节数组
-        byte[] data = pack(json, MOBILE);
+        byte[] data = packForStart(json, MOBILE);
         return AsyncHttp.post(BaseApplication.getInstance(), data, "application/octet-stream", handler);
     }
 
@@ -82,6 +104,14 @@ public class ApiRequest {
      */
     public static RequestHandle requestData(APP_Basic app,String MOBILE,
                                            JsonHttpHandler handler) {
+        if (!TDevice.hasInternet()){
+//            ToastHelper.ShowToast("网络连接失败,请检查您的网络是否异常!");
+            handler.onFail("网络连接失败,请检查您的网络是否异常!");
+            handler.onFinish();
+            TLog.analytics("网络连接失败,请检查您的网络是否异常!");
+            return null;
+        }
+        TLog.analytics("网络连接正常,requestData()");
         String uuid = SharedPreferencesHelper.getString("uuid", "");
         if (uuid.equals("")) {
             uuid = "2" + SequenceUtil.globalSequenceFor32();
@@ -89,7 +119,6 @@ public class ApiRequest {
         app.setTerminalInfo(uuid);
         returnapp = app;
         String json = JSON.toJSONString(app, true);
-        // 要发送的字节数组
         byte[] data = pack(json, MOBILE);
         return AsyncHttp.post(BaseApplication.getInstance(), data, "application/octet-stream",handler);
     }
@@ -114,13 +143,15 @@ public class ApiRequest {
         if (!isActivation) {
             returnapp.getTrxCode().equals("120031");
             returnapp.setTrxCode("120032");
+            token = SequenceUtil.TOKEN;
+            deskey = "";
         }
         APPMsgPack pack;
         if (TextUtils.isEmpty(deskey)) {
-            pack = new APPMsgPack(json.getBytes(), MOBILE, Constant.secretType,
+            pack = new APPMsgPack(json.getBytes(), MOBILE, secretType,
                     returnapp.getTrxCode(), token);
         } else {
-            pack = new APPMsgPack(json.getBytes(), MOBILE, Constant.secretType,
+            pack = new APPMsgPack(json.getBytes(), MOBILE, secretType,
                     returnapp.getTrxCode(), token, deskey);
         }
         try {
@@ -132,4 +163,43 @@ public class ApiRequest {
         return null;
     }
 
+
+    /**
+     * 提交请求
+     *
+     */
+    public static RequestHandle requestStart(APP_Basic app,String MOBILE,
+                                             StartToUseJsonHttpHandler handler) {
+        String uuid = SharedPreferencesHelper.getString("uuid", "");
+        if (uuid.equals("")) {
+            uuid = "2" + SequenceUtil.globalSequenceFor32();
+        }
+        app.setTerminalInfo(uuid);
+        returnapp = app;
+        String json = JSON.toJSONString(app, true);
+        // 要发送的字节数组
+        byte[] data = packForStart(json, MOBILE);
+        return AsyncHttp.post(BaseApplication.getInstance(), data, "application/octet-stream",handler);
+    }
+
+    // 压缩
+    private static byte[] packForStart(String json, String MOBILE) {
+        Boolean isActivation = false;
+        String token ="";
+        String deskey = "";
+        String uuid = SharedPreferencesHelper.getString("uuid", "");
+        returnapp.setTrxCode("120032");
+        returnapp.getTrxCode().equals("120031");
+        token = SequenceUtil.TOKEN;
+        APPMsgPack pack;
+        pack = new APPMsgPack(json.getBytes(), MOBILE, Constant.secretType,
+                    returnapp.getTrxCode(), token);
+        try {
+            pack.setTerminalInfo(uuid);
+            return pack.pack();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

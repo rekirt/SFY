@@ -1,6 +1,5 @@
 package com.cchtw.sfy.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,8 +18,6 @@ import com.cchtw.sfy.uitls.ActivityCollector;
 import com.cchtw.sfy.uitls.Constant;
 import com.cchtw.sfy.uitls.SharedPreferencesHelper;
 import com.cchtw.sfy.uitls.ToastHelper;
-import com.cchtw.sfy.uitls.dialog.AlertDialogHelper;
-import com.cchtw.sfy.uitls.dialog.ChooseDialogDoClickHelper;
 import com.cchtw.sfy.uitls.dialog.DialogHelper;
 import com.itech.message.APP_120034;
 
@@ -145,41 +142,44 @@ public class ChangePwdActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (isFromStartToUseActivity) {
-            AlertDialogHelper.showAlertDialog(ChangePwdActivity.this,
-                    "提示：", "尚未修改初始密码,退出将需要重新启用,是否退出?", new ChooseDialogDoClickHelper() {
+//        if (isFromStartToUseActivity) {
+//            AlertDialogHelper.showAlertDialog(ChangePwdActivity.this,
+//                    "提示：", "尚未修改初始密码,退出将需要重新启用,是否退出?", new ChooseDialogDoClickHelper() {
+//
+//                        @Override
+//                        public void doClick(DialogInterface dialog,
+//                                            int which) {
+//                            SharedPreferencesHelper.setBoolean(userPhone + Constant.ACTIVATION, false);// 记录启用成功状态
+//                            SharedPreferencesHelper.setString(userPhone+Constant.DESKEY, "");
+//                            SharedPreferencesHelper.setString(userPhone + Constant.TOKEN, "");
+//                            ChangePwdActivity.this.finish();
+//                        }
+//                    });
+//        }else {
+//            ChangePwdActivity.this.finish();
+//        }
+     ChangePwdActivity.this.finish();
 
-                        @Override
-                        public void doClick(DialogInterface dialog,
-                                            int which) {
-                            SharedPreferencesHelper.setBoolean(userPhone + Constant.ACTIVATION, false);// 记录启用成功状态
-                            SharedPreferencesHelper.setString(userPhone+Constant.DESKEY, "");
-                            SharedPreferencesHelper.setString(userPhone + Constant.TOKEN, "");
-                            ChangePwdActivity.this.finish();
-                        }
-                    });
-        }else {
-            ChangePwdActivity.this.finish();
-        }
     }
 
     @Override
     public void goBack(View view) {
-        if (isFromStartToUseActivity) {
-            AlertDialogHelper.showAlertDialog(ChangePwdActivity.this,
-                    "提示：", "尚未修改初始密码,退出将需要重新启用,是否退出?", new ChooseDialogDoClickHelper() {
-
-                        @Override
-                        public void doClick(DialogInterface dialog,
-                                            int which) {
-                            SharedPreferencesHelper.setBoolean(userPhone + Constant.ACTIVATION, false);// 记录启用成功状态
-                            SharedPreferencesHelper.setString(userPhone+Constant.DESKEY, "");
-                            SharedPreferencesHelper.setString(userPhone + Constant.TOKEN, "");
-                            ChangePwdActivity.this.finish();
-                        }
-                    });
-        }else {
-            ChangePwdActivity.this.finish();
-        }
+//        if (isFromStartToUseActivity) {
+//            AlertDialogHelper.showAlertDialog(ChangePwdActivity.this,
+//                    "提示：", "尚未修改初始密码,退出将需要重新启用,是否退出?", new ChooseDialogDoClickHelper() {
+//
+//                        @Override
+//                        public void doClick(DialogInterface dialog,
+//                                            int which) {
+//                            SharedPreferencesHelper.setBoolean(userPhone + Constant.ACTIVATION, false);// 记录启用成功状态
+//                            SharedPreferencesHelper.setString(userPhone+Constant.DESKEY, "");
+//                            SharedPreferencesHelper.setString(userPhone + Constant.TOKEN, "");
+//                            ChangePwdActivity.this.finish();
+//                        }
+//                    });
+//        }else {
+//            ChangePwdActivity.this.finish();
+//        }
+        ChangePwdActivity.this.finish();
     }
 }
