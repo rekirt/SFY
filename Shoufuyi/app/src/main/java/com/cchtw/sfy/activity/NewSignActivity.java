@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -72,6 +73,7 @@ public class NewSignActivity extends BaseActivity{
     }
 
     private void initData(){
+        mEdtNewSignId.setInputType(EditorInfo.TYPE_TEXT_VARIATION_URI);
         mIvIdCamera.setOnClickListener(this);
         mIvCardCamera.setOnClickListener(this);
         mbtnOk.setOnClickListener(this);

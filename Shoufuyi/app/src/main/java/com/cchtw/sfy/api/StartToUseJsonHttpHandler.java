@@ -161,7 +161,7 @@ public abstract class StartToUseJsonHttpHandler extends AsyncHttpResponseHandler
                 } else {
                     onFail(mContext.getString(R.string.error_http_server_busy));
                 }
-                onFail(responseBody.toString());
+//                onFail(responseBody.toString());
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

@@ -31,14 +31,14 @@ import org.json.JSONObject;
 public class LoginActivity extends BaseActivity implements OnClickListener,DialogInterface{
 	private Button butlogin;
 	private EditText mEditPhone;
-    private EditText mEditPwd;
+	private EditText mEditPwd;
 	private CheckBox cb_remember;
 	private TextView tv_start_to_use;
 	private TextView tv_forget_pwd;
 	private String strphone;
 
 	protected void onCreate(Bundle savedInstanceState) {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		initView();
@@ -46,8 +46,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener,Dialo
 	}
 
 	private void initView() {
-        mEditPhone = (EditText) findViewById(R.id.edt_phone);
-        mEditPwd = (EditText) findViewById(R.id.edt_pwd);
+		mEditPhone = (EditText) findViewById(R.id.edt_phone);
+		mEditPwd = (EditText) findViewById(R.id.edt_pwd);
 		butlogin = (Button) findViewById(R.id.btn_login);
 		cb_remember = (CheckBox) findViewById(R.id.cb_remember);
 		tv_start_to_use = (TextView) findViewById(R.id.tv_start_to_use);
@@ -64,7 +64,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener,Dialo
 			mEditPhone.setText(strphone);
 		}
 		butlogin.setOnClickListener(this);
-        tv_start_to_use.setOnClickListener(this);
+		tv_start_to_use.setOnClickListener(this);
 		tv_forget_pwd.setOnClickListener(this);
 	}
 
@@ -75,7 +75,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener,Dialo
 		app.setUserName(mEditPhone.getText().toString());
 		app.setLoginState("0000");
 		String des3key = SharedPreferencesHelper.getString(mEditPhone.getText().toString()+Constant.DESK3KEY, "");
-        boolean ForcedOffLine = SharedPreferencesHelper.getBoolean(mEditPhone.getText().toString()+Constant.ISFORCEDOFFLINE, false);
+		boolean ForcedOffLine = SharedPreferencesHelper.getBoolean(mEditPhone.getText().toString()+Constant.ISFORCEDOFFLINE, false);
 		//为了解决由于不同步造成的密码错误的问题
 //		if (TextUtils.isEmpty(des3key)){
 //			if (ForcedOffLine){
@@ -93,11 +93,11 @@ public class LoginActivity extends BaseActivity implements OnClickListener,Dialo
 		if (ForcedOffLine){
 			ToastHelper.ShowToast("账户在其它设备登录，请重新启用！");
 			SharedPreferencesHelper.setBoolean(Constant.ISREMMBER, true);
-            Intent intent = new Intent();
+			Intent intent = new Intent();
 			intent.putExtra("mEditPhone",mEditPhone.getText().toString());
-            intent.setClass(LoginActivity.this, StartToUseActivity.class);
-            startActivity(intent);
-            return;
+			intent.setClass(LoginActivity.this, StartToUseActivity.class);
+			startActivity(intent);
+			return;
 		}
 
 		try {
@@ -114,24 +114,24 @@ public class LoginActivity extends BaseActivity implements OnClickListener,Dialo
 				if ("0000".equals(returnapp.getDetailCode())) {
 					AccountHelper.setUser(returnapp);
 					if (cb_remember.isChecked()) {
-                        SharedPreferencesHelper.setBoolean(Constant.ISREMMBER, true);//是否记住密码
+						SharedPreferencesHelper.setBoolean(Constant.ISREMMBER, true);//是否记住密码
 					}else {
-                        SharedPreferencesHelper.setBoolean(Constant.ISREMMBER, false);//是否记住密码
-                    }
-                    SharedPreferencesHelper.setString(Constant.PHONE, mEditPhone.getText().toString());
+						SharedPreferencesHelper.setBoolean(Constant.ISREMMBER, false);//是否记住密码
+					}
+					SharedPreferencesHelper.setString(Constant.PHONE, mEditPhone.getText().toString());
 					SharedPreferencesHelper.setBoolean(mEditPhone.getText().toString()+Constant.ISFORCEDOFFLINE, false);
 					SharedPreferencesHelper.setString(mEditPhone.getText().toString() + Constant.DESK3KEY, AccountHelper.getDes3Key());
-                    SharedPreferencesHelper.setString(mEditPhone.getText().toString() + Constant.DESKEY, AccountHelper.getDesKey());
-                    SharedPreferencesHelper.setString(mEditPhone.getText().toString()+Constant.TOKEN, AccountHelper.getToken());
+					SharedPreferencesHelper.setString(mEditPhone.getText().toString() + Constant.DESKEY, AccountHelper.getDesKey());
+					SharedPreferencesHelper.setString(mEditPhone.getText().toString()+Constant.TOKEN, AccountHelper.getToken());
 					SharedPreferencesHelper.setBoolean(mEditPhone.getText().toString() + Constant.ACTIVATION, true);
 
 					ACache aCache = ACache.get(LoginActivity.this);
 					byte[] gesturePassword= aCache.getAsBinary(AccountHelper.getUserName() + Constant.GESTURE_PASSWORD);
-                    Intent intent = new Intent();
-                    if (gesturePassword == null){
-                        intent.setClass(LoginActivity.this, CreateGestureActivity.class);
+					Intent intent = new Intent();
+					if (gesturePassword == null){
+						intent.setClass(LoginActivity.this, CreateGestureActivity.class);
 					}else {
-                        intent.setClass(LoginActivity.this, MainActivity.class);
+						intent.setClass(LoginActivity.this, MainActivity.class);
 						intent.putExtra("isCheckUpdate",true);
 					}
 					startActivity(intent);
