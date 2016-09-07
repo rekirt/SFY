@@ -82,20 +82,24 @@ public class ElementVerificationActivity extends BaseActivity {
                     switch (verifyGroup.getVerifyGroupCode()){
                         case "SIX_ELEMENT"://六要素(卡号\户名\身份证号\手机号\手机验证码\支付密码)
                             mElementMember = 6;
+                            mElementVerifyGroupCode = verifyGroup.getVerifyGroupCode();
                             break;
                         case "TWO_ELEMENT"://二要素(卡号\户名)
                             mElementMember = 2;
+                            mElementVerifyGroupCode = verifyGroup.getVerifyGroupCode();
                             break;
                         case "THREE_ELEMENT"://三要素(卡号\户名\身份证号)
                             mElementMember = 3;
+                            mElementVerifyGroupCode = verifyGroup.getVerifyGroupCode();
                             break;
                         case "FOUR_ELEMENT"://四要素(卡号\户名\身份证号\手机号)
                             mElementMember = 4;
+                            mElementVerifyGroupCode = verifyGroup.getVerifyGroupCode();
                             break;
                         default:
                             break;
                     }
-                    mElementVerifyGroupCode = verifyGroup.getVerifyGroupCode();
+
                 }
             }
             changeView(mElementMember);
