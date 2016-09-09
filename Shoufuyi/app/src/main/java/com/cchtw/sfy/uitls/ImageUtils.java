@@ -38,8 +38,8 @@ public class ImageUtils {
      * @return 返回图片的Bitmap
      */
     public Bitmap getCompressedBitmap(String imagePath) {
-        float maxHeight = 1920.0f;
-        float maxWidth = 1080.0f;
+        float maxHeight = 1280.0f;
+        float maxWidth = 720.0f;
         Bitmap scaledBitmap = null;
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
