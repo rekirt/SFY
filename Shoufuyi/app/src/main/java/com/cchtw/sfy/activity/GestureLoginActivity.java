@@ -29,8 +29,10 @@ public class GestureLoginActivity extends AppCompatActivity {
 
     @Bind(R.id.lockPatternView)
     LockPatternView lockPatternView;
+
     @Bind(R.id.messageTv)
     TextView messageTv;
+
     @Bind(R.id.forgetGestureBtn)
     Button forgetGestureBtn;
 
